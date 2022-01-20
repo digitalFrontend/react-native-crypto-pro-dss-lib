@@ -11,12 +11,12 @@ Examples of files you can find `scripts/example_dss_folder`.
 After this steps, you can install lib, which will be postinstall your assets files.
 
 ```bash
-yarn add react-native-crypto-pro-dss-lib
+yarn add https://github.com/digitalFrontend/react-native-crypto-pro-dss-lib
 cd ios
 pod install
 ```
 
-You can add `"update-dss-assets": "node node_modules/react-native-crypto-pro-dss-lib/scripts/installDssAssets.js -fromRootProject"` inside your package.json file for manual assets installation.
+You can add `"update-dss-assets": "node node_modules/react-native-crypto-pro-dss-lib/scripts/installDssAssets.js -fromRootProject"` inside your package.json file  scripts for manual assets installation.
 
 # iOS
 
