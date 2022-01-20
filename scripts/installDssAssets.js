@@ -68,6 +68,9 @@ if (!dssDir.includes("fonts")) {
 if (shouldCopyFonts) {
     const fontsDir = fs.readdirSync(FONTS_DIR)
     let copiedCount = 0
+    if (!fs.existsSync(LIB_FILES_PATH)) {
+        fs.mkdirSync(LIB_FILES_PATH)
+    }
     fontsDir.forEach(font => {
         try {
             fs.copyFileSync(`${FONTS_DIR}${font}`, `${LIB_FILES_PATH}/${font}`)
