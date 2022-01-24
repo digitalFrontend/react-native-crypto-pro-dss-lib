@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -72,6 +73,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.os.Looper.getMainLooper;
 import static ru.nasvyazi.cryptopro.dss.lib.ReactBridgeTools.convertJsonToMap;
 
 class InitCallbackHandler implements SdkInitCallback {
@@ -113,13 +115,21 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
     @SuppressLint("RestrictedApi")
     @ReactMethod
     public void sdkInitialization(Promise promise) {
-        CryptoProDss.initDSS(((FragmentActivity)this.reactContext.getCurrentActivity()));
-        CryptoProDss.getInstance().init(((FragmentActivity)this.reactContext.getCurrentActivity()),new HashMap<String,String[]>(),new InitCallbackHandler(){
-            @Override
-            public void onInit(Constants.CSPInitCode var1) {
-                promise.resolve((var1).getTitle());
-            }
+
+        new Handler(getMainLooper()).post(new Runnable() {
+              @Override
+              public void run() {
+                  CryptoProDss.initDSS(((FragmentActivity)getReactApplicationContext().getCurrentActivity()));
+                  CryptoProDss.getInstance().init(((FragmentActivity)getReactApplicationContext().getCurrentActivity()),new HashMap<String,String[]>(),new InitCallbackHandler(){
+                      @Override
+                      public void onInit(Constants.CSPInitCode var1) {
+                          promise.resolve((var1).getTitle());
+                      }
+                  });
+              }
         });
+
+
     }
 
     public URI getUriFromAssets(String pathResource) throws IOException {
