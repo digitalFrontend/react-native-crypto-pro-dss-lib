@@ -1,0 +1,528 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)
+// swift-module-flags: -target arm64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name SDKFramework
+import AVFoundation
+import CommonCrypto
+import Foundation
+import LocalAuthentication
+import PDFKit
+@_exported import SDKFramework
+import Swift
+import UIKit
+import _Concurrency
+import os.log
+import os
+public struct DSSUser {
+  public var kid: Swift.String
+  public var uid: Swift.String
+  public var alias: Swift.String?
+  public var state: Swift.String
+  public var profile: Swift.String
+  public var notBefore: Swift.Int64
+  public var notAfter: Swift.Int64
+  public var serviceUrl: Swift.String
+  public var name: Swift.String
+  public var keyType: Swift.Bool
+  public init()
+  public init(kid: Swift.String, uid: Swift.String, alias: Swift.String?, state: Swift.String, profile: Swift.String, notBefore: Swift.Int64, notAfter: Swift.Int64, serviceUrl: Swift.String, name: Swift.String, keyType: Swift.Bool)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct OperationDescription : Swift.Codable {
+  public var type: Swift.String
+  public var caption: Swift.String
+  public var description: Swift.String?
+  public init()
+  public init(type: Swift.String, caption: Swift.String, description: Swift.String)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct PolicyPayload : Swift.Codable {
+  public var selfRegistrationEnabled: Swift.Bool
+  public var externalLoginRequired: Swift.Bool
+  public var keyActivationRequired: Swift.Bool
+  public var keyProtectionFlags: SDKFramework.KeyProtectionFlags
+  public var keyActivationTypes: [Swift.String]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct ApproveRequestMT : Swift.Codable {
+  public var approvedOperation: Swift.String
+  public var hmac: Swift.String
+  public init()
+  public init(approvedOperation: Swift.String, hmac: Swift.String)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct ApproveRequestMO : Swift.Codable {
+  public var approvedOperation: SDKFramework.ApprovedOperation
+  public init()
+  public init(approvedOperation: SDKFramework.ApprovedOperation)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public enum OperationStatus : Swift.String {
+  case Completed
+  case InProgress
+  case Waiting
+  case Error
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct OperationResultInfo : Swift.Codable {
+  public var refId: Swift.String?
+  public var originalRefId: Swift.String
+  public var status: Swift.String
+  public var error: Swift.String?
+  public var errorDescription: Swift.String?
+  public init()
+  public init(refId: Swift.String?, originalRefId: Swift.String, status: Swift.String, error: Swift.String, errorDescription: Swift.String)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct CryptoProviderInfo : Swift.Codable {
+  public var provType: Swift.Int
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct NamePolicy : Swift.Codable {
+  public var isRequired: Swift.Bool
+  public var order: Swift.Int
+  public var oid: Swift.String, name: Swift.String
+  public var value: Swift.String?
+  public var stringIdentifier: Swift.String
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct ExtensionsPolicy : Swift.Codable {
+  public var oid: Swift.String
+  public var value: Swift.String
+  public var critical: Swift.Bool
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct CAPolicy : Swift.Codable {
+  public var cryptoProviderInfos: [Swift.String : [SDKFramework.CryptoProviderInfo]]?
+  public var showInUi: Swift.Bool
+  public var extensionsPolicy: [SDKFramework.ExtensionsPolicy]?
+  public var id: Swift.Int
+  public var name: Swift.String
+  public var active: Swift.Bool, allowUserMode: Swift.Bool, snChangesEnable: Swift.Bool
+  public var namePolicy: [SDKFramework.NamePolicy]
+  public var ekuTemplates: [Swift.String : [Swift.String]]
+  public var caType: Swift.String, validationMode: Swift.String
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct OperationHistory : Swift.Codable {
+  public var records: [SDKFramework.AuditRecord]?
+  public var totalCount: Swift.Int
+  public var bookmark: Swift.Int
+  public var kid: Swift.String?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+open class Sign {
+  public init()
+  public func signMT(view: UIKit.UIViewController, kid: Swift.String, operation: SDKFramework.Operation?, enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, silent: Swift.Bool = false, completion: @escaping (_ approveRequest: SDKFramework.ApproveRequestMT?, _ error: Swift.Error?) -> Swift.Void)
+  public func signMO(view: UIKit.UIViewController, kid: Swift.String, parameters: [Swift.String : Swift.String], enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, uploadDocInfo: [SDKFramework.UploadDocInfo], silent: Swift.Bool = false, completion: @escaping (_ signatureResult: SDKFramework.SignatureResult?, _ approveRequest: SDKFramework.ApproveRequestMO?, _ error: Swift.Error?) -> Swift.Void)
+  public func deferredRequest(view: UIKit.UIViewController, kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMT, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  public func deferredRequest(view: UIKit.UIViewController, kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMO, completion: @escaping (_ signatureResult: SDKFramework.SignatureResult?, _ error: Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+public struct Operation : Swift.Codable {
+  public var description: SDKFramework.OperationDescription
+  public var createdAt: Swift.Int64?
+  public var expiresAt: Swift.Int64?
+  public var documentCount: Swift.Int
+  public var transactionId: Swift.String
+  public var parameters: [Swift.String : Swift.String]?
+  public var documents: [SDKFramework.Document]?
+  public var kid: Swift.String?
+  public init()
+  public init(description: SDKFramework.OperationDescription, createdAt: Swift.Int64, expiresAt: Swift.Int64, documentCount: Swift.Int, transactionId: Swift.String, parameters: [Swift.String : Swift.String], documents: [SDKFramework.Document], kid: Swift.String)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct OperationsInfo : Swift.Codable {
+  public var operations: [SDKFramework.Operation]?
+  public var kid: Swift.String?
+  public init()
+  public init(operations: [SDKFramework.Operation])
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct UploadFile : Swift.Codable {
+  public var documentInfo: Swift.String
+  public var snippetTemplate: Swift.String?
+  public var previewTemplate: Swift.String?
+  public var url: Foundation.URL
+  public init(documentInfo: Swift.String, snippetTemplate: Swift.String?, previewTemplate: Swift.String?, url: Foundation.URL)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct DeviceInfo : Swift.Codable {
+  public var uid: Swift.String
+  public var kid: Swift.String
+  public var userName: Swift.String?
+  public var profile: Swift.String?
+  public var nonceRequired: Swift.Bool?
+  public var deviceName: Swift.String?
+  public var notBefore: Swift.Int32
+  public var notAfter: Swift.Int32
+  public var state: Swift.String
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct Devices : Swift.Codable {
+  public var devices: [SDKFramework.DeviceInfo]
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public enum SDKServerMessagesLocale : Swift.String {
+  case badRequest
+  case invalidInput
+  case invalidIdentifier
+  case wrongOperation
+  case invalidLogin
+  case notUniqueLogin
+  case invalidPhone
+  case notUniquePhone
+  case invalidEmail
+  case notUniqueEmail
+  case invalidDeviceFingerprint
+  case notUniqueDeviceFingerprint
+  case invalidDeviceParams
+  case keyAlreadyConfirmed
+  case invalidKeyId
+  case keyNotFound
+  case requestedUserNotFound
+  case invalidCertificate
+  case invalidCertificateStatus
+  case certificateNotFound
+  case existingDeviceFingerprint
+  case contentRequired
+  case userNotFound
+  case userBlocked
+  case invalidAuthenticationScheme
+  case keyExpiredOrNotYetValid
+  case invalidHmac
+  case invalidLicense
+  case invalidGrant
+  case invalidKinit
+  case invalidKeyState
+  case internalError
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct Certificate : Swift.Codable {
+  public var type: Swift.String
+  public var cid: Swift.String?
+  public var rid: Swift.String?
+  public var content: Swift.String
+  public var caId: Swift.Int
+  public var dn: [Swift.String : Swift.String]
+  public var notBefore: Swift.Int32
+  public var notAfter: Swift.Int32
+  public var state: Swift.String
+  public var friendlyName: Swift.String?
+  public var isDefault: Swift.Bool
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct DeclinedDocument : Swift.Codable {
+  public var id: Swift.String
+  public var documentHash: Swift.String
+  public var snippetHash: Swift.String
+  public var reason: Swift.String
+  public init()
+  public init(id: Swift.String, documentHash: Swift.String, snippetHash: Swift.String, reason: Swift.String)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct UploadDocInfo : Swift.Codable {
+  public var docId: Swift.String
+  public init()
+  public init(docId: Swift.String)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+open class Auth {
+  public init()
+  open func scanQR(view: UIKit.UIViewController, base64QR: Swift.String? = nil, completion: @escaping (_ type: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
+  open func _init(view: UIKit.UIViewController, dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, password: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func kinit(view: UIKit.UIViewController, dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, activationCode: Swift.String? = nil, password: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func addNewDevice(view: UIKit.UIViewController, dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, uid: Swift.String, password: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func confirm(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func verify(view: UIKit.UIViewController, kid: Swift.String, silent: Swift.Bool = false, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func setPassAuth(view: UIKit.UIViewController, kid: Swift.String, password: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func changePassAuth(view: UIKit.UIViewController, kid: Swift.String, keyProtectionType: SDKFramework.ProtectionType, oldPassword: Swift.String? = nil, newPassword: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func renameAuth(kid: Swift.String, newName: Swift.String) throws
+  open func removeAuth(view: UIKit.UIViewController, kid: Swift.String, deletedKid: Swift.String, forceDelete: Swift.Bool, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  public static func getAuthList() throws -> [SDKFramework.DSSUser]
+  open func confirmNewDevice(view: UIKit.UIViewController, kid: Swift.String, confirmedKid: Swift.String, silent: Swift.Bool = false, approve: Swift.Bool, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func checkStatus(view: UIKit.UIViewController, kid: Swift.String, viewQR: Swift.Bool, completion: @escaping (_ status: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+public enum ProtectionType : Swift.String {
+  case PASSWORD
+  case NO_PROTECTION
+  case BIOMETRIC
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct KeyProtectionFlags : Swift.Codable {
+  public var fingerprintRequired: Swift.Bool
+  public var collectEvents: Swift.Bool
+  public var collectDeviceInfo: Swift.Bool
+  public var collectSimInfo: Swift.Bool
+  public var collectLocation: Swift.Bool
+  public var passwordPolicy: Swift.Int
+  public var denyOSProtection: Swift.Bool
+  public var scoringEnabled: Swift.Bool
+  public var strongKeyProtectionType: Swift.Bool
+  public init()
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public class Docs {
+  public init()
+  public func uploadDocument(view: UIKit.UIViewController, kid: Swift.String, document: SDKFramework.UploadFile, completion: @escaping (_ uploadData: SDKFramework.UploadDocInfo?, _ error: Swift.Error?) -> Swift.Void)
+  public func downloadDocument(view: UIKit.UIViewController, kid: Swift.String, docId: Swift.String, completion: @escaping (_ data: Foundation.Data?, _ error: Swift.Error?) -> Swift.Void)
+  public func saveDocuments(view: UIKit.UIViewController, kid: Swift.String, document: SDKFramework.Document, completion: @escaping (_ result: Swift.Int, _ error: Swift.Error?) -> Swift.Void)
+  public func listSavedDocument(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ documents: [SDKFramework.Document], _ error: Swift.Error?) -> Swift.Void)
+  public func cleanUpDocuments(view: UIKit.UIViewController, kid: Swift.String, id: Swift.String?, completion: @escaping (_ result: Swift.Int, _ error: Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+public struct SignatureResult : Swift.Codable {
+  public var results: [SDKFramework.OperationResultInfo]
+  public init()
+  public init(results: [SDKFramework.OperationResultInfo])
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct DownloadDocInfo : Swift.Codable {
+  public var id: Swift.String
+  public var documentInfo: Swift.String
+  public var documentHash: Swift.String
+  public var snippet: Swift.String
+  public var snippetHash: Swift.String?
+  public var fileSize: Swift.Int64
+  public var pageCount: Swift.Int
+  public var isPrintableViewAvailable: Swift.Bool?
+  public var isSnippetViewAvailable: Swift.Bool?
+  public var isRawViewAvailable: Swift.Bool?
+  public init()
+  public init(id: Swift.String, documentInfo: Swift.String, documentHash: Swift.String, snippet: Swift.String, snippetHash: Swift.String?, fileSize: Swift.Int64, pageCount: Swift.Int, isPrintableViewAvailable: Swift.Bool?, isSnippetViewAvailable: Swift.Bool?, isRawViewAvailable: Swift.Bool?)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+open class Policy {
+  public init()
+  open func getOperations(view: UIKit.UIViewController, kid: Swift.String, type: Swift.String?, opId: Swift.String?, completion: @escaping (_ operationsInfo: SDKFramework.OperationsInfo?, _ error: Swift.Error?) -> Swift.Void)
+  open func getHistoryOperations(view: UIKit.UIViewController, kid: Swift.String, count: Swift.Int? = nil, bookmark: Swift.Int64? = nil, operationCodes: [Swift.Int]? = nil, completion: @escaping (_ operationHistory: SDKFramework.OperationHistory?, _ error: Swift.Error?) -> Swift.Void)
+  open func getParamsDSS(serviceUrl: Swift.String, completion: @escaping (_ policy: SDKFramework.PolicyPayload?, _ error: Swift.Error?) -> Swift.Void)
+  open func setPersonalisation(url: Foundation.URL) throws
+  open func getUserDevices(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ devices: SDKFramework.Devices?, _ error: Swift.Error?) -> Swift.Void)
+  open func getCaParams(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ policy: SDKFramework.SignServerPolicy?, _ error: Swift.Error?) -> Swift.Void)
+  open func generateKeyPair(provType: Swift.Int) throws
+  open func addEntropy(seed: Swift.String) throws
+  @objc deinit
+}
+public struct ConfirmedDocument : Swift.Codable {
+  public var id: Swift.String
+  public var documentHash: Swift.String
+  public var snippetHash: Swift.String
+  public init()
+  public init(id: Swift.String, documentHash: Swift.String, snippetHash: Swift.String)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+open class Cert {
+  public init()
+  open func getCert(view: UIKit.UIViewController, kid: Swift.String, caId: Swift.Int, tId: Swift.String, dn: [Swift.String : Swift.String], completion: @escaping (_ cert: SDKFramework.Certificate?, _ error: Swift.Error?) -> Swift.Void)
+  open func setCert(view: UIKit.UIViewController, kid: Swift.String, crt: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func getCertList(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ certs: [SDKFramework.Certificate], _ error: Swift.Error?) -> Swift.Void)
+  open func setNameCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, friendlyName: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func suspendCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, holdDate: Swift.Int64, unholdDate: Swift.Int64, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func resumeCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func revokeCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, reason: Swift.Int, date: Swift.Int32, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func setDefaultCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, _default: Swift.Bool, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func deleteCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String? = nil, rid: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  @objc deinit
+}
+public struct AuditRecord : Swift.Codable {
+  public var id: Swift.Int
+  public var operationCode: Swift.Int
+  public var text: Swift.String
+  public var date: Swift.Int64
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct RegisterInfo {
+  public var pushAddress: Swift.String
+  public var appVersion: Swift.String?
+  public var userName: Swift.String?
+  public var phone: Swift.String?
+  public var email: Swift.String?
+  public var token: Swift.String?
+  public var deviceName: Swift.String?
+  public init()
+  public init(pushAddress: Swift.String, appVersion: Swift.String?, userName: Swift.String?, phone: Swift.String?, email: Swift.String?, token: Swift.String?)
+}
+public struct Document : Swift.Codable {
+  public var id: Swift.String
+  public var documentInfo: Swift.String
+  public var documentHash: Swift.String
+  public var snippet: Swift.String
+  public var snippetHash: Swift.String?
+  public var fileSize: Swift.Int64
+  public var pageCount: Swift.Int
+  public var isPrintableViewAvailable: Swift.Bool?
+  public var isSnippetViewAvailable: Swift.Bool?
+  public var isRawViewAvailable: Swift.Bool?
+  public init()
+  public init(id: Swift.String, documentInfo: Swift.String, documentHash: Swift.String, snippet: Swift.String, snippetHash: Swift.String?, fileSize: Swift.Int64, pageCount: Swift.Int, isPrintableViewAvailable: Swift.Bool?, isSnippetViewAvailable: Swift.Bool?, isRawViewAvailable: Swift.Bool?)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct ApprovedOperation : Swift.Codable {
+  public var id: Swift.String?
+  public var type: Swift.String
+  public var caption: Swift.String
+  public var parameters: [Swift.String : Swift.String]?
+  public var confirmedDocuments: [SDKFramework.ConfirmedDocument]?
+  public var declinedDocuments: [SDKFramework.DeclinedDocument]?
+  public var timeStamp: Swift.Int64?
+  public init()
+  public init(id: Swift.String, type: Swift.String, caption: Swift.String, parameters: [Swift.String : Swift.String], confirmedDocuments: [SDKFramework.ConfirmedDocument], declinedDocuments: [SDKFramework.DeclinedDocument], timeStamp: Swift.Int64)
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+extension Swift.String : Swift.Error {
+  public var localizedDescription: Swift.String {
+    get
+  }
+}
+extension Swift.String : Foundation.LocalizedError {
+  public var errorDescription: Swift.String? {
+    get
+  }
+}
+extension Swift.String {
+  public func pad(with padding: Swift.Character, toLength length: Swift.Int) -> Swift.String
+}
+public enum SDKMessagesLocale : Swift.String {
+  case undefinedError
+  case operationCanceledByUser
+  case functionFailed
+  case invalidParameters
+  case noMemory
+  case moreDataNeeded
+  case invalidBlobHeader
+  case invalidPassword
+  case functionNotImplemented
+  case base64EncodedFailed
+  case decodeStruct2String
+  case nameIsExist
+  case nameIsEmpty
+  case authVectorNotFound
+  case kidNotFound
+  case incorrectKeyStatus
+  case keyExpired
+  case selfRegistrationImpossible
+  case needKeyActivationCode
+  case biometricKeyProtectionImpossible
+  case noPolicyKeyProtectionError
+  case encryptSetKeyError
+  case encryptSetVectorError
+  case biometryNotAvailable
+  case biometryLockout
+  case biometryNotEnrolled
+  case biometricUndefinedError
+  case touchIDLockout
+  case touchIDNotAvailable
+  case touchIDNotEnrolled
+  case authenticationFailed
+  case appCancel
+  case invalidContext
+  case notInteractive
+  case passcodeNotSet
+  case systemCancel
+  case userCancel
+  case userFallback
+  case invalidData
+  case biometricPwdSaveError
+  case avCaptureDeviceError
+  case deviceError
+  case imageError
+  case invalidQrCode
+  case qrNotContainOperation
+  case operationExpired
+  case qrNotLoaded
+  case qrDoesNotMatchConfirmedKid
+  case reasonIncorrect
+  case cidOrRidFillingError
+  case sessionFailed
+  case deniedOfUseSDKMethod
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct SignServerPolicy : Swift.Codable {
+  public var caPolicies: [SDKFramework.CAPolicy]
+  public var processingTemplates: [SDKFramework.ProcessingTemplateInfo]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+open class CryptoProDss {
+  public init()
+  public func _init(view: UIKit.UIViewController, completion: @escaping (_ result: SDKFramework.CSPInitCode) -> Swift.Void)
+  @objc deinit
+}
+public enum CSPInitCode : Swift.String {
+  case init_ok
+  case init_certs_not_installed
+  case init_lockScreen_not_installed
+  case init_device_rooted
+  case init_kaspersky_not_installed
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct ProcessingTemplateInfo : Swift.Codable {
+  public var id: Swift.Int
+  public var description: Swift.String
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
+extension SDKFramework.DSSUser : Swift.Encodable {}
+extension SDKFramework.DSSUser : Swift.Decodable {}
+extension SDKFramework.OperationStatus : Swift.Equatable {}
+extension SDKFramework.OperationStatus : Swift.Hashable {}
+extension SDKFramework.OperationStatus : Swift.RawRepresentable {}
+extension SDKFramework.SDKServerMessagesLocale : Swift.Equatable {}
+extension SDKFramework.SDKServerMessagesLocale : Swift.Hashable {}
+extension SDKFramework.SDKServerMessagesLocale : Swift.RawRepresentable {}
+extension SDKFramework.ProtectionType : Swift.Equatable {}
+extension SDKFramework.ProtectionType : Swift.Hashable {}
+extension SDKFramework.ProtectionType : Swift.RawRepresentable {}
+extension SDKFramework.SDKMessagesLocale : Swift.Equatable {}
+extension SDKFramework.SDKMessagesLocale : Swift.Hashable {}
+extension SDKFramework.SDKMessagesLocale : Swift.RawRepresentable {}
+extension SDKFramework.CSPInitCode : Swift.Equatable {}
+extension SDKFramework.CSPInitCode : Swift.Hashable {}
+extension SDKFramework.CSPInitCode : Swift.RawRepresentable {}
