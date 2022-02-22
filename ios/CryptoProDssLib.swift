@@ -23,6 +23,23 @@ struct DictionaryEncoder {
         
         return map;
     }
+    
+    static func convertUserDevices(device: DeviceInfo) -> [String:Any] {
+        
+        var map = [String:Any]()
+        
+        let kid : String = device.kid;
+        let uid : String = device.uid;
+        let profile : String = device.profile!;
+        let deviceName : String = device.deviceName!;
+        
+        map.updateValue(kid, forKey: "kid");
+        map.updateValue(uid, forKey: "uid");
+        map.updateValue(profile, forKey: "profile");
+        map.updateValue(deviceName, forKey: "deviceName");
+        
+        return map;
+    }
 }
 
 @objc(CryptoProDssLib)
@@ -235,6 +252,45 @@ class CryptoProDssLib : UIViewController {
             }
             
             resolve(list)
+       }
+    }
+    
+    @objc
+    func getUserDevices(
+        _ kid: String,
+        withResolver resolve: @escaping RCTPromiseResolveBlock,
+        withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+        
+        jsPromiseResolver = resolve;
+        jsPromiseRejecter = reject;
+            
+        
+        DispatchQueue.main.async {
+            
+            guard let rootVC = UIApplication.shared.delegate?.window??.visibleViewController, (rootVC.navigationController != nil) else {
+                 reject("E_INIT", "Error getting rootViewController", NSError(domain: "", code: 200, userInfo: nil))
+                 return
+            }
+            
+            let policy = Policy();
+            self.tryToSwitchHeader(false);
+            
+            policy.getUserDevices(view: rootVC, kid: kid){
+                devices,error  in
+                    
+                if (error != nil){
+                    reject(error?.localizedDescription,error?.localizedDescription,error?.localizedDescription);
+                } else {
+                    var list = [] as [Any]
+
+                    
+                    for device in devices!.devices {
+                        list.append(DictionaryEncoder.convertUserDevices(device: device));
+                    }
+                    
+                    resolve(list)
+                }
+            }
        }
     }
     

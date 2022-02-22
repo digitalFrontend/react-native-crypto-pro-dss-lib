@@ -27,11 +27,13 @@ import com.digt.sdk.interfaces.SdkInitCallback;
 import com.digt.sdk.interfaces.SdkMtOperationCallback;
 import com.digt.sdk.interfaces.SdkMtOperationWithSuspendCallback;
 import com.digt.sdk.interfaces.SdkPolicyCaParamsCallback;
+import com.digt.sdk.interfaces.SdkPolicyDevicesCallback;
 import com.digt.sdk.interfaces.SdkPolicyOperationHistoryCallback;
 import com.digt.sdk.interfaces.SdkPolicyOperationsInfoCallback;
 import com.digt.sdk.interfaces.SdkQrCallback;
 import com.digt.sdk.policy.Policy;
 import com.digt.sdk.policy.models.CaParams;
+import com.digt.sdk.policy.models.DeviceInfo;
 import com.digt.sdk.policy.models.OperationHistory;
 import com.digt.sdk.sign.Sign;
 import com.digt.sdk.sign.models.ApproveRequestMT;
@@ -293,6 +295,15 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
         return object;
     }
 
+    public Map<String, String> convertDeviceInfo(DeviceInfo info){
+        Map<String, String> object = new HashMap<>();
+        object.put("kid", info.getKid());
+        object.put("uid", info.getUid());
+        object.put("deviceName", info.getDeviceName());
+        object.put("profile", info.getProfile());
+        return object;
+    }
+
     @SuppressLint("RestrictedApi")
     @ReactMethod
     public void getUsers(Promise promise) {
@@ -313,6 +324,37 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
         WritableNativeArray array = Arguments.makeNativeArray((List)list);
         promise.resolve(array);
+    }
+
+    @SuppressLint("RestrictedApi")
+    @ReactMethod
+    public void getUserDevices(String kid, Promise promise) {
+        List<DssUser> authList = new ArrayList<DssUser>();
+        Policy policy = new Policy();
+        try {
+            policy.getUserDevices(getReactApplicationContext().getCurrentActivity(), kid, new SdkPolicyDevicesCallback() {
+                @Override
+                public void onOperationSuccessful(@NonNull List<DeviceInfo> list) {
+                    List<Map<String, String>> resultList = new ArrayList<>();
+
+                    list.forEach(info -> {
+                        resultList.add(convertDeviceInfo(info));
+                    });
+
+                    WritableNativeArray array = Arguments.makeNativeArray((List)resultList);
+                    promise.resolve(array);
+                }
+
+                @Override
+                public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
+                    Log.i("nasvyzi", s.toString());
+                   promise.reject("ERROR", s);
+                }
+            });
+        } catch (Exception e) {
+            Log.i("nasvyzi", e.toString());
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("RestrictedApi")
