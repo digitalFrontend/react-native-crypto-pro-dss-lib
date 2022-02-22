@@ -52,4 +52,11 @@ RCT_EXTERN_METHOD(getUsers:
                   withRejecter: (RCTPromiseRejectBlock)reject
 )
 
+
+RCT_EXTERN_METHOD(getUserDevices:
+                  (NSString *)kid
+                  withResolver: (RCTPromiseResolveBlock)resolve
+                  withRejecter: (RCTPromiseRejectBlock)reject
+)
+
 @end

@@ -8,6 +8,7 @@ let CryptoProDss = {
     signMT: (transactionId, kid) => CryptoProDssLib.signMT(transactionId, kid),
     updateStyles: () => CryptoProDssLib.updateStyles(),
     getUsers: () => CryptoProDssLib.getUsers(),
+    getUserDevices: (kid) => CryptoProDssLib.getUserDevices(kid),
     continueInitViaQr: (kid) => CryptoProDssLib.continueInitViaQr(kid),
     initViaQr: (qr, useBiometric) => CryptoProDssLib.initViaQr(qr, useBiometric),
     deferredRequest: (kid) => CryptoProDssLib.deferredRequest(kid),
