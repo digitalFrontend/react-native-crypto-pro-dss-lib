@@ -36,11 +36,6 @@ RCT_EXTERN_METHOD(signMT:
                   withRejecter: (RCTPromiseRejectBlock)reject
 )
 
-RCT_EXTERN_METHOD(deferredRequest:
-                  (NSString *)kid
-                  withResolver: (RCTPromiseResolveBlock)resolve
-                  withRejecter: (RCTPromiseRejectBlock)reject
-)
 
 RCT_EXTERN_METHOD(updateStyles:
                   (RCTPromiseResolveBlock)resolve

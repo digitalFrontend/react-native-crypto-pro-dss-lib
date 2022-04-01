@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ac_sdk_sign_operation_content_vg_main">
+    <ListView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ac_sdk_sign_operation_content_layout_footer"
+        android:id="@+id/ac_sdk_sign_operation_content_rv_docs"
+        android:dividerHeight="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+    </ListView>
+    <com.digt.sdk.ui.components.SdkButtonsFooter
+        android:layout_alignParentBottom="true"
+        android:id="@+id/ac_sdk_sign_operation_content_layout_footer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sdk_footer_height"/>
+</RelativeLayout>

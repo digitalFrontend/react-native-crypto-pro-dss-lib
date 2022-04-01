@@ -35,7 +35,7 @@ struct RND_CONTEXT_;
 * \param length [in] Размер буфера под случайную последовательность.
 * \return TRUE, случайная последовательность получена, FALSE иначе.
 */
-typedef CSP_BOOL(*GetRandomFunction)(pCP_CALL_CTX pCallCtx, struct RND_CONTEXT_ *context, LPBYTE buffer, uint32_t length, uint32_t flags);
+typedef CSP_BOOL(*GetRandomFunction)(pCP_CALL_CTX pCallCtx, struct RND_CONTEXT_ *context, LPBYTE buffer, uint32_t length, uint32_t flags) ATTR_USERES;
 
 
 /*! \internal
@@ -46,7 +46,7 @@ typedef CSP_BOOL(*GetRandomFunction)(pCP_CALL_CTX pCallCtx, struct RND_CONTEXT_ 
 * \return TRUE, случайная последовательность может быть получена (ДСЧ инициализирован),
 *  FALSE иначе.
 */
-typedef CSP_BOOL(*IsRandomInitedFunction)(struct RND_CONTEXT_ *context);
+typedef CSP_BOOL(*IsRandomInitedFunction)(struct RND_CONTEXT_ *context) ATTR_USERES;
 
 /*! \internal
 * \brief Указатель на функцию получения состояния ДСЧ.
@@ -55,7 +55,7 @@ typedef CSP_BOOL(*IsRandomInitedFunction)(struct RND_CONTEXT_ *context);
 *  полную структуру контекста.
 * \param seed [out] Инициализирующая последовательность.
 */
-typedef CSP_BOOL(*GetRandomSeedFunction)(struct RND_CONTEXT_ *context, LPBYTE seed, size_t length);
+typedef CSP_BOOL(*GetRandomSeedFunction)(struct RND_CONTEXT_ *context, LPBYTE seed, size_t length) ATTR_USERES;
 
 /*! \internal
 * \brief Указатель на функцию установки инициализирующей последовательности.
@@ -64,13 +64,7 @@ typedef CSP_BOOL(*GetRandomSeedFunction)(struct RND_CONTEXT_ *context, LPBYTE se
 *  полную структуру контекста.
 * \param seed [in] Инициализирующая последовательность.
 */
-typedef CSP_BOOL(*SetRandomSeedFunction)(pCP_CALL_CTX pCallCtx, struct RND_CONTEXT_ *context, const LPBYTE seed, size_t length);
-/*! \internal
-* \brief Признак инициализации контекста от внешнего источника,
-*  в частности с использованием функции CPSetProvParam(), PP_RANDOM.
-*/
-#define RND_INITED 0x00000001
-
+typedef CSP_BOOL(*SetRandomSeedFunction)(pCP_CALL_CTX pCallCtx, struct RND_CONTEXT_ *context, const LPBYTE seed, size_t length, DWORD dwInitFlags) ATTR_USERES;
 
 /*! \internal
 * \brief Контекст функции получения случайной последовательности.
@@ -81,6 +75,7 @@ typedef struct RND_CONTEXT_ {
     GetRandomSeedFunction get_random_seed; /*!< Указатель на функцию получения random seed. */
     SetRandomSeedFunction set_random_seed; /*!< Указатель на функцию установки random_seed. */
     DWORD Flags;			    /*!< Флаг состояния контекста.*/
+    DWORD dwSecurityLevel;
 } RND_CONTEXT, *LPRND_CONTEXT;
 
 /* Реентерабельные варианты CSP_SetLastError/CSP_GetLastError */
@@ -109,6 +104,8 @@ void	rValidateMemory	(pCP_CALL_CTX pCallCtx);
 void	rInitCallCtx	(pCP_CALL_CTX pCallCtx, LPCRYPT_CSP hCSP);
 
 
+#define	 ROOT_PRSG_CRITICAL_ERROR	   1
+
 struct _CP_CALL_CTX_
 {
     LPCRYPT_CSP			hCSP;
@@ -121,9 +118,10 @@ struct _CP_CALL_CTX_
     CSP_BOOL			bOwnFPU;
     int				iCntFPU;
     DWORD			dwFPUOpType;
-	// ASSERT - адрес выровнен на FPUAllignValue
+    DWORD			dwCriticalErrorFlags;
+
     struct cp_vtb_28147_89     *pVTB;
-    CP_ASTACK	       *pAStk;
+    CP_ASTACK		       *pAStk;
 };
 
 

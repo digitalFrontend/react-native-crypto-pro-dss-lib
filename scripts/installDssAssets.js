@@ -13,7 +13,7 @@ const CERTS_FILE = "certs.json"
 const STYLES_FILE = "SDKStyles.json"
 const PROJECT_FILES_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}android/app/src/main/assets/`
 const LIB_FILES_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/android/src/main/assets/`
-const IOS_FRAMEWORK_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/Frameworks/SDKFramework.framework/`
+const IOS_FRAMEWORK_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/Frameworks/`
 
 const convertStylesToIOS = (_stylesText = "", fonts = []) => {
     let stylesText = `${_stylesText}`

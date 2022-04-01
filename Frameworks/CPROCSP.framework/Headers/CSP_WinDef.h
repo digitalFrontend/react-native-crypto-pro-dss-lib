@@ -479,8 +479,8 @@ CSP_FormatMessage(
 #else
 
 #if defined (_MSC_VER) || defined (__GNUC__)
-#  if defined (__cplusplus) && !defined (IGNORE_LEGACY_FORMAT_MESSAGE_MSG)
-#    if !(defined(PROCESSOR_TYPE) && (PROCESSOR_TYPE == PROC_TYPE_E2K32 || PROCESSOR_TYPE == PROC_TYPE_E2K64))
+#  if defined (__cplusplus) && !defined (IGNORE_LEGACY_FORMAT_MESSAGE_MSG) && !defined (__APPLE__)
+#    if defined(_M_IX86) || defined(_M_X64) || defined(__amd64) || defined(__x86_64__) || defined(__i386__) || defined(__i386)
 #      pragma message ("Your application will require at least CryptoPro CSP 4.0 R3. You can use LEGACY_FORMAT_MESSAGE_IMPL to support older versions.")
 #    endif
 #  endif

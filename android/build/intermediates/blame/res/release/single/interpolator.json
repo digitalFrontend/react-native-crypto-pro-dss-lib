@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/97c430f738ebf07894b09d943d45b96b/transformed/res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/interpolator/mtrl_linear.xml",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/a4cdd3cc4fbed1b9e787db04ad8dddec/transformed/res/interpolator/mtrl_linear.xml"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/97c430f738ebf07894b09d943d45b96b/transformed/res/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/97c430f738ebf07894b09d943d45b96b/transformed/res/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/97c430f738ebf07894b09d943d45b96b/transformed/res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/97c430f738ebf07894b09d943d45b96b/transformed/res/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/97c430f738ebf07894b09d943d45b96b/transformed/res/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/interpolator/fast_out_slow_in.xml",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/97c430f738ebf07894b09d943d45b96b/transformed/res/interpolator/fast_out_slow_in.xml"
+    }
+]

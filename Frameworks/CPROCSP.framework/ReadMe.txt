@@ -1,15 +1,25 @@
-﻿[UTF-8]
+[UTF-8]
 [Use `iconv -f utf-8', if needed]
 
 Если вы планируете использовать MonoDevelop, ознакомьтесь с инструкцией MonoDevelopBuild.txt
 
-Для сборки примера в Xcode:
 
-0. Проекты CreateFile и iStunnelSimple уже настроены, чтобы работать с ними, их надо извлечь в одну папку с CPROCSP.framework и выполнить пункт 1
+§.1. Особенности при обновлении
+_______________________________
+
+Если вы уже собирали проект и заменяете в нём CPROCSP.framework, перед сборкой надо обязательно
+выполнить очистку в XCode: "Product / Clean build folder" (Shift+Apple+K).
+
+
+§.2. Сборка примера в Xcode
+___________________________
+
+0. Проект CreateFile уже настроен, чтобы работать с ним, его надо извлечь в одну папку
+   с CPROCSP.framework и выполнить пункт 1.
 
 1. Запустить 
 
-	SetApplicationLicense 40400-W0037-EKVQK-9YDNG-D3F67 license.enc
+	SetApplicationLicense 5050X-80030-05WE5-0QQWR-PWQFL license.enc
 
    В текущей директории будет создан файл license.enc. 
 2. Открыть проект в XCode
@@ -29,7 +39,7 @@
    В меню выбрать "Create Folder Groups".
    При этом они будут автоматически сгруппированы в двуязычные файлы локализации.
 7. В свойствах проекта настроить 
-   "Valid Architectures: armv7"
+   "Valid Architectures: $(ARCHS_STANDARD)"
 8. Если используется XCode, в левой панели выбрать проект, затем 
    в основном окне в списке targets выбрать цель сборки, перейти на вкладку
    "Build Phases", выбрать там "Add Build Phase - Add Run Script". Появившуюся
@@ -43,7 +53,67 @@
     При задании (рекомендуется) bool USE_CACHE_DIR = false; эта директория будет Documents/cprocsp/keys/
     При задании bool USE_CACHE_DIR = true; это будет Library/Caches/cprocsp/keys/
 
-Установка корневого сертификата удостоверяющего центра:
+
+§.3. Особые настройки и отладка
+_______________________________
+
+!!!ВАЖНО!!!---------------------------------------------------------------------
+1. При сборке собственного проекта с КриптоПро CSP и в свойствах проекта и в свойствах target 
+   рекомендуем отключать опции "Dead Code Striping", "Strip during copy",  "Strip linked products".
+   Отметим, что включение "Dead Code Striping" позволяет в несколько раз уменьшить размер приложения. Если при этом
+   планируется использовать модули считывателей ключей или ДСЧ то, чтобы линкер не удалил эти модули, 
+   нужно добавить ссылки на необходиммые символы в приложении.
+    #import <CPROCSP/CPROCSP.h>
+    const void * ptr = bio_gui_rndm_get_table();
+    const void * ptr = gemalto_media_get_table();
+    const void * ptr = default_reader_get_table();
+    const void * ptr = default_reader_get_group_table();
+    const void * ptr = pcsc_reader_get_table();
+    const void * ptr = pcsc_reader_get_group_table();
+    const void * ptr = cryptoki_reader_get_table();
+    const void * ptr = cryptoki_reader_get_group_table();
+    const void * ptr = rutokenfkc_media_get_table();
+    const void * ptr = jacarta_media_get_table();
+    const void * ptr = jacarta_lt_get_table();
+    const void * ptr = rutokennfc_media_get_table();
+    const void * ptr = rutokenlite_media_get_table();
+    const void * ptr = rutokenecp_media_get_table();
+    const void * ptr = rutokenlitesc2_media_get_table();
+    const void * ptr = rutokenecpsc_media_get_table();
+    const void * ptr = rutoken_media_get_table();
+    const void * ptr = rutokenpinpad_media_get_table();
+    const void * ptr = rutokenfkcold_media_get_table();
+    const void * ptr = rutokenecpm_media_get_table();
+    const void * ptr = rutokenecpmsc_media_get_table();
+    const void * ptr = cloud_reader_get_table();
+    const void * ptr = cloud_media_get_table();
+    const void * ptr = hvisdef_hvis_get_table();
+
+2. Во время отладки проектов необходимо отключать контроль целостности CSP. Для этого нужно
+   вызвать функцию DisableIntegrityCheck() из /Headers/DisableIntegrity.h .
+--------------------------------------------------------------------------------
+
+
+§.4. Настройки для проекта на swift
+___________________________________
+
+Кроме настроек из П.2 и П.3, для проектов на swift дополнительно нужно:
+
+1. В левой панели выбрать проект, затем в основном окне в списке targets выбрать 
+   цель сборки, перейти на вкладку "Build Settings". В "Linking" / "Other Linker Flags"
+   указать -lc++
+   Иначе будут ошибки отсутствия C++ символов в духе:
+   Undefined symbol: std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::find(char, unsigned long) const
+
+2. Аналогично в "Build Phases" / "Link Binary With Libraries" / "Add Items"
+   найти и добавить libz.tbd
+   Иначе будут ошибки отсутствия символовв духе:
+   Undefined symbol: _inflate
+
+
+§.5. Установка корневого сертификата удостоверяющего центра
+___________________________________________________________
+
 1. Создать копию корневого хранилища
    mv /var/opt/cprocsp/users/stores/root.sto{,.old}
 2. Скопировать корневое хранилище, находящееся в ресурсах фреймворка
@@ -60,18 +130,17 @@
 7. Вернуть исходное корневое хранилище
    mv /var/opt/cprocsp/users/stores/root.sto.old /var/opt/cprocsp/users/stores/root.sto
 
-Сохранение/восстановление контейнеров
+
+§.6. Сохранение/восстановление контейнеров
+__________________________________________
+
 1. С помощью iTunes File Sharing найдите приложение, слинкованное с фреймворком CPROCSP
 2.
    а) Сохранение: cкопируйте папку keys, лежащую внутри cprocsp, в директорию на компьютере
    б) Восстановление: замените папку keys, лежащую внутри cprocsp, на аналогичную заранее сохраненную папку.
 
-!!!ВАЖНО!!!---------------------------------------------------------------------
-При сборке собственного проекта с КриптоПро CSP и в свойствах проекта и в свойствах target 
-должны быть отключены опции "Dead Code Striping", "Strip during copy",  "Strip linked products".
 
-Во время отладки проектов необходимо отключать контроль целостности CSP. Для этого нужно
-вызвать функцию DisableIntegrityCheck() из /Headers/DisableIntegrity.h .
---------------------------------------------------------------------------------
+§.7. Тестирование
+_________________
 
 Проверить корректность работы приложения на iOS можно воспользовавшись инструкцией RunTest.txt

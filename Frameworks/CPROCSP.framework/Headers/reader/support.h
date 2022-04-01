@@ -15,44 +15,8 @@
 #if !defined( _READER_SUPPORT_SUPPORT_H )
 #define _READER_SUPPORT_SUPPORT_H
 
-#include<CPROCSP/common.h>
-#include<CPROCSP/reader/tchar.h>
-
-/* --------------- INCLUDE --------------- */
-#if defined(CSP_LITE)       	
-#include<CPROCSP/CSP_WinDef.h>
-#include<CPROCSP/CSP_WinError.h>
-#elif defined _WIN32
-#   include <stdlib.h>
-#   include <malloc.h>
-#   pragma warning( push )
-#   pragma warning( disable: 4100 4115 4201 4214 )
-#   include <windows.h>
-#   include <time.h>
-#   pragma warning( pop )
-#elif defined UNIX
-#   include <wchar.h>
-#include<CPROCSP/CSP_WinDef.h>
-#include<CPROCSP/CSP_WinError.h>
-#   include <stdlib.h>
-#   include <stdarg.h>
-# ifdef HAVE_STDINT_H
-#   include <stdint.h>
-# elif defined(HAVE_INTTYPES_H)
-#   include <inttypes.h>
-# elif defined(HAVE_SYS_INTTYPES_H)
-#   include <sys/inttypes.h>
-# endif //HAVE_STDINT_H
-#   include <time.h>
-#   include <sys/time.h>
-#   include <pthread.h>
-#   include <nl_types.h>
-#include<CPROCSP/reader/ubi_mutex.h>
-#else
-#   error !UNIX && !_WIN32
-#endif //CSP_LITE
-
-#include<CPROCSP/reader/std_decl.h>
+#include<CPROCSP/reader/support_base_defs.h>
+#include<CPROCSP/reader/support_registry.h>
 
 #if !defined( _SUPPORT_CALLBACK_CONV )
 #   if defined( UNIX )
@@ -168,7 +132,7 @@
 #   define support_mutex_init( mutex ) *mutex = INVALID_HANDLE_VALUE;
 #   define support_mutex_open( mutex, name, f) support_mutex_open_fun(mutex, name)
 #   define support_mutex_lock( mutex ) WaitForSingleObject( (mutex), INFINITE )
-#   define support_mutex_unlock( mutex ) { if(mutex != INVALID_HANDLE_VALUE) ReleaseMutex( mutex ); }
+#   define support_mutex_unlock( mutex ) ReleaseMutex( mutex );
 #   define support_mutex_close( mutex ) { if( *mutex != INVALID_HANDLE_VALUE ) { CloseHandle( *mutex ); *mutex = INVALID_HANDLE_VALUE; } }
 # ifndef _M_ARM
 #   define support_try __try {
@@ -263,11 +227,6 @@
     #endif
 #endif
 
-#ifdef UNIX
-# define SUP_INLINE inline
-#else
-# define SUP_INLINE __inline
-#endif
 
 #ifdef __cplusplus
 # if defined(__xlC__) || defined(_AIX)
@@ -528,14 +487,24 @@ SUP_INLINE static int IsGoodCodePtr(SUP_PROC_PTR p) { return (p != NULL); }
 #define SUPPORT_NOTIFY_CHANGE 0x2
 #define SUPPORT_NOTIFY_RENAME 0x4
 #define SUPPORT_NOTIFY_SECURITY 0x8
+#define SUPPORT_NOTIFY_PASSTHROUGH 0x10000000
 
 #define SUP_LOAD_LIBRARY_STD 0
 
+// Разрешить загрузку библиотеки, если её регистрации нет в AppPath
 #define SUP_LOAD_LIBRARY_DEFAULT    1
+// Загрузка с флагом RTLD_GROUP (разделение таблиц символов). Solaris-only.
 #define SUP_LOAD_LIBRARY_SEPARATE   2
+// Не прогружать полностью библиотеку (RTLD_LAZY). Unix-only.
 #define SUP_LOAD_LIBRARY_LAZY	    4
-#define SUP_LOAD_LIBRARY_SYSTEM	    8 /* do not use this module path during dll search */ 
-#define SUP_LOAD_LIBRARY_REDIRECTION 16 /*try to get redirected path or use default behaviour*/
+// При поиске DLL не использовать путь загружающего модуля. Windows-only.
+#define SUP_LOAD_LIBRARY_SYSTEM	    8
+// experimental, disabled - При поиске DLL пользоваться перенаправлением, если задано. Windows-only.
+#define SUP_LOAD_LIBRARY_REDIRECTION 16
+// Не журналировать ошибку загрузки библиотеки. Unix-only.
+#define SUP_LOAD_LIBRARY_NO_ERROR_LOG 32
+// Искать загружаемую библиотеку только в системном расположении. Windows-only (System32).
+#define SUP_LOAD_LIBRARY_SYSTEM_PATH 64
 
 /* --------------- TYPES --------------- */
 
@@ -544,9 +513,8 @@ SUP_INLINE static int IsGoodCodePtr(SUP_PROC_PTR p) { return (p != NULL); }
 
     typedef struct
     {
-	int * idc_hide;
-	int idc_hide_len;
 	int max_resume_time;
+	int timer_id;
     } TSupResumeTimeStruct;
 #endif
 
@@ -633,7 +601,7 @@ typedef enum TSupFileType_ {
 	    LONG lDone;
 	    LONG lInited;
 	} TSupportOnce;
-	#define SUPPORT_ONCE_INIT { 0, 0 }
+	#define SUPPORT_ONCE_INIT { 0, 0, 0 }
 
 	static __inline int
 	support_once(TSupportOnce *once_control, 
@@ -784,17 +752,18 @@ typedef struct timeval support_timeval;
 extern "C" {
 #endif /* defined( __cplusplus ) */
 
-#include<CPROCSP/reader/altreg.h>
 DWORD usenewreg(void); /* переключение на новый имитатор. 0 -- удавчно, не-0 -- ошибка */
 DWORD rlsnewreg(void); /* завершаем работу с новым, переключаемся на старый. Всегда успешно */
 DWORD isnewreg(void);   /* 0 -- старый, не-0 -- новый */
-DWORD support_registry_get_oid(struct AREG_CRYPT_OID_INFO*); /* описания известных OID. -1 -- ошибка */
-DWORD support_registry_get_oidlen(void); /* количество известных OID. -1 -- ошибка */
-DWORD release_files(void);
-DWORD write_random_seed(void);
 
 unsigned long       support_get_last_error (void);
 void                support_set_last_error (unsigned long);
+
+#ifdef _WIN32
+void support_set_library(TSupModuleInstance support_ext_module);
+#else //_WIN32
+#define support_set_library(x) 
+#endif //_WIN32
 
 DWORD support_set_impersonate (int delayed, int hsmmode, int kb2mode);
 
@@ -822,6 +791,22 @@ void* support_shared_memory_lock(
 DWORD support_shared_memory_unlock( 
     TSupportSharedMemory *shared );
 #endif /* _WIN32 */
+
+/* Значение таймаута по умолчанию */
+#define DEF_DIALOG_TIMEOUT_VALUE 600
+
+/* Функция установки в конфиг значения таймаута диалоговых окон провайдера.
+   Если start_timeout == NULL, стирает параметр.
+   Иначе пишет в параметр * start_timeout.*/
+DWORD support_set_to_config_dialog_timeout(CSP_BOOL is_global, int * start_timeout);
+
+/* Функция чтения значения таймаута диалоговых окон провайдера.
+   Возвращает ERROR_FILE_NOT_FOUND в случае ошибки или отсутствия параметра в конфиге.
+   Иначе возвращает ERROR_SUCCESS, и, если указан start_timeout, то в нем значение таймаута. */
+DWORD support_get_from_config_dialog_timeout(CSP_BOOL is_global, int * start_timeout);
+
+/* Функция чтения значений таймаутов диалоговых окон провайдера */
+void support_get_dialog_timeouts(int * start_timeout, int * show_timeout, int * resume_timeout);
 
 /* Функция получения строкового параметра. */
 DWORD support_registry_get_string(
@@ -1020,6 +1005,10 @@ DWORD support_registry_notify_done(
 DWORD support_resource_string(
     TSupResourceInstance instance, size_t ids, TCHAR *dest, size_t *length );
 
+/* Функция получения строки на заданном языке из псевдо-ресурса. */
+DWORD support_resource_string_local(
+    TSupResourceInstance instance, WORD language, size_t ids, TCHAR *dest, size_t *length );
+
 /*! \ingroup group_resource
  * Функция получения компании производителя из псевдо-ресурса.
  */
@@ -1030,7 +1019,7 @@ DWORD support_resource_company(
 
 /* Функция получения произвольной именованой строки из ресурса VersionInfo */
 DWORD support_resource_version_string(
-    TCHAR *target,
+    const TCHAR *target,
     TSupResourceInstance instance, TCHAR *dest, size_t *length );
 
 DWORD support_icon_free(TSupIcon bitmap);
@@ -1078,6 +1067,7 @@ WORD support_wnd_language_get(void);
 DWORD support_wnd_language_update(void);
 DWORD support_wnd_language_done(void);
 
+// в length принимает и возвращает длину строки без учёта нуль-терминатора
 DWORD support_path2dir(
     const TCHAR *src, size_t *length, TCHAR *dest );
 
@@ -1177,14 +1167,22 @@ TSupModuleInstance support_load_library_registry(
 void support_unload_library_registry(TSupModuleInstance handle);
 TSupProc support_load_library_getaddr(TSupModuleInstance handle,
     const char *name);
-TSupModuleInstance support_load_dll(TCHAR *path, int mode);
+
+#ifdef _WIN32
+TSupModuleInstance support_load_dll(const TCHAR *path, int mode);
 void support_unload_dll( TSupModuleInstance handle );
+#endif //_WIN32
 
 DWORD support_registry_get_app_path(
     const TCHAR *path, size_t *length, TCHAR *dest );
 
 DWORD support_registry_get_app_path_ex(
     const TCHAR *path, size_t *length, TCHAR *dest, int do_not_use_this_file_path);
+
+#ifdef WIN32
+/* заполняет путь до вызывающего модуля для ускорения загрузки библиотек */
+CSP_BOOL support_init_module_path(void);
+#endif 
 
 /* Прогрузка библиотеки. */
 DWORD support_load_library( void );
@@ -1602,7 +1600,7 @@ DWORD support_verify_blocks(
 			       src_cur_.tv_sec < src_prev_.tv_sec + SRC_TIMEOUT && \
 			       src_cur_.tv_sec > src_prev_.tv_sec - SRC_TIMEOUT; \
 			SRC_##t##_RWLOCK_UNLOCK(pCC_, src_lock_); \
-		    } \
+		    }; \
 		    if(!src_cache_ || (cond)) { \
 			src_cache_ = FALSE; \
 			SRC_##t##_RWLOCK_WRLOCK(pCC_, src_lock_); \
@@ -1633,7 +1631,7 @@ DWORD support_verify_blocks(
 		    } \
 		    /* Если !src_cache_, то кэш инвалидирован в */ \
 		    /* этом потоке */ \
-		} \
+		}; \
 		if(!src_##t##_use_ || !src_cache_) {
 		    // Реальный доступ к реестру для записи или 
 		    // получения данных. Допустимы: return, 
@@ -1856,8 +1854,16 @@ typedef void(*slr_pfDestruct_t)(void *);
 
 #define support_len_of(a)    (sizeof(a)/sizeof((a)[0]))
 
+#ifdef UNIX
+void support_init_locale(void);
+#endif
+
 #if defined( __cplusplus )
 }
 #endif
+
+#ifndef CSP_LITE
+#include<CPROCSP/reader/support_util.h>
+#endif //CSP_LITE
 
 #endif /* !_READER_SUPPORT_SUPPORT_H */

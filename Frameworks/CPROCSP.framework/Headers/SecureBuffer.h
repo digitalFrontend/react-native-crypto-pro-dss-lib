@@ -26,9 +26,9 @@
  */
 
 /*!
- * \version $Revision: 127051 $
- * \date $Date:: 2015-09-09 16:08:20 +0400#$
- * \author $Author: pav $ (Original author: halaud) 
+ * \version $Revision: 200060 $
+ * \date $Date:: 2019-10-01 02:24:09 -0700#$
+ * \author $Author: sagafyin $ (Original author: halaud) 
  *
  * \brief Буфер для хранения PIN и паролей
  *
@@ -36,6 +36,8 @@
 
 #ifndef _SECUREBUFFER_H_INCLUDED
 #define _SECUREBUFFER_H_INCLUDED
+
+#include <stdexcept>
 
 #ifdef UNIX
 

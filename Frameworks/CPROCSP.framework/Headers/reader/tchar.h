@@ -99,6 +99,7 @@
     #define _tcstol strtol
     #define _tcstok strtok
     #define _ttol atol
+    #define _ttoi64 atoll
     #define _tcstoul strtoul
     #define _tasctime asctime
     #define _ftscanf fscanf

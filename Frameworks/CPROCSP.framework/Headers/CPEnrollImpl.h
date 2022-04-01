@@ -81,6 +81,7 @@ class CPEnrollImpl: public CPEnroll
 	    std::string oid;
 	    CSP_BOOL critical;
 	    std::vector<BYTE> value;
+	    std::string value_string;
 
 	    Extension() {
 	    }
@@ -88,8 +89,9 @@ class CPEnrollImpl: public CPEnroll
 	    Extension( 
 		const char* argOid,
 		LONG argCritical,
-		const std::vector<BYTE>& argValue)
-	    : oid(argOid), critical(argCritical), value(argValue) {
+		const std::vector<BYTE>& argValue,
+		const std::string &value_string = std::string())
+	    : oid(argOid), critical(argCritical), value(argValue), value_string(value_string) {
 	    }
 	};
 

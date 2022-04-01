@@ -14,9 +14,9 @@
 
 /*!
  * \file $RCSfile$
- * \version $Revision: 177359 $
- * \date $Date:: 2018-07-06 16:32:26 +0400#$
- * \author $Author: sonina $
+ * \version $Revision: 197576 $
+ * \date $Date:: 2019-08-13 06:00:32 -0700#$
+ * \author $Author: dim $
  *
  * \brief Модуль функций, обеспечивающих контейнер и др. основные структуры.
  */
@@ -118,6 +118,16 @@ fast_htonl (unsigned long hostlong)
     (((DWORD)(A) & 0x0000ff00) << 8) | \
     (((DWORD)(A) & 0x000000ff) << 24))
 
+#define bytes_rotate(ptr, length) \
+{ \
+    DWORD bytes_rotate_idx; \
+    for (bytes_rotate_idx = 0; bytes_rotate_idx < length / 2; bytes_rotate_idx++) { \
+        BYTE swap_tmp = ((BYTE*)ptr)[bytes_rotate_idx]; \
+        ((BYTE*)ptr)[bytes_rotate_idx] = ((BYTE*)ptr)[length - 1 - bytes_rotate_idx]; \
+        ((BYTE*)ptr)[length - 1 - bytes_rotate_idx] = swap_tmp; \
+    }\
+}
+
 static __inline
 uint32_t
 letohl_loc (const unsigned char * pcn)
@@ -141,6 +151,17 @@ htolelxor (unsigned char * pcn, DWORD hostlong)
     *(pcn+2) ^= (unsigned char)(hostlong & (uint32_t)0xff);
     hostlong >>= 8;
     *(pcn+3) ^= (unsigned char)(hostlong & (uint32_t)0xff);
+}
+
+static __inline
+void letohqxor(uint64_t *dest, const uint8_t *src)
+{
+    uint64_t tmp = 0;
+    unsigned i;
+    for (i = 0; i != sizeof(tmp); ++i) {
+        tmp |= ((uint64_t) src[i]) << (8 * i);
+    }
+    *dest ^= tmp;
 }
 
 static __inline
