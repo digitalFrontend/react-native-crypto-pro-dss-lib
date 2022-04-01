@@ -14,9 +14,9 @@
 
 /*!
  * \file $RCSfile$
- * \version $Revision: 148173 $
- * \date $Date:: 2016-11-07 00:01:43 +0400#$
- * \author $Author: raa $
+ * \version $Revision: 210843 $
+ * \date $Date:: 2020-04-29 00:24:30 -0700#$
+ * \author $Author: ilias $
  *
  * \brief Краткое описание модуля.
  *
@@ -30,9 +30,12 @@
 extern "C" {
 #endif
 
+extern int const_memcmp(const void * s1, const void * s2, size_t n);
+
 #define CMPMEMORY_TRUE 0xda61e537
 #if !defined( CmpMemory )
-extern int CmpMemory (LPCVOID pMemAddr1, LPCVOID pMemAddr2, DWORD dwCount);
+#include<CPROCSP/compiler_attributes.h>
+extern int CmpMemory (LPCVOID pMemAddr1, LPCVOID pMemAddr2, DWORD dwCount) ATTR_USERES;
 #endif /* !defined( CmpMemory ) */
 
 #ifdef __cplusplus

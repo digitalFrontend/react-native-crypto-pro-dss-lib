@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
 
   s.dependency "React"
   s.ios.vendored_frameworks = [
-    'Frameworks/SDKFramework.framework'
+    'Frameworks/SDKFramework.xcframework'
   ]
   # ...
   # s.dependency "..."

@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/raw/digests64",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/7caa10095f01d3ca73f0225d599cdc20/transformed/res/raw/digests64"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/raw/digests32",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/7caa10095f01d3ca73f0225d599cdc20/transformed/res/raw/digests32"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/raw/android_build.ini",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/7caa10095f01d3ca73f0225d599cdc20/transformed/res/raw/android_build.ini"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/raw/license.ini",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/7caa10095f01d3ca73f0225d599cdc20/transformed/res/raw/license.ini"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/raw/config.ini",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/7caa10095f01d3ca73f0225d599cdc20/transformed/res/raw/config.ini"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/raw/config64.ini",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/7caa10095f01d3ca73f0225d599cdc20/transformed/res/raw/config64.ini"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/raw/digestsx86",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/7caa10095f01d3ca73f0225d599cdc20/transformed/res/raw/digestsx86"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/raw/dexdigests",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/52710a8f9ca1b74a27cd38930ef5646b/transformed/res/raw/dexdigests"
+    },
+    {
+        "merged": "/Users/macbook/Documents/projects/App4T2/App4T2_Mobile/node_modules/react-native-crypto-pro-dss-lib/android/build/intermediates/res/merged/release/raw/digestsx86_64",
+        "source": "/Users/macbook/.gradle/caches/transforms-3/7caa10095f01d3ca73f0225d599cdc20/transformed/res/raw/digestsx86_64"
+    }
+]

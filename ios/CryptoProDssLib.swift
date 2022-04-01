@@ -17,7 +17,7 @@ struct DictionaryEncoder {
         
         let kid : String = user.kid;
         let uid : String = user.uid;
-        
+
         map.updateValue(kid, forKey: "kid");
         map.updateValue(uid, forKey: "uid");
         
@@ -32,7 +32,7 @@ struct DictionaryEncoder {
         let uid : String = device.uid;
         let profile : String = device.profile!;
         let deviceName : String = device.deviceName!;
-        
+
         map.updateValue(kid, forKey: "kid");
         map.updateValue(uid, forKey: "uid");
         map.updateValue(profile, forKey: "profile");
@@ -48,8 +48,6 @@ class CryptoProDssLib : UIViewController {
     private var jsPromiseResolver: RCTPromiseResolveBlock? = nil;
     private var jsPromiseRejecter: RCTPromiseRejectBlock? = nil;
     private var lastAuth: Auth? = nil;
-    private var lastRequest: ApproveRequestMT? = nil;
-    private var lastView: UIViewController? = nil;
     
     @objc
     func sdkInitialization(
@@ -67,7 +65,6 @@ class CryptoProDssLib : UIViewController {
             
             let cpd = CryptoProDss();
             cpd._init(view: rootVC) { code in
-                
                 resolve("inited")
             }
        }
@@ -89,9 +86,9 @@ class CryptoProDssLib : UIViewController {
             }
             
             let policy = Policy();
-            
+
             policy.getOperations(view: rootVC, kid: kid, type: nil, opId: nil){ operationsInfo,error  in
-                
+
                 if (error != nil){
                     reject(error?.localizedDescription,error?.localizedDescription,error?.localizedDescription);
                 } else {
@@ -124,34 +121,36 @@ class CryptoProDssLib : UIViewController {
                  return
             }
             
-            
+
             let policy = Policy();
             let sign = Sign();
             policy.getOperations(view: rootVC, kid: kid, type: nil, opId: nil){ operationsInfo,error  in
                 
                 var operation = nil as SDKFramework.Operation?;
-                
+
                 for _operation in operationsInfo?.operations ?? [] {
-                  
+
                     if (transactionId == _operation.transactionId) {
                         operation = _operation;
                     }
                 }
-                
-                self.tryToSwitchHeader(true);
+
+               // self.tryToSwitchHeader(true);
                 sign.signMT(view: rootVC, kid: kid, operation: operation, enableMultiSelection: false, inmediateSendConfirm: false, silent: false){ approveRequestMT,error  in
                     
-                    self.tryToSwitchHeader( false);
-                    
-                    self.lastRequest = approveRequestMT;
-                    self.lastView = rootVC;
+                  //  self.tryToSwitchHeader( false);
+
                     
                     if (error != nil){
                         reject(error?.localizedDescription,error?.localizedDescription,error?.localizedDescription);
                     } else {
-                        let forReturn = try! DictionaryEncoder.encode(self.lastRequest);
-                        
-                        resolve(forReturn);
+
+                        sign.deferredRequest(view: rootVC, kid: kid, approveRequest: approveRequestMT!){ error in
+                            
+                            let forReturn = try! DictionaryEncoder.encode(approveRequestMT);
+                                                    
+                            resolve(forReturn);
+                        }
                     }
                     
                 }
@@ -161,28 +160,7 @@ class CryptoProDssLib : UIViewController {
     }
     
     
-    @objc
-    func deferredRequest(
-        _ kid: String,
-        withResolver resolve: @escaping RCTPromiseResolveBlock,
-        withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
-        
-        jsPromiseResolver = resolve;
-        jsPromiseRejecter = reject;
-        
-        DispatchQueue.main.async {
-            
-            
-            
-            let policy = Policy();
-            let sign = Sign();
-            
-            sign.deferredRequest(view: self.lastView!, kid: kid, approveRequest: self.lastRequest!){ error in
-                resolve("success");
-            }
-       }
-        
-    }
+   
     
     override func viewDidLoad() {
             super.viewDidLoad()
@@ -197,7 +175,7 @@ class CryptoProDssLib : UIViewController {
                 let lastUser = authList[authList.count-1];
                 return lastUser.kid;
             } catch {
-                
+
             }
         return nil;
     }
@@ -212,10 +190,10 @@ class CryptoProDssLib : UIViewController {
         
         DispatchQueue.main.async {
             let policy = Policy();
-         
+
             do {
                 try policy.setPersonalisation(url: Bundle.main.url(forResource: "SDKStyles", withExtension:"json")!)
-                
+
                 resolve("updateStyles success");
             } catch {
                 reject("cant load styles","cant load styles","cant load styles");
@@ -236,7 +214,7 @@ class CryptoProDssLib : UIViewController {
         DispatchQueue.main.async {
             
             
-            self.tryToSwitchHeader(false);
+           // self.tryToSwitchHeader(false);
             var authList = [] as [DSSUser];
             do {
                 authList = try Auth.getAuthList();
@@ -273,11 +251,11 @@ class CryptoProDssLib : UIViewController {
             }
             
             let policy = Policy();
-            self.tryToSwitchHeader(false);
+           // self.tryToSwitchHeader(false);
             
             policy.getUserDevices(view: rootVC, kid: kid){
                 devices,error  in
-                    
+
                 if (error != nil){
                     reject(error?.localizedDescription,error?.localizedDescription,error?.localizedDescription);
                 } else {
@@ -315,15 +293,15 @@ class CryptoProDssLib : UIViewController {
                     
                     self.lastAuth!.confirm(view: rootVC, kid: kid) { error in
                         if error != nil {
-                            self.tryToSwitchHeader(false);
+                           // self.tryToSwitchHeader(false);
                             reject("auth confirm - failed", error as! String, "auth confirm - failed")
-                    
+
                         } else {
                             self.lastAuth!.verify(view: rootVC, kid: kid, silent: false) { error in
-                                self.tryToSwitchHeader(false);
+                               // self.tryToSwitchHeader(false);
                                 if error != nil {
                                     reject("auth verify - failed", error as! String, "auth verify - failed")
-                             
+
                                 } else {
                                     resolve(String(format: "success"))
                                 }
@@ -336,7 +314,7 @@ class CryptoProDssLib : UIViewController {
                     print("continueInitViaQr error")
                     print(error)
                     
-                    reject("continueInitViaQr - error", error as! String, "continueInitViaQr - error")
+                    reject("continueInitViaQr - error", error as! String, "continueInitViaQr - error" as! Error)
                 }
             }
     }
@@ -360,7 +338,7 @@ class CryptoProDssLib : UIViewController {
         DispatchQueue.main.async {
                 
             do {
-                self.lastAuth = try Auth()
+               self.lastAuth = try Auth()
                 
                 guard let rootVC = UIApplication.shared.delegate?.window??.visibleViewController, (rootVC.navigationController != nil) else {
                      reject("E_INIT", "Error getting rootViewController", NSError(domain: "", code: 200, userInfo: nil))
@@ -369,16 +347,17 @@ class CryptoProDssLib : UIViewController {
                 
                 let user = DSSUser();
                 let registerInfo = RegisterInfo();
-                
-                self.lastAuth!.scanQR(view: rootVC, base64QR: base64)  { type, error in
+
+                self.lastAuth!.scanQR(view: rootVC, base64QR: base64) {
+                    type, url, error in
                     if error != nil {
                         reject("scanQr - failed", "scanQr - failed", "scanQr - failed")
                     } else {
-                        self.tryToSwitchHeader(true);
-                        self.lastAuth!.kinit(view: rootVC, dssUser: user, registerInfo: registerInfo, keyProtectionType: useBiometric ? SDKFramework.ProtectionType.BIOMETRIC : SDKFramework.ProtectionType.PASSWORD, activationCode: nil, password: nil) { error in
-                            
+                       // self.tryToSwitchHeader(true);
+                        self.lastAuth!.kinit(view: rootVC, dssUser: user, registerInfo: registerInfo, keyProtectionType: useBiometric ? SDKFramework.ProtectionType.BIOMETRIC : SDKFramework.ProtectionType.PASSWORD, activationCode: nil, password: nil) { kid, error  in
+
                             if error != nil {
-                                self.tryToSwitchHeader(false);
+                                //self.tryToSwitchHeader(false);
                                 reject("kinit - failed", error as! String, "kinit - failed")
                             } else {
                                 resolve(String(format: "success"))
@@ -390,7 +369,7 @@ class CryptoProDssLib : UIViewController {
             } catch {
                 print("scanQR error")
                 print(error)
-                reject("scanQr - error", "scanQr - error", "scanQr - error")
+                reject("scanQr - error", "scanQr - error", "scanQr - error" as! Error)
                    
             }
                   

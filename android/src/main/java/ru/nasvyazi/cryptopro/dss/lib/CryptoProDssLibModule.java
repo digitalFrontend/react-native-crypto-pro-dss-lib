@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.digt.sdk.*;
 import com.digt.sdk.auth.Auth;
 import com.digt.sdk.auth.models.DssUser;
+import com.digt.sdk.auth.models.RawQR;
 import com.digt.sdk.auth.models.RegisterInfo;
 import com.digt.sdk.cert.Cert;
 import com.digt.sdk.cert.models.Certificate;
@@ -88,8 +89,6 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
     private Auth lastAuth;
-    private Operation lastOperation;
-    private ApproveRequestMT lastRequest;
 
 
     @SuppressLint("RestrictedApi")
@@ -110,7 +109,7 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
     @SuppressLint("RestrictedApi")
     @ReactMethod
     public void onResumeActivity() {
-        CryptoProDss.getInstance().registerActivityContext(this.reactContext);
+        //CryptoProDss.registerActivityContext(getReactApplicationContext());
      }
 
 
@@ -230,13 +229,23 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
                     @Override
                     public void onOperationSuspendedConfirm(@NonNull ApproveRequestMT approveRequestMT) {
-                        lastOperation = final_operation;
-                        lastRequest = approveRequestMT;
-                        try {
-                            promise.resolve(convertJsonToMap(new JSONObject(lastRequest.toJsonString())));
-                        } catch (JSONException e) {
-                            promise.resolve("JSON PARSE ERROR");
-                        }
+
+
+                        sign.deferredRequest(getReactApplicationContext().getCurrentActivity(), kid, approveRequestMT, new SdkMtOperationCallback() {
+                            @Override
+                            public void onOperationSuccessful() {
+                                try {
+                                    promise.resolve(convertJsonToMap(new JSONObject(approveRequestMT.toJsonString())));
+                                } catch (JSONException e) {
+                                    promise.resolve("JSON PARSE ERROR");
+                                }
+                            }
+
+                            @Override
+                            public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
+                                promise.reject("deferredRequest - failed",s, throwable);
+                            }
+                        });
                     }
 
                     @Override
@@ -254,23 +263,6 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
     }
 
-    @SuppressLint("RestrictedApi")
-    @ReactMethod
-    public void deferredRequest(String kid, Promise promise) {
-        Sign sign = new Sign();
-
-        sign.deferredRequest(getReactApplicationContext().getCurrentActivity(), kid, lastRequest, new SdkMtOperationCallback() {
-            @Override
-            public void onOperationSuccessful() {
-                promise.resolve("success");
-            }
-
-            @Override
-            public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
-                promise.reject("deferredRequest - failed",s, throwable);
-            }
-        });
-    }
 
 
 
@@ -391,19 +383,20 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
         DssUser dssUser = new DssUser();
         RegisterInfo registerInfo = new RegisterInfo(null, null);
         lastAuth = new Auth();
-        lastAuth.scanQr(this.reactContext.getCurrentActivity(), base64, new SdkQrCallback(){
+        lastAuth.scanQr(this.reactContext.getCurrentActivity(), base64, new SdkQrCallback() {
 
             @Override
-            public void onOperationSuccessful(@NonNull String s) {
-                lastAuth.kinit(getReactApplicationContext().getCurrentActivity(), dssUser, registerInfo,useBiometric ? Constants.KeyProtectionType.BIOMETRIC: Constants.KeyProtectionType.PASSWORD, null, null, new SdkDssUserCallback(){
-                    @Override
-                    public void onOperationSuccessful() {
-                        promise.resolve("success");
-                    }
+            public void onOperationSuccessful(@NonNull RawQR rawQR) {
+                lastAuth.kinit(getReactApplicationContext().getCurrentActivity(), dssUser, registerInfo, useBiometric ? Constants.KeyProtectionType.BIOMETRIC : Constants.KeyProtectionType.PASSWORD, null, null, new SdkDssUserCallback() {
 
                     @Override
                     public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
                         promise.reject("kinit - failed", s,throwable);
+                    }
+
+                    @Override
+                    public void onOperationSuccessful(String s) {
+                        promise.resolve("success");
                     }
                 });
             }

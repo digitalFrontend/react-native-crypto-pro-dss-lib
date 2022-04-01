@@ -30,9 +30,9 @@ eval $PROGRAM_CHECKSUM $PARAM
 ------------------------------
 где 
 <путь к собранному приложению> -- путь к собранному приложению. Ќапример, если проект называетс€ testcrypt и находитс€ по пути path, путь скорее всего будет таким:
-"/<path>/testcrypt/bin/iPhoneSimulator/Debug/testcrypt.app" 
+"/<path>/testcrypt/bin/iPhoneSimulator/Debug/testcrypt.app/testcrypt"
 дл€ сборки под эмул€тор или
-"/<path>/testcrypt/bin/iPhone/Debug/testcrypt.app"
+"/<path>/testcrypt/bin/iPhone/Debug/testcrypt.app/testcrypt"
 дл€ сборки дл€ устройства.
 
 9. ¬ажно: при сборке ipa в свойствах проекта: ѕостроение -> iOS Build -> Enable debugging необходимо установить галочку, т.к. без этого не работает (причины пока не €сны, но св€зано с оптимизацией кода).

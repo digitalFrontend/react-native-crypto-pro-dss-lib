@@ -49,6 +49,8 @@ typedef struct _CPSSP_CTX_FLAGS_ {
     unsigned int FixedDH:1;
     unsigned int SplitByMessages:1;
     unsigned int SkipNextMAC:1;
+    unsigned int ReadPacketNumOverflow:1;
+    unsigned int WritePacketNumOverflow:1;
 //флажки отвечающие за TLS extensions
 //для клиента означают, что extension посылался, после получения hello от сервера - будет ли поддерживаться
 //для сервера означают, что получен от клиента и будет поддерживаться
@@ -64,6 +66,24 @@ typedef struct _CPSSP_CTX_FLAGS_ {
     unsigned int extended_master_secret : 1;
     unsigned int session_reused : 1;
     unsigned int client_legacy_sent : 1;
+    unsigned int elliptic_curves : 1;
+    unsigned int ec_point_formats : 1;
+    // Новые флаги добавлять строго в конец!
+    unsigned int unused_1 : 1;
+    unsigned int SessionTicketAcquired : 1;
+    unsigned int signed_certificate_timestamp : 1;
+    unsigned int check_session_timeout : 1;
+    unsigned int tls13 : 1;
+    unsigned int hrr : 1;
+    unsigned int hash_and_sign_srv_algs : 1;
+    unsigned int hash_and_sign_cert_cln_algs : 1;
+    unsigned int hash_and_sign_cert_srv_algs : 1;
+    unsigned int supported_versions : 1;
+    unsigned int key_share : 1;
+    unsigned int psk_key_exchange_modes : 1;
+    unsigned int pre_shared_keys : 1;
+    unsigned int post_handshake_auth : 1;
+    unsigned int post_handshake_auth_ordered : 1;
 } CPSSP_CTX_FLAGS, *PCPSSP_CTX_FLAGS;
 
 #ifdef KSP_LITE
@@ -134,5 +154,38 @@ typedef struct _SecPkgContext_ApplicationProtocol
 } SecPkgContext_ApplicationProtocol, *PSecPkgContext_ApplicationProtocol;
 
 #endif /*SECBUFFER_APPLICATION_PROTOCOLS*/
+
+#define ID_NODE_BYTE_SIZE 3
+
+#define SECPKG_ATTR_SID_CTX 0x119
+#define SECPKG_ATTR_SERVER_SESSION_TICKET_DATA        0x661
+
+#define AUTO_BASE_KEY	"AUTO" 
+
+#define MAX_BASEKEY_KEYBLOB_SIZE 256
+
+#define SEC_PKG_CRED_SERVER_SESSION_TICKET_DATA_VERSION_1 0x01
+
+#define SERVER_SESSION_TICKET_DERIVE_LABEL  "CryptoPro"
+
+typedef struct _ServerSessionTicketKeyBlob {
+    DWORD cbData;
+    BYTE pbData[MAX_BASEKEY_KEYBLOB_SIZE];
+} ServerSessionTicketKeyBlob, * PServerSessionTicketKeyBlob;
+
+#define MAX_SID_CTX_SIZE 32
+#define MAX_BASEKEY_KEYBLOBS 8
+
+typedef struct _SecPkgContext_SidCtx {
+    DWORD cbSidCtx;
+    BYTE pbSidCtx[MAX_SID_CTX_SIZE];
+} SecPkgContext_SidCtx, * PSecPkgContext_SidCtx;
+
+typedef struct _SecPkgCred_ServerSessionTicketData {
+    BYTE version;
+    BYTE node_id[ID_NODE_BYTE_SIZE];
+    SecPkgContext_SidCtx sid_ctx;
+    ServerSessionTicketKeyBlob keyBlobs[MAX_BASEKEY_KEYBLOBS];
+} SecPkgCred_ServerSessionTicketData, * PSecPkgCred_ServerSessionTicketData;
 
 #endif /* _CP_SCHANNEL_ */

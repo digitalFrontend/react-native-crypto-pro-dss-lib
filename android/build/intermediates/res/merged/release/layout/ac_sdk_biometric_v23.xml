@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ac_sdk_biometric_v23_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    tools:context=".auth.biometricUtils.Biometric"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/ac_sdk_biometric_v23_tv_title"
+        android:layout_marginBottom="16dp"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/ac_sdk_biometric_v23_vg_container"
+        android:layout_below="@id/ac_sdk_biometric_v23_tv_title">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:id="@+id/ac_sdk_biometric_v23_iv_fingerprint"
+            android:src="@drawable/ic_sdk_fingerprint_24px" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_gravity="center"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:id="@+id/ac_sdk_biometric_v23_tv_description" />
+    </LinearLayout>
+    <TextView
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ac_sdk_biometric_v23_btn_cancel"
+        android:layout_alignEnd="@id/ac_sdk_biometric_v23_vg_container"
+        android:layout_below="@id/ac_sdk_biometric_v23_vg_container"
+        android:clickable="true"
+        android:focusable="true" />
+</RelativeLayout>

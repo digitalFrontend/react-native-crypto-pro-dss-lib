@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #define CSP_BOOL CSP_CSP_BOOL
+#include<CPROCSP/reader/support.h>
 #include<CPROCSP/CSP_WinCrypt.h>
+#undef CSP_BOOL
 
 #define URL_RETRIEVER_TIMEOUT 60000
-#define NEED_EXIT_BUTTON_ITEMS_NUMBER 8
-#define ITEMS_NUMBER 7
 
 @protocol ModalViewControllerDelegate<NSObject>
 
@@ -20,6 +20,7 @@
 
 @end
 
+OBJC_EXPORT
 @interface PaneViewController : UIViewController<ModalViewControllerDelegate, UINavigationControllerDelegate> {
 	__unsafe_unretained id<ModalViewControllerDelegate, UITableViewDelegate> delegate;
 	bool needExitButton;
