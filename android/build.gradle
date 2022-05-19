@@ -98,8 +98,12 @@ repositories {
 }
 
 dependencies {
-    //noinspection GradleDynamicVersion    
-    implementation fileTree(dir: 'libs', include: ['*.aar'])
+    api project(':cspgui')
+    api project(':dssclient')
+    api project(':jinitcsp')
+    api project(':sharedlibrary')
+
+
     implementation 'com.facebook.react:react-native:+'  // From node_modules
     implementation 'androidx.appcompat:appcompat:1.2.0' 
     implementation 'com.google.android.material:material:1.2.0' 
@@ -116,6 +120,8 @@ dependencies {
     implementation "org.ini4j:ini4j:0.5.4"
 
 }
+
+
 
 def configureReactNativePom(def pom) {
     def packageJson = new groovy.json.JsonSlurper().parseText(file('../package.json').text)
@@ -144,6 +150,7 @@ def configureReactNativePom(def pom) {
         }
     }
 }
+
 
 afterEvaluate { project ->
     // some Gradle build hooks ref:
@@ -189,6 +196,8 @@ afterEvaluate { project ->
         }
     }
 }
+
+
 
 configurations.all { 
     resolutionStrategy.eachDependency { 
