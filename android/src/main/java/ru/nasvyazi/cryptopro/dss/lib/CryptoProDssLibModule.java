@@ -118,16 +118,30 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
     public void sdkInitialization(Promise promise) {
 
         new Handler(getMainLooper()).post(new Runnable() {
-              @Override
-              public void run() {
-                  CryptoProDss.initDSS(((FragmentActivity)getReactApplicationContext().getCurrentActivity()));
-                  CryptoProDss.getInstance().init(((FragmentActivity)getReactApplicationContext().getCurrentActivity()),new HashMap<String,String[]>(),new InitCallbackHandler(){
-                      @Override
-                      public void onInit(Constants.CSPInitCode var1) {
-                          promise.resolve((var1).getTitle());
-                      }
-                  });
-              }
+            @Override
+            public void run() {
+                CryptoProDss.initDSS(((FragmentActivity)getReactApplicationContext().getCurrentActivity()));
+                CryptoProDss.getInstance().init(((FragmentActivity)getReactApplicationContext().getCurrentActivity()),new HashMap<String,String[]>(),new InitCallbackHandler(){
+                    @Override
+                    public void onInit(Constants.CSPInitCode var1) {
+                        promise.resolve((var1).getTitle());
+                    }
+                });
+            }
+        });
+
+
+    }
+
+    @SuppressLint("RestrictedApi")
+    @ReactMethod
+    public void switchHeader(Boolean state, Promise promise) {
+
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                promise.resolve(null);
+            }
         });
 
 
