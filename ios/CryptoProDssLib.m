@@ -16,6 +16,12 @@ RCT_EXTERN_METHOD(getOperations:
                   withRejecter: (RCTPromiseRejectBlock)reject
 )
 
+RCT_EXTERN_METHOD(switchHeader:
+                  (BOOL *)state
+                  withResolver: (RCTPromiseResolveBlock)resolve
+                  withRejecter: (RCTPromiseRejectBlock)reject
+)
+
 RCT_EXTERN_METHOD(continueInitViaQr:
                   (NSString *)kid
                   withResolver: (RCTPromiseResolveBlock)resolve

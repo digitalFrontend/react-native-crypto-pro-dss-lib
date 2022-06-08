@@ -71,6 +71,24 @@ class CryptoProDssLib : UIViewController {
     }
     
     @objc
+    func switchHeader(
+        _ state: Bool,
+        withResolver resolve: @escaping RCTPromiseResolveBlock,
+        withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+        
+        jsPromiseResolver = resolve;
+        jsPromiseRejecter = reject;
+        
+        DispatchQueue.main.async {
+            
+            self.tryToSwitchHeader(state)
+            resolve(nil)
+
+       }
+        
+    }
+    
+    @objc
     func getOperations(
         _ kid: String,
         withResolver resolve: @escaping RCTPromiseResolveBlock,
@@ -135,11 +153,11 @@ class CryptoProDssLib : UIViewController {
                     }
                 }
 
-               // self.tryToSwitchHeader(true);
+                //self.tryToSwitchHeader(true);
                 sign.signMT(view: rootVC, kid: kid, operation: operation, enableMultiSelection: false, inmediateSendConfirm: false, silent: false){ approveRequestMT,error  in
                     
-                  //  self.tryToSwitchHeader( false);
-
+                    
+                    //self.tryToSwitchHeader( false);
                     
                     if (error != nil){
                         reject(error?.localizedDescription,error?.localizedDescription,error?.localizedDescription);
@@ -147,6 +165,7 @@ class CryptoProDssLib : UIViewController {
 
                         sign.deferredRequest(view: rootVC, kid: kid, approveRequest: approveRequestMT!){ error in
                             
+                            //self.tryToSwitchHeader( false);
                             let forReturn = try! DictionaryEncoder.encode(approveRequestMT);
                                                     
                             resolve(forReturn);
@@ -214,7 +233,6 @@ class CryptoProDssLib : UIViewController {
         DispatchQueue.main.async {
             
             
-           // self.tryToSwitchHeader(false);
             var authList = [] as [DSSUser];
             do {
                 authList = try Auth.getAuthList();
@@ -251,7 +269,6 @@ class CryptoProDssLib : UIViewController {
             }
             
             let policy = Policy();
-           // self.tryToSwitchHeader(false);
             
             policy.getUserDevices(view: rootVC, kid: kid){
                 devices,error  in
@@ -293,12 +310,12 @@ class CryptoProDssLib : UIViewController {
                     
                     self.lastAuth!.confirm(view: rootVC, kid: kid) { error in
                         if error != nil {
-                           // self.tryToSwitchHeader(false);
+                            //self.tryToSwitchHeader(false);
                             reject("auth confirm - failed", error as! String, "auth confirm - failed")
 
                         } else {
                             self.lastAuth!.verify(view: rootVC, kid: kid, silent: false) { error in
-                               // self.tryToSwitchHeader(false);
+                                //self.tryToSwitchHeader(false);
                                 if error != nil {
                                     reject("auth verify - failed", error as! String, "auth verify - failed")
 
@@ -353,7 +370,7 @@ class CryptoProDssLib : UIViewController {
                     if error != nil {
                         reject("scanQr - failed", "scanQr - failed", "scanQr - failed")
                     } else {
-                       // self.tryToSwitchHeader(true);
+                        //self.tryToSwitchHeader(true);
                         self.lastAuth!.kinit(view: rootVC, dssUser: user, registerInfo: registerInfo, keyProtectionType: useBiometric ? SDKFramework.ProtectionType.BIOMETRIC : SDKFramework.ProtectionType.PASSWORD, activationCode: nil, password: nil) { kid, error  in
 
                             if error != nil {
@@ -383,18 +400,23 @@ public extension UIWindow {
         self.window?.makeKeyAndVisible()
         let vc = self.rootViewController;
         if let nc = vc as? UINavigationController {
-            nc.setNavigationBarHidden(!state, animated: false);
-            if #available(iOS 15, *) {
-                let appearance = UINavigationBarAppearance()
-                appearance.configureWithOpaqueBackground()
-                appearance.backgroundColor = UIColor(red: 63/255.0, green: 203/255.0, blue: 255.0/255.0, alpha: 1.0)
-                
-                appearance.titleTextAttributes = [
-                    NSAttributedString.Key.foregroundColor: UIColor.white,
-                    NSAttributedString.Key.font: UIFont(name: "Tele2DisplaySerifWebSHORT-Bold", size: 17)!]
-                UINavigationBar.appearance().standardAppearance = appearance
-                UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            
+            if (state){
+                if #available(iOS 15, *) {
+                    let appearance = UINavigationBarAppearance()
+                    appearance.configureWithOpaqueBackground()
+                    appearance.backgroundColor = UIColor(red: 63/255.0, green: 203/255.0, blue: 255.0/255.0, alpha: 1.0)
+
+                    appearance.titleTextAttributes = [
+                        NSAttributedString.Key.foregroundColor: UIColor.white,
+                        NSAttributedString.Key.font: UIFont(name: "Tele2DisplaySerifWebSHORT-Bold", size: 17)!]
+                    UINavigationBar.appearance().standardAppearance = appearance
+                    UINavigationBar.appearance().scrollEdgeAppearance = appearance
+                }
             }
+            print(state);
+            print("state")
+            nc.setNavigationBarHidden(!state, animated: false);
             return UIWindow.getVisibleViewControllerFrom(nc.visibleViewController)
         } else if let tc = vc as? UITabBarController {
             return UIWindow.getVisibleViewControllerFrom(tc.selectedViewController)
