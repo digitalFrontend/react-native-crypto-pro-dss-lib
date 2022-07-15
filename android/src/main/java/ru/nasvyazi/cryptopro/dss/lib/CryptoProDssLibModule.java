@@ -112,6 +112,10 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
         //CryptoProDss.registerActivityContext(getReactApplicationContext());
      }
 
+     public void reject(Promise promise, String text) {
+         promise.reject("CryptoProDssLib", text);
+     }
+
 
     @SuppressLint("RestrictedApi")
     @ReactMethod
@@ -120,11 +124,16 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+
                 CryptoProDss.initDSS(((FragmentActivity)getReactApplicationContext().getCurrentActivity()));
                 CryptoProDss.getInstance().init(((FragmentActivity)getReactApplicationContext().getCurrentActivity()),new HashMap<String,String[]>(),new InitCallbackHandler(){
                     @Override
                     public void onInit(Constants.CSPInitCode var1) {
-                        promise.resolve((var1).getTitle());
+                        if (var1.equals(Constants.CSPInitCode.initOk)){
+                            promise.resolve("inited");
+                        } else {
+                            reject(promise, var1.getTitle());
+                        }
                     }
                 });
             }
@@ -178,7 +187,7 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
             policy.setPersonalisation(url);
            promise.resolve("updateStyles success");
         } catch (IOException e) {
-            promise.reject("cant load styles", "cant load styles");
+            reject(promise, "cant load styles (updateStyles)");
         }
     }
 
@@ -199,7 +208,7 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
                     try {
                         listWithJson.add(convertJsonToMap(new JSONObject(operation.toJsonString())));
                     } catch (JSONException e) {
-                        promise.reject("json error", "json error");
+                        reject(promise, String.format("json error (getOperations)"));
                     }
                 }
                 WritableNativeArray array = Arguments.makeNativeArray((List)listWithJson);
@@ -208,7 +217,7 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
-                promise.reject("getOperations - failed", s, throwable);
+                reject(promise, String.format("%s (getOperations)", s));
             }
         });
     }
@@ -251,27 +260,27 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
                                 try {
                                     promise.resolve(convertJsonToMap(new JSONObject(approveRequestMT.toJsonString())));
                                 } catch (JSONException e) {
-                                    promise.resolve("JSON PARSE ERROR");
+                                    reject(promise, String.format("JSON ERROR (deferredRequest)"));
                                 }
                             }
 
                             @Override
                             public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
-                                promise.reject("deferredRequest - failed",s, throwable);
+                                reject(promise, String.format("%s (deferredRequest)", s));
                             }
                         });
                     }
 
                     @Override
                     public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
-                        promise.reject("signMT - failed",s, throwable);
+                        reject(promise, String.format("%s (signMT)", s));
                     }
                 });
             }
 
             @Override
             public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
-                promise.reject("signMT - onOperationFailed - failed", s, throwable);
+                reject(promise, String.format("%s (getoperations.signMT)", s));
             }
         });
 
@@ -353,13 +362,12 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
                 @Override
                 public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
-                    Log.i("nasvyzi", s.toString());
-                   promise.reject("ERROR", s);
+                    reject(promise, String.format("%s (getUserDevices)", s));
                 }
             });
         } catch (Exception e) {
-            Log.i("nasvyzi", e.toString());
             e.printStackTrace();
+            reject(promise, String.format("%s (unknown.getUserDevices)", e.toString()));
         }
     }
 
@@ -378,14 +386,14 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
                     @Override
                     public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
 
-                        promise.reject("auth verify - failed", s, throwable);
+                        reject(promise, String.format("%s (auth.verify)", s));
                     }
                 });
             }
 
             @Override
             public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
-                promise.reject("auth confirm - failed", s, throwable);
+                reject(promise, String.format("%s (auth.confirm)", s));
             }
         });
     }
@@ -405,7 +413,7 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
                     @Override
                     public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
-                        promise.reject("kinit - failed", s,throwable);
+                        reject(promise, String.format("%s (kinit)", s));
                     }
 
                     @Override
@@ -417,8 +425,7 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
-                Log.i("TEST", "scan onOperationFailed");
-                promise.reject("scanQr - failed", s,throwable);
+                reject(promise, String.format("%s (scanQr)", s));
             }
 
             @Override

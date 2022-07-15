@@ -49,6 +49,10 @@ class CryptoProDssLib : UIViewController {
     private var jsPromiseRejecter: RCTPromiseRejectBlock? = nil;
     private var lastAuth: Auth? = nil;
     
+    private func reject(rejectFunc: @escaping RCTPromiseRejectBlock, text: String) -> Void {
+        rejectFunc("CryptoProDssLib", text, text);
+    }
+    
     @objc
     func sdkInitialization(
         _ resolve: @escaping RCTPromiseResolveBlock,
@@ -57,15 +61,21 @@ class CryptoProDssLib : UIViewController {
         jsPromiseResolver = resolve;
         jsPromiseRejecter = reject;
         
+      
         DispatchQueue.main.async {
             guard let rootVC = UIApplication.shared.delegate?.window??.visibleViewController, (rootVC.navigationController != nil) else {
-                 reject("E_INIT", "Error getting rootViewController", NSError(domain: "", code: 200, userInfo: nil))
+                 self.reject(rejectFunc: reject, text: "Error getting rootViewController(sdkInitialization)")
                  return
             }
             
+            
             let cpd = CryptoProDss();
             cpd._init(view: rootVC) { code in
-                resolve("inited")
+                if (code.rawValue == CSPInitCode.init_ok.rawValue){
+                    resolve("inited")
+                } else {
+                    self.reject(rejectFunc: reject, text: code.rawValue)
+                }
             }
        }
     }
@@ -80,12 +90,9 @@ class CryptoProDssLib : UIViewController {
         jsPromiseRejecter = reject;
         
         DispatchQueue.main.async {
-            
             self.tryToSwitchHeader(state)
             resolve(nil)
-
        }
-        
     }
     
     @objc
@@ -99,7 +106,8 @@ class CryptoProDssLib : UIViewController {
         
         DispatchQueue.main.async {
             guard let rootVC = UIApplication.shared.delegate?.window??.visibleViewController, (rootVC.navigationController != nil) else {
-                 reject("E_INIT", "Error getting rootViewController", NSError(domain: "", code: 200, userInfo: nil))
+                self.reject(rejectFunc: reject, text: "Error getting rootViewController(getOperations)")
+                
                  return
             }
             
@@ -108,7 +116,7 @@ class CryptoProDssLib : UIViewController {
             policy.getOperations(view: rootVC, kid: kid, type: nil, opId: nil){ operationsInfo,error  in
 
                 if (error != nil){
-                    reject(error?.localizedDescription,error?.localizedDescription,error?.localizedDescription);
+                    self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (getOperations)")
                 } else {
                     var operations = [] as [Any];
                     
@@ -135,7 +143,7 @@ class CryptoProDssLib : UIViewController {
         
         DispatchQueue.main.async {
             guard let rootVC = UIApplication.shared.delegate?.window??.visibleViewController, (rootVC.navigationController != nil) else {
-                 reject("E_INIT", "Error getting rootViewController", NSError(domain: "", code: 200, userInfo: nil))
+                self.reject(rejectFunc: reject, text: "Error getting rootViewController (signMT)")
                  return
             }
             
@@ -143,6 +151,11 @@ class CryptoProDssLib : UIViewController {
             let policy = Policy();
             let sign = Sign();
             policy.getOperations(view: rootVC, kid: kid, type: nil, opId: nil){ operationsInfo,error  in
+                
+                if (error != nil){
+                    self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (getOperations.signMT)")
+                    return;
+                }
                 
                 var operation = nil as SDKFramework.Operation?;
 
@@ -156,14 +169,18 @@ class CryptoProDssLib : UIViewController {
                 //self.tryToSwitchHeader(true);
                 sign.signMT(view: rootVC, kid: kid, operation: operation, enableMultiSelection: false, inmediateSendConfirm: false, silent: false){ approveRequestMT,error  in
                     
-                    
                     //self.tryToSwitchHeader( false);
                     
                     if (error != nil){
-                        reject(error?.localizedDescription,error?.localizedDescription,error?.localizedDescription);
+                        self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (signMT)")
                     } else {
 
                         sign.deferredRequest(view: rootVC, kid: kid, approveRequest: approveRequestMT!){ error in
+                            
+                            if (error != nil){
+                                self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (deferredRequest)")
+                                return;
+                            }
                             
                             //self.tryToSwitchHeader( false);
                             let forReturn = try! DictionaryEncoder.encode(approveRequestMT);
@@ -190,7 +207,7 @@ class CryptoProDssLib : UIViewController {
         var authList = [] as [DSSUser];
             do {
                 authList = try Auth.getAuthList();
-                print(authList, authList.count)
+                
                 let lastUser = authList[authList.count-1];
                 return lastUser.kid;
             } catch {
@@ -215,7 +232,7 @@ class CryptoProDssLib : UIViewController {
 
                 resolve("updateStyles success");
             } catch {
-                reject("cant load styles","cant load styles","cant load styles");
+                self.reject(rejectFunc: reject, text: "cant load styles (updateStyles)")
             }
        }
     }
@@ -237,8 +254,7 @@ class CryptoProDssLib : UIViewController {
             do {
                 authList = try Auth.getAuthList();
             } catch {
-                print("getUsers error")
-                print(error)
+                
             }
             
             var list = [] as [Any]
@@ -264,7 +280,8 @@ class CryptoProDssLib : UIViewController {
         DispatchQueue.main.async {
             
             guard let rootVC = UIApplication.shared.delegate?.window??.visibleViewController, (rootVC.navigationController != nil) else {
-                 reject("E_INIT", "Error getting rootViewController", NSError(domain: "", code: 200, userInfo: nil))
+                
+                self.reject(rejectFunc: reject, text: "Error getting rootViewController (getUserDevices)")
                  return
             }
             
@@ -274,7 +291,7 @@ class CryptoProDssLib : UIViewController {
                 devices,error  in
 
                 if (error != nil){
-                    reject(error?.localizedDescription,error?.localizedDescription,error?.localizedDescription);
+                    self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (getUserDevices)")
                 } else {
                     var list = [] as [Any]
 
@@ -304,20 +321,20 @@ class CryptoProDssLib : UIViewController {
                     let rootViewController = UIApplication.shared.delegate?.window??.rootViewController
 
                     guard let rootVC = UIApplication.shared.delegate?.window??.visibleViewController, (rootVC.navigationController != nil) else {
-                         reject("E_INIT", "Error getting rootViewController", NSError(domain: "", code: 200, userInfo: nil))
+                        self.reject(rejectFunc: reject, text: "Error getting rootViewController (continueInitViaQr)")
                          return
                     }
                     
                     self.lastAuth!.confirm(view: rootVC, kid: kid) { error in
                         if error != nil {
                             //self.tryToSwitchHeader(false);
-                            reject("auth confirm - failed", error as! String, "auth confirm - failed")
+                            self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (auth.confirm)")
 
                         } else {
                             self.lastAuth!.verify(view: rootVC, kid: kid, silent: false) { error in
                                 //self.tryToSwitchHeader(false);
                                 if error != nil {
-                                    reject("auth verify - failed", error as! String, "auth verify - failed")
+                                    self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (auth.verify)")
 
                                 } else {
                                     resolve(String(format: "success"))
@@ -331,7 +348,7 @@ class CryptoProDssLib : UIViewController {
                     print("continueInitViaQr error")
                     print(error)
                     
-                    reject("continueInitViaQr - error", error as! String, "continueInitViaQr - error" as! Error)
+                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (continueInitViaQr)")
                 }
             }
     }
@@ -358,7 +375,7 @@ class CryptoProDssLib : UIViewController {
                self.lastAuth = try Auth()
                 
                 guard let rootVC = UIApplication.shared.delegate?.window??.visibleViewController, (rootVC.navigationController != nil) else {
-                     reject("E_INIT", "Error getting rootViewController", NSError(domain: "", code: 200, userInfo: nil))
+                    self.reject(rejectFunc: reject, text: "Error getting rootViewController (initViaQr)")
                      return
                 }
                 
@@ -368,14 +385,14 @@ class CryptoProDssLib : UIViewController {
                 self.lastAuth!.scanQR(view: rootVC, base64QR: base64) {
                     type, url, error in
                     if error != nil {
-                        reject("scanQr - failed", "scanQr - failed", "scanQr - failed")
+                        self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (scanQR)")
                     } else {
                         //self.tryToSwitchHeader(true);
                         self.lastAuth!.kinit(view: rootVC, dssUser: user, registerInfo: registerInfo, keyProtectionType: useBiometric ? SDKFramework.ProtectionType.BIOMETRIC : SDKFramework.ProtectionType.PASSWORD, activationCode: nil, password: nil) { kid, error  in
 
                             if error != nil {
                                 //self.tryToSwitchHeader(false);
-                                reject("kinit - failed", error as! String, "kinit - failed")
+                                self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (kinit)")
                             } else {
                                 resolve(String(format: "success"))
                             }
@@ -386,7 +403,7 @@ class CryptoProDssLib : UIViewController {
             } catch {
                 print("scanQR error")
                 print(error)
-                reject("scanQr - error", "scanQr - error", "scanQr - error" as! Error)
+                self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (initViaQr)")
                    
             }
                   
@@ -414,8 +431,7 @@ public extension UIWindow {
                     UINavigationBar.appearance().scrollEdgeAppearance = appearance
                 }
             }
-            print(state);
-            print("state")
+            
             nc.setNavigationBarHidden(!state, animated: false);
             return UIWindow.getVisibleViewControllerFrom(nc.visibleViewController)
         } else if let tc = vc as? UITabBarController {
