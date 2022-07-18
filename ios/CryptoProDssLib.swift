@@ -71,11 +71,7 @@ class CryptoProDssLib : UIViewController {
             
             let cpd = CryptoProDss();
             cpd._init(view: rootVC) { code in
-                if (code.rawValue == CSPInitCode.init_ok.rawValue){
-                    resolve("inited")
-                } else {
-                    self.reject(rejectFunc: reject, text: code.rawValue)
-                }
+                    resolve(CSPInitCode.init_ok.rawValue)
             }
        }
     }
