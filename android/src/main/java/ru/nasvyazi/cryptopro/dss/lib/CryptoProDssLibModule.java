@@ -129,11 +129,8 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
                 CryptoProDss.getInstance().init(((FragmentActivity)getReactApplicationContext().getCurrentActivity()),new HashMap<String,String[]>(),new InitCallbackHandler(){
                     @Override
                     public void onInit(Constants.CSPInitCode var1) {
-                        if (var1.equals(Constants.CSPInitCode.initOk)){
-                            promise.resolve("inited");
-                        } else {
-                            reject(promise, var1.getTitle());
-                        }
+
+                        promise.resolve(var1.getTitle());
                     }
                 });
             }
