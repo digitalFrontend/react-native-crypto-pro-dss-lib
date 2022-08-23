@@ -6,23 +6,7 @@
 	<dict>
 		<key>Assets.car</key>
 		<data>
-		fikzjofCOQr44snLuAExp+pq0VY=
-		</data>
-		<key>CPCAViewController.nib</key>
-		<data>
-		9kjtkjHWSBJ3x8siBIYbIzp9Zgw=
-		</data>
-		<key>CPCAViewControllerIPhone.nib</key>
-		<data>
-		bRK7OUJcq3I0MzdrtQtPQPnQsKQ=
-		</data>
-		<key>CPROCertviewViewController.nib</key>
-		<data>
-		gn1Johdsf/ToHDZAljQ3EKkKt3g=
-		</data>
-		<key>CPROCertviewViewControllerIPhone.nib</key>
-		<data>
-		UAlclYhV/97McFznJ933BIUhMOo=
+		5SE8EMGS81Mvjwuux34ND2OAuWE=
 		</data>
 		<key>CpMyDssRootCerts.json</key>
 		<data>
@@ -30,7 +14,7 @@
 		</data>
 		<key>Headers/SDKFramework-Swift.h</key>
 		<data>
-		FrKdgSZpqYBzomQNx/2KoI9tVlk=
+		fRYW3v4Sf1di4tR01teIgsybGKo=
 		</data>
 		<key>Headers/SDKFramework.h</key>
 		<data>
@@ -38,159 +22,31 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		2iNhH/jJVTTsHmKtRTdy2Frzb1M=
-		</data>
-		<key>MOSignViewController.nib</key>
-		<data>
-		cGP64FWo92wc6ffFBLPVx4h/t5Y=
-		</data>
-		<key>MSCARequestViewController.nib</key>
-		<data>
-		Rky2djl9v2rdn5mzs9gIueiy5e4=
-		</data>
-		<key>MSCARequestViewControllerIPhone.nib</key>
-		<data>
-		pmKgNq4SmPBMnjyuesf+rE0X8PE=
-		</data>
-		<key>MTSignViewController.nib</key>
-		<data>
-		8tq1fKAozFZwZBDZauTdxeqlF50=
+		u3F2tLY4s2OFihWnsCd7IYzuOzg=
 		</data>
 		<key>Modules/SDKFramework.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		6fqRsx4DtrzQovrDYwfme8ltaL0=
+		DCbDtcOzSvMaGmSo33QYrtG/e+Y=
 		</data>
 		<key>Modules/SDKFramework.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		JixyMFlBNIPt8tzcNkFgLOoq5VY=
+		DbxYH1EESkSPZTGgJNHWvApjWCU=
 		</data>
 		<key>Modules/SDKFramework.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		PiYtX9dgtWkubSam3PUBbMMGiWE=
+		nTkb0W+qiOjaAurkXHzkdkYb4Cg=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
 		Va6PevfEaDpM+9hNOrfWyHfHZzc=
 		</data>
-		<key>NewUserViewController.nib</key>
-		<data>
-		Rky2djl9v2rdn5mzs9gIueiy5e4=
-		</data>
-		<key>NewUserViewControllerIPhone.nib</key>
-		<data>
-		pmKgNq4SmPBMnjyuesf+rE0X8PE=
-		</data>
-		<key>OperationInfoVC.nib</key>
-		<data>
-		1deVKS4IxGMnqY0O4g9f69t9Qyo=
-		</data>
-		<key>OperationInfoViewCell.nib</key>
-		<data>
-		SOuRc9akwa8hHivLc2r14GWgq0Q=
-		</data>
-		<key>PaneViewController.nib</key>
-		<data>
-		8AAi4UQeqtHydMxxlHSRpY57H9U=
-		</data>
-		<key>PaneViewControllerIPhone.nib</key>
-		<data>
-		r83ieaNR9PjbQK5/wRs4Tq2LWyk=
-		</data>
-		<key>PasswordViewController.nib</key>
-		<data>
-		82daTKt4wyS9/B3irNeMgc+1h9Y=
-		</data>
-		<key>Pdf.storyboardc/Info.plist</key>
-		<data>
-		5QWFwmFpPp6EjNveAs2mnCVUY7A=
-		</data>
-		<key>Pdf.storyboardc/PagePDFViewController.nib</key>
-		<data>
-		+dUwq8fiULgAbYldiNLwuEXfstc=
-		</data>
-		<key>Pdf.storyboardc/PageViewController.nib</key>
-		<data>
-		xe6R1D7BUBK7KkuHSIexLfy4J/4=
-		</data>
-		<key>Pdf.storyboardc/RawPDFViewController.nib</key>
-		<data>
-		zlNTM0pz3zn6H+P1dvUkRtpY340=
-		</data>
-		<key>Pdf.storyboardc/Rru-S1-JTm-view-fuP-gY-jut.nib</key>
-		<data>
-		hrXPfSkc/lnSUXSnOqEzihR1a7g=
-		</data>
-		<key>Pdf.storyboardc/zOJ-xg-ngT-view-CDc-kT-409.nib</key>
-		<data>
-		TgbtUNVpArhvtNK3nI/VYYuTGyo=
-		</data>
-		<key>PrintPDFViewController.nib</key>
-		<data>
-		byFDhIxjUjY1E+wVFYSgnqORLTw=
-		</data>
-		<key>ProfileTableViewCell.nib</key>
-		<data>
-		8z4MkgZyHErP29OH5eSen7tQiKA=
-		</data>
-		<key>ProfileViewController.nib</key>
-		<data>
-		mGNDeV2TiA92D8zZE4+rw9LknWA=
-		</data>
-		<key>QRScannerViewController.nib</key>
-		<data>
-		aXyUxC8zghBuqeTDglT2K5KeZAk=
-		</data>
-		<key>QRViewerViewController.nib</key>
-		<data>
-		W68FqASjkmpWFV3atXzv6t4LXnw=
-		</data>
-		<key>RequestSelectionViewController.nib</key>
-		<data>
-		o+3cgmEC5Xtqmq5k7pzna946vaY=
-		</data>
-		<key>RequestSelectionViewControllerIPhone.nib</key>
-		<data>
-		YOwHeBGrDBcrlTYAVNOU7B/igdM=
-		</data>
-		<key>RndmBioViewController.nib</key>
-		<data>
-		foVFizo/keW0r8N4gB9fR1czp6A=
-		</data>
-		<key>RndmBioViewControllerIPhone.nib</key>
-		<data>
-		AC/ORJsFfMvY9ciajCne+tIZ6XM=
-		</data>
 		<key>SDKStyles.json</key>
 		<data>
 		y9ThpFup2YLrtHyfp3KrHouHJXE=
 		</data>
-		<key>SecurityWarningViewController.nib</key>
-		<data>
-		5ISV4as9LBVYYofzht66JTFdQRo=
-		</data>
-		<key>SelectionViewController.nib</key>
-		<data>
-		xPayKeXjXOYKFpWsA7t6U7/AyI4=
-		</data>
-		<key>SelectionViewControllerIPhone.nib</key>
-		<data>
-		IHVdNWAtNSNkV8KnXB+gHJCwTlk=
-		</data>
 		<key>SignTableViewCell.nib</key>
 		<data>
-		5RpauCqAtmC4O4BMq9Ak2RlaGB8=
-		</data>
-		<key>TemplateSelectionViewController.nib</key>
-		<data>
-		uoD1Ck1mgvYZVHuQNBLTKsY4Igs=
-		</data>
-		<key>TemplateSelectionViewControllerIPhone.nib</key>
-		<data>
-		G3ooh5qNl2x1hYDQ+BrGX1v2QUI=
-		</data>
-		<key>WarningViewController.nib</key>
-		<data>
-		XTHJv5As45PQVw2CTycq0rraPHw=
+		q+btvK/5ttlkYJtd+7DDL9KUixQ=
 		</data>
 		<key>config.ini</key>
 		<data>
@@ -218,7 +74,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			R7UtZeJwPIe0/1xMwIsNBy0M1+c=
+			mMgNRHFOagrQ8N0EkIBkk8vDliQ=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -840,6 +696,10 @@
 		<data>
 		Zs0vYCz0lOlU/fooJ5AoHSG3RFI=
 		</data>
+		<key>operations.json</key>
+		<data>
+		aQF2AM1ZbI8ZH0jLIis/nTZOaC4=
+		</data>
 		<key>root.sto</key>
 		<data>
 		Wum4g9tflq0aZCgbNL76RVJwQms=
@@ -866,7 +726,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			WMhp2AWknwm9XBuhXOuDYx8kxJk=
+			Rm0E+G5EZawBOI7A7X4E7EF++64=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -887,35 +747,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			YvV38pc5tnzRVGe5mdaFfSoMKvUC4y2sIn359b4hcPo=
-			</data>
-		</dict>
-		<key>CPCAViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			5P0GCFZ1Ro2t5PvB291fYoXPLoa2xDxk7C1xEwHoLsg=
-			</data>
-		</dict>
-		<key>CPCAViewControllerIPhone.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Q/k0O1qJ843fJpJY6x6Sx0E64f7zDfLn9pHMXhCq7us=
-			</data>
-		</dict>
-		<key>CPROCertviewViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			eAkhEU8kT3JZghYDGAGG0UAP8FA0VpDJ62F30VBiRS4=
-			</data>
-		</dict>
-		<key>CPROCertviewViewControllerIPhone.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			hax/GvdWFK/kUIscyyqxI2OLW9B0lsp0pkAkO+FO0Zs=
+			kcqQv14b7TUG81cchiltTg3tbp6JZO6Eax6QbnXiSHw=
 			</data>
 		</dict>
 		<key>CpMyDssRootCerts.json</key>
@@ -929,7 +761,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			CQJh9zJJtUPp5yuhn4tf8orl7O0nHWrE76UMP3raKBM=
+			ZQQb1IwQ90g8IdjK/bEt0W1/lGX4H64WCX+YQFbQHt8=
 			</data>
 		</dict>
 		<key>Headers/SDKFramework.h</key>
@@ -939,53 +771,25 @@
 			GzwgfamSuPnp5SsonRldsKPGWZM8e7RIlJOLbGyRAng=
 			</data>
 		</dict>
-		<key>MOSignViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			HfzkWoL4BybpMSbPqFdi1/hmFF1VDeE09yOZ99Q9VmE=
-			</data>
-		</dict>
-		<key>MSCARequestViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Tvt6OkFfJVvCRi/gBQx9w5BA4xxaDJ0MhvQCm7uHAHM=
-			</data>
-		</dict>
-		<key>MSCARequestViewControllerIPhone.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			yosZSCXVoIh2jG1dMO5sZfYlVR2WPMX+KJKwyctRpxg=
-			</data>
-		</dict>
-		<key>MTSignViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			H440Fcofe/oLr6DktPVND1/0rtT5ZBZ/Ttcau9pBdDk=
-			</data>
-		</dict>
 		<key>Modules/SDKFramework.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			2pjoBYkPbNv1Ms/GUH4E+I/jLb8k65wSToVk4+HgMG4=
+			/PeLhO+KOWcWDGnvuLBq7NvJUxLbgwVVbHZ57nkWB+s=
 			</data>
 		</dict>
 		<key>Modules/SDKFramework.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+gjE7BX8Fv8M+rQWSyYmBIXm+nAyhfcu7FMKYtmr/DE=
+			+fCkL2TIB9TZvPbFc0geIHgNJXRTABhSfxudHI8yPCo=
 			</data>
 		</dict>
 		<key>Modules/SDKFramework.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Unxa3Ejsul2D6su+lNBPx8tozIRspPUo6KAszZ23F8w=
+			+pgeLd6ZFRcqYHGtg5cch7kYxNBUki/R5jkRVTuZEBo=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -995,160 +799,6 @@
 			oFAX5hsA6AbPyMuvDQMkhUUHlgrg4yV7+sIcD1zIrYc=
 			</data>
 		</dict>
-		<key>NewUserViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Tvt6OkFfJVvCRi/gBQx9w5BA4xxaDJ0MhvQCm7uHAHM=
-			</data>
-		</dict>
-		<key>NewUserViewControllerIPhone.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			yosZSCXVoIh2jG1dMO5sZfYlVR2WPMX+KJKwyctRpxg=
-			</data>
-		</dict>
-		<key>OperationInfoVC.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			enisphAGvWb7k3kG0F2mzzC30XunSOCzbkTXTUdal/8=
-			</data>
-		</dict>
-		<key>OperationInfoViewCell.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			t98rfIaVRbrVIk55KjlovbeX2Xu0ZwG0JhxBerY39YU=
-			</data>
-		</dict>
-		<key>PaneViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			MucmwaVnR/vsFUZP3YQbn7W4rCdcN9I3sAnp2VEpYno=
-			</data>
-		</dict>
-		<key>PaneViewControllerIPhone.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			KCX0KLJobxaS3pSj0QK/a1+an7nWp7B9Wj/njlPhmJg=
-			</data>
-		</dict>
-		<key>PasswordViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			RCOKcn9ZzWOTY9gw3aOUqt7hP507hZuS22kqeWKFh04=
-			</data>
-		</dict>
-		<key>Pdf.storyboardc/Info.plist</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			/cihxCYq4bhhobvxB2HZbatNCcTtUdkp0LGd5onFUYc=
-			</data>
-		</dict>
-		<key>Pdf.storyboardc/PagePDFViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			qX+/9ZMR1c8GqIhujo49d5M3X9de1n2HMKHEdP7eHF4=
-			</data>
-		</dict>
-		<key>Pdf.storyboardc/PageViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			KkaV8+oEtIn0LGfebTaw59TT9Tg6AxtiVSmZw8lIQMo=
-			</data>
-		</dict>
-		<key>Pdf.storyboardc/RawPDFViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			A30Gj4RrE4SbmbngNJsUSQIr35qIAj5uYeyTrckZt6E=
-			</data>
-		</dict>
-		<key>Pdf.storyboardc/Rru-S1-JTm-view-fuP-gY-jut.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			jPnQx3yftUD3jVbRaNuM0FWuj0PbX0dDxjhPzkbpsic=
-			</data>
-		</dict>
-		<key>Pdf.storyboardc/zOJ-xg-ngT-view-CDc-kT-409.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			J0lgiXRIbhHdUdXgjCP7hxQX6soaMdEWN9l5x/x0smc=
-			</data>
-		</dict>
-		<key>PrintPDFViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			YOPGH7m970Ly3nGwyDcScsBjJtiz2ARkLlr4KzqLvIQ=
-			</data>
-		</dict>
-		<key>ProfileTableViewCell.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			/TvZ6ImdItBGCXmDaKj5nb3lZWSRhqSvQYqjvXzO8FM=
-			</data>
-		</dict>
-		<key>ProfileViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			7Pr3YcPgNyn8ThsjAQidBPVpdl4ZqD/1vUAvnfbKXCs=
-			</data>
-		</dict>
-		<key>QRScannerViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			J+OPxAmL0Vo4lr5KtiJeK+LC6zbNTPgLE8UTbEboeg0=
-			</data>
-		</dict>
-		<key>QRViewerViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			JjpiAt0vEuQO6WuA9RupuSz7bQirii5PNS7h+80uAVU=
-			</data>
-		</dict>
-		<key>RequestSelectionViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			xPZj09eqBlBmAuF99mrT3syP8YW+3qwzLlF8q3IdKJI=
-			</data>
-		</dict>
-		<key>RequestSelectionViewControllerIPhone.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Gr408dsM5r9blLwHoAjU7cV3cX1jvui8aWB3rIdTUaY=
-			</data>
-		</dict>
-		<key>RndmBioViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			c3ssIzUL5esh7345zhbbS/+MGJ4HsqQ7O8+f0X9x3aI=
-			</data>
-		</dict>
-		<key>RndmBioViewControllerIPhone.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Md38if4O/NLFhSYHvS1I3LUg+swiU8d8fu4LZEnAJh0=
-			</data>
-		</dict>
 		<key>SDKStyles.json</key>
 		<dict>
 			<key>hash2</key>
@@ -1156,53 +806,11 @@
 			aMrJoGbgi7iRwi+dt5J9+N3Dn2XO6UDYntqS1byYL7U=
 			</data>
 		</dict>
-		<key>SecurityWarningViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			do36hAxb7babltxeatPbDWhHPUgu+V26PjKhBEcWbpg=
-			</data>
-		</dict>
-		<key>SelectionViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			CaPm0/ce4vJNKTtDr7MQGVFSZGLTSK9a3SSOyHfsxA8=
-			</data>
-		</dict>
-		<key>SelectionViewControllerIPhone.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Ku1G/+ZJziGgeBWC3wGsoXZI2YaIYH/RPBD3S0b1Wd4=
-			</data>
-		</dict>
 		<key>SignTableViewCell.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			dEnmtw1a8hZWLC04+Z2nlxclVrfRQ1oGUlRPkF07O3Y=
-			</data>
-		</dict>
-		<key>TemplateSelectionViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			UUEtnDK5TjLfvwFacaKXb+GKHFSfYRYYaE6kb8zq9/g=
-			</data>
-		</dict>
-		<key>TemplateSelectionViewControllerIPhone.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			1NBecLgTmQhdn+hBS9hSbdBoa8VfhpOsQPs4A1j4ZEs=
-			</data>
-		</dict>
-		<key>WarningViewController.nib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			jQ8j3qUotqgja7REfnQTMgUysaKrRxzDh3Kdrjy803E=
+			3Ood2+vUSMZDA2YpUglUopX6fnOy9YIg9eXC2oycxEE=
 			</data>
 		</dict>
 		<key>config.ini</key>
@@ -1234,7 +842,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			R5CJpvQfwd/iR57XVfpVkbznxn1vpgq7ZWtJCrtIdaU=
+			j1AnVId8f9yIog/AcGflqFSI2y+tdIbUuxFPiq4Tsro=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -2312,6 +1920,13 @@
 			8022QyZfWEpEwetIR6Q3jqQwHExov2mw1XsJlnQhu3E=
 			</data>
 		</dict>
+		<key>operations.json</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			sMvlVI23Q9/AITFFu790EvdT9kprgxAGjIbQbL2zOd0=
+			</data>
+		</dict>
 		<key>root.sto</key>
 		<dict>
 			<key>hash2</key>
@@ -2341,7 +1956,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			diArguorU/VJjmxSpj1ZwCa9Tj7VTTIVZLPjTKXTB/w=
+			UYYk8kGTvk0zoelGxOFUd6/J1tIiStywWCTbgnTsQWA=
 			</data>
 			<key>optional</key>
 			<true/>
