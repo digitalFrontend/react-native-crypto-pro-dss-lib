@@ -1,17 +1,52 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
-// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name SDKFramework
+// swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
+// swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name SDKFramework
 import AVFoundation
+import CoreImage.CIFilterBuiltins
+import Combine
 import CommonCrypto
+import CoreImage
+import Darwin
+import Dispatch
 import Foundation
 import LocalAuthentication
 import PDFKit
+import PhotosUI
 @_exported import SDKFramework
 import Swift
 import UIKit
 import _Concurrency
 import os.log
 import os
+public typealias Constraint = UIKit.NSLayoutConstraint
+public typealias Constraints = [SDKFramework.Constraint]
+public enum ConstraintRelation : Swift.Int {
+  case equal
+  case equalOrLess
+  case equalOrGreater
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension Swift.Collection where Self.Element == SDKFramework.Constraint {
+  public func activate()
+  public func deActivate()
+}
+extension UIKit.NSLayoutConstraint {
+  @objc @_Concurrency.MainActor(unsafe) dynamic public func with(_ p: SDKFramework.LayoutPriority) -> Self
+  @_Concurrency.MainActor(unsafe) public func set(_ active: Swift.Bool) -> Self
+}
+@_hasMissingDesignatedInitializers public class SDKControlStyle {
+  public var backgroundColor: SDKFramework.SDKControlColor
+  public var cornerRadius: SDKFramework.SDKCornerRadius?
+  public var borderWidth: CoreGraphics.CGFloat
+  public var borderColor: SDKFramework.SDKControlColor?
+  public var tintColor: SDKFramework.SDKControlColor?
+  public var alpha: SDKFramework.SDKControlFloatValue
+  @objc deinit
+}
 public struct DSSUser {
   public var kid: Swift.String
   public var uid: Swift.String
@@ -27,6 +62,55 @@ public struct DSSUser {
   public init(kid: Swift.String, uid: Swift.String, alias: Swift.String?, state: Swift.String, profile: Swift.String, notBefore: Swift.Int64, notAfter: Swift.Int64, serviceUrl: Swift.String, name: Swift.String, keyType: Swift.Bool)
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class SDKTextFieldStyle {
+  public var controlStyle: SDKFramework.SDKTextFieldFillStateValue<SDKFramework.SDKViewStyle>
+  public var textFieldStyle: SDKFramework.SDKTextFieldFillStateValue<SDKFramework.SDKViewStyle>
+  public var textColor: SDKFramework.SDKTextFieldFillStateValue<SDKFramework.SDKControlColor>
+  public var descriptionColor: SDKFramework.SDKTextFieldFillStateValue<SDKFramework.SDKControlColor>
+  public var placeholderColor: SDKFramework.SDKTextFieldFillStateValue<SDKFramework.SDKControlColor>
+  @objc deinit
+}
+public struct SDKTextFieldFillStateValue<T> {
+  public var empty: T
+  public var emptyActive: T
+  public var filled: T
+  public var filledActive: T
+  public init(empty: T, emptyActive: T, filled: T, filledActive: T)
+  public init(all: T)
+  public func get(by textField: UIKit.UITextField) -> T
+}
+extension Swift.Array where Element : Swift.Equatable {
+  public mutating func removeFirst(_ element: Element)
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKUserProfileVC : SDKFramework.SDKFixedVC {
+  @_Concurrency.MainActor(unsafe) public init(canRefuse: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKControlsDemoVC : SDKFramework.SDKScrollVC {
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKScrollVC : SDKFramework.SDKBaseVC {
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKControl : UIKit.UIControl {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var isEnabled: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
+    @_Concurrency.MainActor(unsafe) @objc set
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var isHighlighted: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
+    @_Concurrency.MainActor(unsafe) @objc set
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var isSelected: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
+    @_Concurrency.MainActor(unsafe) @objc set
+  }
+  @objc deinit
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func layoutSubviews()
 }
 public struct OperationDescription : Swift.Codable {
   public var type: Swift.String
@@ -61,6 +145,27 @@ public struct ApproveRequestMO : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKLoginVC : SDKFramework.SDKScrollVC {
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKSetPasswordVC : SDKFramework.SDKScrollVC {
+  @objc deinit
+}
+public protocol LogHandler {
+  func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, source: Swift.String, file: Swift.String, function: Swift.String, line: Swift.UInt)
+  @available(*, deprecated, renamed: "log(level:message:metadata:source:file:function:line:)")
+  func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, file: Swift.String, function: Swift.String, line: Swift.UInt)
+  subscript(metadataKey _: Swift.String) -> SDKFramework.Logger.Metadata.Value? { get set }
+  var metadata: SDKFramework.Logger.Metadata { get set }
+  var logLevel: SDKFramework.Logger.Level { get set }
+}
+extension SDKFramework.LogHandler {
+  @available(*, deprecated, message: "You should implement this method instead of using the default implementation")
+  public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, source: Swift.String, file: Swift.String, function: Swift.String, line: Swift.UInt)
+  @available(*, deprecated, renamed: "log(level:message:metadata:source:file:function:line:)")
+  public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, file: Swift.String, function: Swift.String, line: Swift.UInt)
+}
+public typealias CLNumPadDotStyle = SDKFramework.SDKViewStyle
 public enum OperationStatus : Swift.String {
   case Completed
   case InProgress
@@ -90,6 +195,8 @@ public struct OperationResultInfo : Swift.Codable {
   public func isExist(kid: Swift.String, rid: Swift.String?, cid: Swift.String?) -> Swift.Bool
   @objc deinit
 }
+infix operator => : DefaultPrecedence
+public func => <T>(left: T, f: (T) -> Swift.Void) -> T where T : AnyObject
 public struct CryptoProviderInfo : Swift.Codable {
   public var containerName: Swift.String?
   public var provType: Swift.Int
@@ -135,13 +242,39 @@ public struct OperationHistory : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+@_hasMissingDesignatedInitializers public class SDKLabelStyle {
+  public var textColor: SDKFramework.SDKControlColor
+  public var font: UIKit.UIFont?
+  public var fontSize: SDKFramework.SDKControlFloatValue
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKFixedVC : SDKFramework.SDKBaseVC {
+  @objc override dynamic public init()
+  @objc deinit
+}
+public enum SDKCornerRadius {
+  case value(_: CoreGraphics.CGFloat)
+  case percent(_: CoreGraphics.CGFloat)
+}
 open class Sign {
   public init()
-  public func signMT(view: UIKit.UIViewController, kid: Swift.String, operation: SDKFramework.Operation?, enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, silent: Swift.Bool = false, completion: @escaping (_ approveRequest: SDKFramework.ApproveRequestMT?, _ error: Swift.Error?) -> Swift.Void)
-  public func signMO(view: UIKit.UIViewController, kid: Swift.String, parameters: [Swift.String : Swift.String], enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, uploadDocInfo: [SDKFramework.UploadDocInfo], silent: Swift.Bool = false, isClientSide: Swift.Bool, completion: @escaping (_ signatureResult: SDKFramework.SignatureResult?, _ approveRequest: SDKFramework.ApproveRequestMO?, _ error: Swift.Error?) -> Swift.Void)
-  public func deferredRequest(view: UIKit.UIViewController, kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMT, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  public func deferredRequest(view: UIKit.UIViewController, kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMO, completion: @escaping (_ signatureResult: SDKFramework.SignatureResult?, _ error: Swift.Error?) -> Swift.Void)
+  public func signMT(kid: Swift.String, operation: SDKFramework.Operation?, enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, silent: Swift.Bool = false, completion: @escaping (_ approveRequest: SDKFramework.ApproveRequestMT?, _ error: Swift.Error?) -> Swift.Void)
+  public func signMO(kid: Swift.String, parameters: [Swift.String : Swift.String], enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, uploadDocInfo: [SDKFramework.UploadDocInfo], silent: Swift.Bool = false, isClientSide: Swift.Bool, successHandler: @escaping ((_ signatureResult: SDKFramework.SignatureResult?, _ approveRequestMOSign: SDKFramework.ApproveRequestMO?) -> Swift.Void), errorHandler: @escaping ((_ error: Swift.Error) -> Swift.Void))
+  public func deferredRequest(kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMT, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  public func deferredRequest(kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMO, completion: @escaping (_ signatureResult: SDKFramework.SignatureResult?, _ error: Swift.Error?) -> Swift.Void)
   @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKBaseVC : UIKit.UIViewController {
+  @_Concurrency.MainActor(unsafe) public var isAutoClose: Swift.Bool
+  @objc dynamic public init()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @objc deinit
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func willMove(toParent parent: UIKit.UIViewController?)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func didMove(toParent parent: UIKit.UIViewController?)
 }
 public enum CryptoLibError : Swift.Error, Swift.Equatable {
   case failure
@@ -182,6 +315,102 @@ public struct Operation : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+@_hasMissingDesignatedInitializers public class SDKViewStyle {
+  public var backgroundColor: SDKFramework.SDKControlColor
+  public var cornerRadius: SDKFramework.SDKCornerRadius?
+  public var borderWidth: CoreGraphics.CGFloat
+  public var borderColor: SDKFramework.SDKControlColor?
+  public var alpha: SDKFramework.SDKControlFloatValue
+  @objc deinit
+}
+extension CoreGraphics.CGSize {
+  public func crop(aspect: CoreGraphics.CGFloat) -> CoreGraphics.CGSize
+  public func rotate() -> CoreGraphics.CGSize
+}
+extension CoreGraphics.CGRect {
+  public init(x: CoreGraphics.CGFloat, y: CoreGraphics.CGFloat, w: CoreGraphics.CGFloat, h: CoreGraphics.CGFloat)
+  public var x: CoreGraphics.CGFloat {
+    get
+    set(value)
+  }
+  public var y: CoreGraphics.CGFloat {
+    get
+    set(value)
+  }
+}
+extension CoreGraphics.CGRect {
+  public func crop(aspect: CoreGraphics.CGFloat) -> CoreGraphics.CGRect
+}
+@objc public protocol MTSlideToOpenDelegate {
+  @objc func mtSlideToOpenDelegateDidFinish(_ sender: SDKFramework.MTSlideToOpenView)
+}
+@objc @_inheritsConvenienceInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class MTSlideToOpenView : UIKit.UIView {
+  @objc @_Concurrency.MainActor(unsafe) final public let textLabel: UIKit.UILabel
+  @objc @_Concurrency.MainActor(unsafe) final public let sliderTextLabel: UIKit.UILabel
+  @objc @_Concurrency.MainActor(unsafe) final public let thumnailImageView: UIKit.UIImageView
+  @objc @_Concurrency.MainActor(unsafe) final public let sliderHolderView: UIKit.UIView
+  @objc @_Concurrency.MainActor(unsafe) final public let draggedView: UIKit.UIView
+  @objc @_Concurrency.MainActor(unsafe) final public let view: UIKit.UIView
+  @objc @_Concurrency.MainActor(unsafe) weak public var delegate: SDKFramework.MTSlideToOpenDelegate?
+  @objc @_Concurrency.MainActor(unsafe) public var animationVelocity: Swift.Double
+  @objc @_Concurrency.MainActor(unsafe) public var sliderViewTopDistance: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var thumbnailViewTopDistance: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var thumbnailViewStartingDistance: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var textLabelLeadingDistance: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var isEnabled: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var showSliderText: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var animationChangedEnabledBlock: ((Swift.Bool) -> Swift.Void)?
+  @objc @_Concurrency.MainActor(unsafe) public var sliderCornerRadius: CoreGraphics.CGFloat {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var sliderBackgroundColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var textColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var slidingColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var thumbnailColor: UIKit.UIColor {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var labelText: Swift.String {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var textFont: UIKit.UIFont {
+    @objc get
+    @objc set
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+  @objc @_Concurrency.MainActor(unsafe) public func resetStateWithAnimation(_ animated: Swift.Bool)
+  @objc deinit
+}
 public struct OperationsInfo : Swift.Codable {
   public var operations: [SDKFramework.Operation]?
   public var kid: Swift.String?
@@ -198,6 +427,68 @@ public struct UploadFile : Swift.Codable {
   public init(documentInfo: Swift.String, snippetTemplate: Swift.String?, previewTemplate: Swift.String?, url: Foundation.URL)
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
+}
+extension SDKFramework.Constrainable {
+  @discardableResult
+  public func center(in view: SDKFramework.Constrainable, offset: CoreGraphics.CGPoint = .zero, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraints
+  @discardableResult
+  public func edges(to view: SDKFramework.Constrainable, excluding excludedEdge: SDKFramework.LayoutEdge = .none, insets: SDKFramework.TinyEdgeInsets = .zero, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraints
+  @discardableResult
+  public func size(_ size: CoreGraphics.CGSize, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraints
+  @discardableResult
+  public func size(to view: SDKFramework.Constrainable, multiplier: CoreGraphics.CGFloat = 1, insets: CoreGraphics.CGSize = .zero, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraints
+  @discardableResult
+  public func origin(to view: SDKFramework.Constrainable, insets: SDKFramework.TinyEdgeInsets = .zero, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraints
+  @discardableResult
+  public func width(_ width: CoreGraphics.CGFloat, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func width(to view: SDKFramework.Constrainable, _ dimension: UIKit.NSLayoutDimension? = nil, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func widthToHeight(of view: SDKFramework.Constrainable, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func width(min: CoreGraphics.CGFloat? = nil, max: CoreGraphics.CGFloat? = nil, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraints
+  @discardableResult
+  public func height(_ height: CoreGraphics.CGFloat, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func height(to view: SDKFramework.Constrainable, _ dimension: UIKit.NSLayoutDimension? = nil, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func heightToWidth(of view: SDKFramework.Constrainable, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func height(min: CoreGraphics.CGFloat? = nil, max: CoreGraphics.CGFloat? = nil, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraints
+  @discardableResult
+  public func aspectRatio(_ ratio: CoreGraphics.CGFloat, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func leadingToTrailing(of view: SDKFramework.Constrainable, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func leading(to view: SDKFramework.Constrainable, _ anchor: UIKit.NSLayoutXAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func leftToRight(of view: SDKFramework.Constrainable, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func left(to view: SDKFramework.Constrainable, _ anchor: UIKit.NSLayoutXAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func trailingToLeading(of view: SDKFramework.Constrainable, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func trailing(to view: SDKFramework.Constrainable, _ anchor: UIKit.NSLayoutXAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func rightToLeft(of view: SDKFramework.Constrainable, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func right(to view: SDKFramework.Constrainable, _ anchor: UIKit.NSLayoutXAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func topToBottom(of view: SDKFramework.Constrainable, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func top(to view: SDKFramework.Constrainable, _ anchor: UIKit.NSLayoutYAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func bottomToTop(of view: SDKFramework.Constrainable, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func bottom(to view: SDKFramework.Constrainable, _ anchor: UIKit.NSLayoutYAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func centerX(to view: SDKFramework.Constrainable, _ anchor: UIKit.NSLayoutXAxisAnchor? = nil, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+  @discardableResult
+  public func centerY(to view: SDKFramework.Constrainable, _ anchor: UIKit.NSLayoutYAxisAnchor? = nil, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true) -> SDKFramework.Constraint
+}
+extension UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) public func setHugging(_ priority: SDKFramework.LayoutPriority, for axis: SDKFramework.ConstraintAxis)
+  @_Concurrency.MainActor(unsafe) public func setCompressionResistance(_ priority: SDKFramework.LayoutPriority, for axis: SDKFramework.ConstraintAxis)
 }
 public struct DeviceInfo : Swift.Codable {
   public var uid: Swift.String
@@ -273,6 +564,36 @@ public struct Certificate : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKOperationContentVC : SDKFramework.SDKFixedVC {
+  @objc deinit
+}
+extension UIKit.UIView {
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func stack(_ views: [SDKFramework.TinyView], axis: SDKFramework.ConstraintAxis = .vertical, width: CoreGraphics.CGFloat? = nil, height: CoreGraphics.CGFloat? = nil, spacing: CoreGraphics.CGFloat = 0) -> SDKFramework.Constraints
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKNavigationController : UIKit.UINavigationController {
+  @objc dynamic public init()
+  @objc deinit
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open var supportedInterfaceOrientations: UIKit.UIInterfaceOrientationMask {
+    @_Concurrency.MainActor(unsafe) @objc get
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var preferredStatusBarStyle: UIKit.UIStatusBarStyle {
+    @_Concurrency.MainActor(unsafe) @objc get
+  }
+  @_Concurrency.MainActor(unsafe) public func themeUpdated()
+}
+extension SDKFramework.SDKNavigationController {
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func popViewController(animated: Swift.Bool) -> UIKit.UIViewController?
+  @_Concurrency.MainActor(unsafe) public func popViewController(animated: Swift.Bool, completion: (() -> Swift.Void)?)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func pushViewController(_ viewController: UIKit.UIViewController, animated: Swift.Bool)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKAnimationTextVC : SDKFramework.SDKFixedVC {
+  @objc override dynamic public init()
+  @objc deinit
+}
 open class SigningKey {
   public init()
   open func listKeys() -> [SDKFramework.SigningKeyInfo]
@@ -289,6 +610,33 @@ public struct DeclinedDocument : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+extension SDKFramework.Auth {
+  public typealias QRHandler = ((_ type: Swift.String?, _ url: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
+}
+public struct SDKPublicColorStyle {
+  public var error: UIKit.UIColor
+  public var success: UIKit.UIColor
+  public var brand: SDKFramework.SDKPublicColorStyle.Brand
+  public var text: SDKFramework.SDKPublicColorStyle.Text
+  public var element: SDKFramework.SDKPublicColorStyle.Element
+}
+extension SDKFramework.SDKPublicColorStyle {
+  public struct Brand {
+  }
+  public struct Text {
+  }
+  public struct Element {
+  }
+}
+extension SDKFramework.SDKPublicColorStyle {
+  public static func getLight() -> SDKFramework.SDKPublicColorStyle
+  public static func getDark() -> SDKFramework.SDKPublicColorStyle
+}
+public typealias TinyView = UIKit.UIView
+public typealias LayoutGuide = UIKit.UILayoutGuide
+public typealias ConstraintAxis = UIKit.NSLayoutConstraint.Axis
+public typealias LayoutPriority = UIKit.UILayoutPriority
+public typealias TinyEdgeInsets = UIKit.UIEdgeInsets
 public struct UploadDocInfo : Swift.Codable {
   public var docId: Swift.String
   public init()
@@ -298,19 +646,21 @@ public struct UploadDocInfo : Swift.Codable {
 }
 open class Auth {
   public init()
-  open func scanQR(view: UIKit.UIViewController, base64QR: Swift.String? = nil, completion: @escaping (_ type: Swift.String?, _ url: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
-  open func _init(view: UIKit.UIViewController, dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, password: Swift.String? = nil, completion: @escaping (_ kid: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
-  open func kinit(view: UIKit.UIViewController, dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, activationCode: Swift.String? = nil, password: Swift.String? = nil, completion: @escaping (_ kid: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
-  open func addNewDevice(view: UIKit.UIViewController, dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, uid: Swift.String, password: Swift.String? = nil, completion: @escaping (_ kid: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
-  open func confirm(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func verify(view: UIKit.UIViewController, kid: Swift.String, silent: Swift.Bool = false, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func setPassAuth(view: UIKit.UIViewController, kid: Swift.String, password: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func changePassAuth(view: UIKit.UIViewController, kid: Swift.String, keyProtectionType: SDKFramework.ProtectionType, oldPassword: Swift.String? = nil, newPassword: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func add(qrCode: Swift.String, completion: @escaping SDKFramework.Auth.QRHandler)
+  open func add(base64QR: Swift.String, completion: @escaping SDKFramework.Auth.QRHandler)
+  open func scanQR(completion: @escaping SDKFramework.Auth.QRHandler)
+  open func _init(dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, password: Swift.String? = nil, completion: @escaping (_ kid: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
+  public func kinit(dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, activationCode: Swift.String? = nil, password: Swift.String? = nil, completion: @escaping ((_ kid: Swift.String?, _ error: Swift.Error?) -> Swift.Void))
+  open func addNewDevice(dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, uid: Swift.String, password: Swift.String? = nil, completion: @escaping (_ kid: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
+  open func confirm(kid: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func verify(kid: Swift.String, silent: Swift.Bool = false, successCompletion: @escaping (() -> Swift.Void), cancelCompletion: @escaping ((_ type: SDKFramework.SDKCancelType) -> Swift.Void))
+  open func setPassAuth(kid: Swift.String, password: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func changePassAuth(kid: Swift.String, keyProtectionType: SDKFramework.ProtectionType, oldPassword: Swift.String? = nil, newPassword: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
   open func renameAuth(kid: Swift.String, newName: Swift.String) throws
-  open func removeAuth(view: UIKit.UIViewController, kid: Swift.String, deletedKid: Swift.String, forceDelete: Swift.Bool, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func removeAuth(kid: Swift.String, deletedKid: Swift.String, forceDelete: Swift.Bool, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
   public static func getAuthList() throws -> [SDKFramework.DSSUser]
-  open func confirmNewDevice(view: UIKit.UIViewController, kid: Swift.String, confirmedKid: Swift.String, silent: Swift.Bool = false, approve: Swift.Bool, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func checkStatus(view: UIKit.UIViewController, kid: Swift.String, viewQR: Swift.Bool, completion: @escaping (_ status: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
+  open func confirmNewDevice(kid: Swift.String, confirmedKid: Swift.String, silent: Swift.Bool = false, approve: Swift.Bool, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func checkStatus(kid: Swift.String, viewQR: Swift.Bool, completion: @escaping (_ status: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
   open func currentProtectionType(kid: Swift.String) -> SDKFramework.ProtectionType?
   @objc deinit
 }
@@ -323,6 +673,59 @@ public enum ProtectionType : Swift.String {
   public var rawValue: Swift.String {
     get
   }
+}
+extension UIKit.UIView {
+  @available(tvOS 10.0, iOS 10.0, *)
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func edgesToSuperview(excluding excludedEdge: SDKFramework.LayoutEdge = .none, insets: SDKFramework.TinyEdgeInsets = .zero, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraints
+  @available(tvOS 10.0, iOS 10.0, *)
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func leadingToSuperview(_ anchor: UIKit.NSLayoutXAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
+  @available(tvOS 10.0, iOS 10.0, *)
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func trailingToSuperview(_ anchor: UIKit.NSLayoutXAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
+  @available(tvOS 10.0, iOS 10.0, *)
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func horizontalToSuperview(insets: SDKFramework.TinyEdgeInsets = .zero, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraints
+  @available(tvOS 10.0, iOS 10.0, *)
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func verticalToSuperview(insets: SDKFramework.TinyEdgeInsets = .zero, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraints
+}
+public struct LayoutEdge : Swift.OptionSet {
+  public let rawValue: Swift.UInt8
+  public init(rawValue: Swift.UInt8)
+  public static let top: SDKFramework.LayoutEdge
+  public static let bottom: SDKFramework.LayoutEdge
+  public static let trailing: SDKFramework.LayoutEdge
+  public static let leading: SDKFramework.LayoutEdge
+  public static let left: SDKFramework.LayoutEdge
+  public static let right: SDKFramework.LayoutEdge
+  public static let none: SDKFramework.LayoutEdge
+  public typealias ArrayLiteralElement = SDKFramework.LayoutEdge
+  public typealias Element = SDKFramework.LayoutEdge
+  public typealias RawValue = Swift.UInt8
+}
+extension UIKit.UIView {
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func centerInSuperview(offset: CoreGraphics.CGPoint = .zero, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraints
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func originToSuperview(insets: SDKFramework.TinyEdgeInsets = .zero, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraints
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func widthToSuperview(_ dimension: UIKit.NSLayoutDimension? = nil, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func heightToSuperview(_ dimension: UIKit.NSLayoutDimension? = nil, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func leftToSuperview(_ anchor: UIKit.NSLayoutXAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func rightToSuperview(_ anchor: UIKit.NSLayoutXAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func topToSuperview(_ anchor: UIKit.NSLayoutYAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func bottomToSuperview(_ anchor: UIKit.NSLayoutYAxisAnchor? = nil, offset: CoreGraphics.CGFloat = 0, relation: SDKFramework.ConstraintRelation = .equal, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func centerXToSuperview(_ anchor: UIKit.NSLayoutXAxisAnchor? = nil, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func centerYToSuperview(_ anchor: UIKit.NSLayoutYAxisAnchor? = nil, multiplier: CoreGraphics.CGFloat = 1, offset: CoreGraphics.CGFloat = 0, priority: SDKFramework.LayoutPriority = .required, isActive: Swift.Bool = true, usingSafeArea: Swift.Bool = false) -> SDKFramework.Constraint
 }
 public struct KeyProtectionFlags : Swift.Codable {
   public var fingerprintRequired: Swift.Bool
@@ -338,14 +741,27 @@ public struct KeyProtectionFlags : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+@_hasMissingDesignatedInitializers public class SDKSwitchStyle {
+  public var tintColor: SDKFramework.SDKControlColor
+  public var onTintColor: SDKFramework.SDKControlColor
+  public var alpha: SDKFramework.SDKControlFloatValue
+  @objc deinit
+}
 public class Docs {
   public init()
-  public func uploadDocument(view: UIKit.UIViewController, kid: Swift.String, document: SDKFramework.UploadFile, completionQueue: Dispatch.DispatchQueue? = nil, completion: @escaping (_ uploadData: SDKFramework.UploadDocInfo?, _ error: Swift.Error?) -> Swift.Void)
-  public func downloadDocument(view: UIKit.UIViewController, kid: Swift.String, docId: Swift.String, completionQueue: Dispatch.DispatchQueue? = nil, completion: @escaping (_ data: Foundation.Data?, _ error: Swift.Error?) -> Swift.Void)
-  public func saveDocuments(view: UIKit.UIViewController, kid: Swift.String, document: SDKFramework.Document, completion: @escaping (_ result: Swift.Int, _ error: Swift.Error?) -> Swift.Void)
-  public func listSavedDocument(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ documents: [SDKFramework.Document], _ error: Swift.Error?) -> Swift.Void)
-  public func cleanUpDocuments(view: UIKit.UIViewController, kid: Swift.String, id: Swift.String?, completion: @escaping (_ result: Swift.Int, _ error: Swift.Error?) -> Swift.Void)
+  public func uploadDocument(kid: Swift.String, document: SDKFramework.UploadFile, completionQueue: Dispatch.DispatchQueue? = nil, completion: @escaping (_ uploadData: SDKFramework.UploadDocInfo?, _ error: Swift.Error?) -> Swift.Void)
+  public func downloadDocument(kid: Swift.String, docId: Swift.String, completionQueue: Dispatch.DispatchQueue? = nil, completion: @escaping (_ data: Foundation.Data?, _ error: Swift.Error?) -> Swift.Void)
+  public func saveDocuments(kid: Swift.String, document: SDKFramework.Document, completion: @escaping (_ result: Swift.Int, _ error: Swift.Error?) -> Swift.Void)
+  public func listSavedDocument(kid: Swift.String, completion: @escaping (_ documents: [SDKFramework.Document], _ error: Swift.Error?) -> Swift.Void)
+  public func cleanUpDocuments(kid: Swift.String, id: Swift.String?, completion: @escaping (_ result: Swift.Int, _ error: Swift.Error?) -> Swift.Void)
   @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKDemoVC : SDKFramework.SDKScrollVC {
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension SDKFramework.SDKDemoVC {
+  @_Concurrency.MainActor(unsafe) public static func show()
 }
 public struct SignatureResult : Swift.Codable {
   public var results: [SDKFramework.OperationResultInfo]
@@ -353,6 +769,285 @@ public struct SignatureResult : Swift.Codable {
   public init(results: [SDKFramework.OperationResultInfo])
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
+}
+extension UIKit.UIView : SDKFramework.Constrainable {
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func prepareForLayout() -> Self
+}
+extension UIKit.UILayoutGuide : SDKFramework.Constrainable {
+  @discardableResult
+  @_Concurrency.MainActor(unsafe) public func prepareForLayout() -> Self
+}
+public protocol Constrainable {
+  var topAnchor: UIKit.NSLayoutYAxisAnchor { get }
+  var bottomAnchor: UIKit.NSLayoutYAxisAnchor { get }
+  var leftAnchor: UIKit.NSLayoutXAxisAnchor { get }
+  var rightAnchor: UIKit.NSLayoutXAxisAnchor { get }
+  var leadingAnchor: UIKit.NSLayoutXAxisAnchor { get }
+  var trailingAnchor: UIKit.NSLayoutXAxisAnchor { get }
+  var centerXAnchor: UIKit.NSLayoutXAxisAnchor { get }
+  var centerYAnchor: UIKit.NSLayoutYAxisAnchor { get }
+  var widthAnchor: UIKit.NSLayoutDimension { get }
+  var heightAnchor: UIKit.NSLayoutDimension { get }
+  @discardableResult
+  func prepareForLayout() -> Self
+}
+public enum SDKControlStatus {
+  case normal
+  case success
+  case warning
+  case error
+  public static func == (a: SDKFramework.SDKControlStatus, b: SDKFramework.SDKControlStatus) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class SDKLabel : UIKit.UILabel {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var isEnabled: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
+    @_Concurrency.MainActor(unsafe) @objc set
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var isHighlighted: Swift.Bool {
+    @_Concurrency.MainActor(unsafe) @objc get
+    @_Concurrency.MainActor(unsafe) @objc set
+  }
+  @objc deinit
+}
+public struct Logger {
+  @usableFromInline
+  internal var handler: SDKFramework.LogHandler
+  public let label: Swift.String
+}
+extension SDKFramework.Logger {
+  @inlinable public func log(level: SDKFramework.Logger.Level, _ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        if self.logLevel <= level {
+            self.handler.log(level: level,
+                             message: message(),
+                             metadata: metadata(),
+                             source: source() ?? Logger.currentModule(fileID: (file)),
+                             file: file, function: function, line: line)
+        }
+    }
+  @inlinable public func log(level: SDKFramework.Logger.Level, _ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.log(level: level, message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
+    }
+  @inlinable public subscript(metadataKey metadataKey: Swift.String) -> SDKFramework.Logger.Metadata.Value? {
+    get {
+            return self.handler[metadataKey: metadataKey]
+        }
+    set {
+            self.handler[metadataKey: metadataKey] = newValue
+        }
+  }
+  @inlinable public var logLevel: SDKFramework.Logger.Level {
+    get {
+            return self.handler.logLevel
+        }
+    set {
+            self.handler.logLevel = newValue
+        }
+  }
+}
+extension SDKFramework.Logger {
+  @inlinable public func trace(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.log(level: .trace, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
+    }
+  @inlinable public func trace(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.trace(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
+    }
+  @inlinable public func debug(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.log(level: .debug, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
+    }
+  @inlinable public func debug(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.debug(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
+    }
+  @inlinable public func info(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.log(level: .info, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
+    }
+  @inlinable public func info(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.info(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
+    }
+  @inlinable public func notice(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.log(level: .notice, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
+    }
+  @inlinable public func notice(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.notice(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
+    }
+  @inlinable public func warning(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.log(level: .warning, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
+    }
+  @inlinable public func warning(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.warning(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
+    }
+  @inlinable public func error(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.log(level: .error, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
+    }
+  @inlinable public func error(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.error(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
+    }
+  @inlinable public func critical(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.log(level: .critical, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
+    }
+  @inlinable public func critical(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
+        self.critical(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
+    }
+}
+public enum LoggingSystem {
+  public static func bootstrap(_ factory: @escaping (Swift.String) -> SDKFramework.LogHandler)
+}
+extension SDKFramework.Logger {
+  public typealias Metadata = [Swift.String : SDKFramework.Logger.MetadataValue]
+  public enum MetadataValue {
+    case string(Swift.String)
+    case stringConvertible(Swift.CustomStringConvertible)
+    case dictionary(SDKFramework.Logger.Metadata)
+    case array([SDKFramework.Logger.Metadata.Value])
+  }
+  public enum Level : Swift.String, Swift.Codable, Swift.CaseIterable {
+    case trace
+    case debug
+    case info
+    case notice
+    case warning
+    case error
+    case critical
+    public init?(rawValue: Swift.String)
+    public typealias AllCases = [SDKFramework.Logger.Level]
+    public typealias RawValue = Swift.String
+    public static var allCases: [SDKFramework.Logger.Level] {
+      get
+    }
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public init(label: Swift.String)
+  public init(label: Swift.String, factory: (Swift.String) -> SDKFramework.LogHandler)
+}
+extension SDKFramework.Logger.Level : Swift.Comparable {
+  public static func < (lhs: SDKFramework.Logger.Level, rhs: SDKFramework.Logger.Level) -> Swift.Bool
+}
+extension SDKFramework.Logger.MetadataValue : Swift.Equatable {
+  public static func == (lhs: SDKFramework.Logger.Metadata.Value, rhs: SDKFramework.Logger.Metadata.Value) -> Swift.Bool
+}
+extension SDKFramework.Logger {
+  public struct Message : Swift.ExpressibleByStringLiteral, Swift.Equatable, Swift.CustomStringConvertible, Swift.ExpressibleByStringInterpolation {
+    public typealias StringLiteralType = Swift.String
+    public init(stringLiteral value: Swift.String)
+    public var description: Swift.String {
+      get
+    }
+    public static func == (a: SDKFramework.Logger.Message, b: SDKFramework.Logger.Message) -> Swift.Bool
+    public typealias ExtendedGraphemeClusterLiteralType = SDKFramework.Logger.Message.StringLiteralType
+    public typealias StringInterpolation = Swift.DefaultStringInterpolation
+    public typealias UnicodeScalarLiteralType = SDKFramework.Logger.Message.StringLiteralType
+  }
+}
+public struct MultiplexLogHandler : SDKFramework.LogHandler {
+  public init(_ handlers: [SDKFramework.LogHandler])
+  public var logLevel: SDKFramework.Logger.Level {
+    get
+    set
+  }
+  public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, source: Swift.String, file: Swift.String, function: Swift.String, line: Swift.UInt)
+  public var metadata: SDKFramework.Logger.Metadata {
+    get
+    set
+  }
+  public subscript(metadataKey metadataKey: SDKFramework.Logger.Metadata.Key) -> SDKFramework.Logger.Metadata.Value? {
+    get
+    set
+  }
+}
+public struct StreamLogHandler : SDKFramework.LogHandler {
+  public static func standardOutput(label: Swift.String) -> SDKFramework.StreamLogHandler
+  public static func standardError(label: Swift.String) -> SDKFramework.StreamLogHandler
+  public var logLevel: SDKFramework.Logger.Level
+  public var metadata: SDKFramework.Logger.Metadata {
+    get
+    set
+  }
+  public subscript(metadataKey metadataKey: Swift.String) -> SDKFramework.Logger.Metadata.Value? {
+    get
+    set
+  }
+  public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, source: Swift.String, file: Swift.String, function: Swift.String, line: Swift.UInt)
+}
+public struct SwiftLogNoOpLogHandler : SDKFramework.LogHandler {
+  public init()
+  public init(_: Swift.String)
+  @inlinable public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, file: Swift.String, function: Swift.String, line: Swift.UInt) {}
+  @inlinable public subscript(metadataKey _: Swift.String) -> SDKFramework.Logger.Metadata.Value? {
+    get {
+            return nil
+        }
+    set {}
+  }
+  @inlinable public var metadata: SDKFramework.Logger.Metadata {
+    get {
+            return [:]
+        }
+    set {}
+  }
+  @inlinable public var logLevel: SDKFramework.Logger.Level {
+    get {
+            return .critical
+        }
+    set {}
+  }
+}
+extension SDKFramework.Logger {
+  @inlinable internal static func currentModule(filePath: Swift.String = #file) -> Swift.String {
+        let utf8All = filePath.utf8
+        return filePath.utf8.lastIndex(of: UInt8(ascii: "/")).flatMap { lastSlash -> Substring? in
+            utf8All[..<lastSlash].lastIndex(of: UInt8(ascii: "/")).map { secondLastSlash -> Substring in
+                filePath[utf8All.index(after: secondLastSlash) ..< lastSlash]
+            }
+        }.map {
+            String($0)
+        } ?? "n/a"
+    }
+  @inlinable internal static func currentModule(fileID: Swift.String = #fileID) -> Swift.String {
+        let utf8All = fileID.utf8
+        if let slashIndex = utf8All.firstIndex(of: UInt8(ascii: "/")) {
+            return String(fileID[..<slashIndex])
+        } else {
+            return "n/a"
+        }
+    }
+}
+extension SDKFramework.Logger.MetadataValue : Swift.ExpressibleByStringLiteral {
+  public typealias StringLiteralType = Swift.String
+  public init(stringLiteral value: Swift.String)
+  public typealias ExtendedGraphemeClusterLiteralType = SDKFramework.Logger.MetadataValue.StringLiteralType
+  public typealias UnicodeScalarLiteralType = SDKFramework.Logger.MetadataValue.StringLiteralType
+}
+extension SDKFramework.Logger.MetadataValue : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension SDKFramework.Logger.MetadataValue : Swift.ExpressibleByStringInterpolation {
+  public typealias StringInterpolation = Swift.DefaultStringInterpolation
+}
+extension SDKFramework.Logger.MetadataValue : Swift.ExpressibleByDictionaryLiteral {
+  public typealias Key = Swift.String
+  public typealias Value = SDKFramework.Logger.Metadata.Value
+  public init(dictionaryLiteral elements: (Swift.String, SDKFramework.Logger.Metadata.Value)...)
+}
+extension SDKFramework.Logger.MetadataValue : Swift.ExpressibleByArrayLiteral {
+  public typealias ArrayLiteralElement = SDKFramework.Logger.Metadata.Value
+  public init(arrayLiteral elements: SDKFramework.Logger.Metadata.Value...)
+}
+public typealias SDKControlColor = SDKFramework.SDKControlValue<SDKFramework.SDKControlStateValue<UIKit.UIColor>>
+public typealias SDKControlFloatValue = SDKFramework.SDKControlValue<SDKFramework.SDKControlStateValue<CoreGraphics.CGFloat>>
+public struct SDKControlValue<T> {
+  public var normal: T
+  public var success: T?
+  public var warning: T?
+  public var error: T?
+  public init(normal: T, success: T? = nil, warning: T? = nil, error: T? = nil)
 }
 public struct DownloadDocInfo : Swift.Codable {
   public var id: Swift.String
@@ -372,12 +1067,12 @@ public struct DownloadDocInfo : Swift.Codable {
 }
 open class Policy {
   public init()
-  open func getOperations(view: UIKit.UIViewController, kid: Swift.String, type: Swift.String?, opId: Swift.String?, completion: @escaping (_ operationsInfo: SDKFramework.OperationsInfo?, _ error: Swift.Error?) -> Swift.Void)
-  open func getHistoryOperations(view: UIKit.UIViewController, kid: Swift.String, count: Swift.Int? = nil, bookmark: Swift.Int64? = nil, operationCodes: [Swift.Int]? = nil, completion: @escaping (_ operationHistory: SDKFramework.OperationHistory?, _ error: Swift.Error?) -> Swift.Void)
+  open func getOperations(kid: Swift.String, type: Swift.String?, opId: Swift.String?, completion: @escaping (_ operationsInfo: SDKFramework.OperationsInfo?, _ error: Swift.Error?) -> Swift.Void)
+  open func getHistoryOperations(kid: Swift.String, count: Swift.Int? = nil, bookmark: Swift.Int64? = nil, operationCodes: [Swift.Int]? = nil, completion: @escaping (_ operationHistory: SDKFramework.OperationHistory?, _ error: Swift.Error?) -> Swift.Void)
   open func getParamsDSS(serviceUrl: Swift.String, completion: @escaping (_ policy: SDKFramework.PolicyPayload?, _ error: Swift.Error?) -> Swift.Void)
   open func setPersonalisation(url: Foundation.URL) throws
-  open func getUserDevices(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ devices: SDKFramework.Devices?, _ error: Swift.Error?) -> Swift.Void)
-  open func getCaParams(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ policy: SDKFramework.SignServerPolicy?, _ error: Swift.Error?) -> Swift.Void)
+  open func getUserDevices(kid: Swift.String, completion: @escaping (_ devices: SDKFramework.Devices?, _ error: Swift.Error?) -> Swift.Void)
+  open func getCaParams(kid: Swift.String, completion: @escaping (_ policy: SDKFramework.SignServerPolicy?, _ error: Swift.Error?) -> Swift.Void)
   open func generateKeyPair(provType: Swift.Int) throws
   open func addEntropy(seed: Swift.String) throws
   @objc deinit
@@ -394,24 +1089,41 @@ public struct ConfirmedDocument : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+extension UIKit.UIEdgeInsets {
+  public static func uniform(_ value: CoreGraphics.CGFloat) -> SDKFramework.TinyEdgeInsets
+  public static func top(_ value: CoreGraphics.CGFloat) -> SDKFramework.TinyEdgeInsets
+  public static func left(_ value: CoreGraphics.CGFloat) -> SDKFramework.TinyEdgeInsets
+  public static func bottom(_ value: CoreGraphics.CGFloat) -> SDKFramework.TinyEdgeInsets
+  public static func right(_ value: CoreGraphics.CGFloat) -> SDKFramework.TinyEdgeInsets
+  public static func horizontal(_ value: CoreGraphics.CGFloat) -> SDKFramework.TinyEdgeInsets
+  public static func vertical(_ value: CoreGraphics.CGFloat) -> SDKFramework.TinyEdgeInsets
+}
+public func + (lhs: SDKFramework.TinyEdgeInsets, rhs: SDKFramework.TinyEdgeInsets) -> SDKFramework.TinyEdgeInsets
 open class Cert {
   public init()
-  open func getCert(view: UIKit.UIViewController, kid: Swift.String, caId: Swift.Int, tId: Swift.String, dn: [Swift.String : Swift.String], completion: @escaping (_ cert: SDKFramework.Certificate?, _ error: Swift.Error?) -> Swift.Void)
+  open func getCert(kid: Swift.String, caId: Swift.Int, tId: Swift.String, dn: [Swift.String : Swift.String], completion: @escaping (_ cert: SDKFramework.Certificate?, _ error: Swift.Error?) -> Swift.Void)
   open func setCert(view: UIKit.UIViewController, kid: Swift.String, crt: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func getCertList(view: UIKit.UIViewController, kid: Swift.String, completion: @escaping (_ certs: [SDKFramework.Certificate], _ error: Swift.Error?) -> Swift.Void)
-  open func setNameCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, friendlyName: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func suspendCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, holdDate: Swift.Int64, unholdDate: Swift.Int64, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func resumeCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func revokeCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, reason: Swift.Int, date: Swift.Int32, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func setDefaultCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String, _default: Swift.Bool, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func deleteCert(view: UIKit.UIViewController, kid: Swift.String, cid: Swift.String? = nil, rid: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
-  open func getClientCert(view: UIKit.UIViewController, kid: Swift.String, caId: Swift.Int, tId: Swift.String, dn: [Swift.String : Swift.String], completion: @escaping (_ cert: SDKFramework.Certificate?, _ error: Swift.Error?) -> Swift.Void)
-  open func signRequest(view: UIKit.UIViewController, kid: Swift.String, cert: SDKFramework.Certificate, providerInfo: SDKFramework.CryptoProviderInfo?, pin: Swift.String, completion: @escaping (_ signedCertificate: Foundation.Data?, _ error: Swift.Error?) -> Swift.Void)
-  open func sendClientSignedCertificate(view: UIKit.UIViewController, kid: Swift.String, caId: Swift.Int, rid: Swift.String, content: Foundation.Data, completion: @escaping (_ cert: SDKFramework.Certificate?, _ error: Swift.Error?) -> Swift.Void)
-  open func installCertificate(view: UIKit.UIViewController, kid: Swift.String, cert: SDKFramework.Certificate, providerInfo: SDKFramework.CryptoProviderInfo?, pin: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func getCertList(kid: Swift.String, completion: @escaping (_ certs: [SDKFramework.Certificate], _ error: Swift.Error?) -> Swift.Void)
+  open func setNameCert(kid: Swift.String, cid: Swift.String, friendlyName: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func suspendCert(kid: Swift.String, cid: Swift.String, holdDate: Swift.Int64, unholdDate: Swift.Int64, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func resumeCert(kid: Swift.String, cid: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func revokeCert(kid: Swift.String, cid: Swift.String, reason: Swift.Int, date: Swift.Int32, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func setDefaultCert(kid: Swift.String, cid: Swift.String, _default: Swift.Bool, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func deleteCert(kid: Swift.String, cid: Swift.String? = nil, rid: Swift.String? = nil, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func getClientCert(kid: Swift.String, caId: Swift.Int, tId: Swift.String, dn: [Swift.String : Swift.String], completion: @escaping (_ cert: SDKFramework.Certificate?, _ error: Swift.Error?) -> Swift.Void)
+  open func signRequest(kid: Swift.String, cert: SDKFramework.Certificate, providerInfo: SDKFramework.CryptoProviderInfo?, pin: Swift.String, completion: @escaping (_ signedCertificate: Foundation.Data?, _ error: Swift.Error?) -> Swift.Void)
+  open func sendClientSignedCertificate(kid: Swift.String, caId: Swift.Int, rid: Swift.String, content: Foundation.Data, completion: @escaping (_ cert: SDKFramework.Certificate?, _ error: Swift.Error?) -> Swift.Void)
+  open func installCertificate(kid: Swift.String, cert: SDKFramework.Certificate, providerInfo: SDKFramework.CryptoProviderInfo?, pin: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
   public func checkIfInstalled(kid: Swift.String, certificate: SDKFramework.Certificate) -> Swift.Bool
   public func checkIfAccessibleOnThisDevice(kid: Swift.String, cid: Swift.String?, rid: Swift.String?) -> Swift.Bool
   @objc deinit
+}
+public struct SDKControlStateValue<T> {
+  public var normal: T
+  public var selected: T?
+  public var highlighted: T?
+  public var disabled: T?
+  public init(normal: T, selected: T? = nil, highlighted: T? = nil, disabled: T? = nil)
 }
 public struct AuditRecord : Swift.Codable {
   public var id: Swift.Int
@@ -454,6 +1166,66 @@ public struct Document : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+@_hasMissingDesignatedInitializers public class SDKCheckBoxStyle {
+  public var cornerRadius: SDKFramework.SDKCheckBoxStateValue<SDKFramework.SDKCornerRadius>
+  public var borderWidth: SDKFramework.SDKCheckBoxStateValue<CoreGraphics.CGFloat>?
+  public var lineWidth: SDKFramework.SDKCheckBoxStateValue<CoreGraphics.CGFloat>
+  public var checkmarkSize: SDKFramework.SDKCheckBoxStateValue<CoreGraphics.CGFloat>
+  public var backgroundColor: SDKFramework.SDKCheckBoxStateValue<SDKFramework.SDKControlColor>
+  public var borderColor: SDKFramework.SDKCheckBoxStateValue<SDKFramework.SDKControlColor>?
+  public var tintColor: SDKFramework.SDKCheckBoxStateValue<SDKFramework.SDKControlColor>
+  public var alpha: SDKFramework.SDKCheckBoxStateValue<SDKFramework.SDKControlFloatValue>?
+  @objc deinit
+}
+@frozen public enum SDKCancelType {
+  case userCancel
+  case error(_: Swift.Error)
+}
+public class SDKPublicStyle {
+  public static let styleNotificationName: Foundation.Notification.Name
+  public var button: SDKFramework.SDKPublicStyle.Button
+  public var label: SDKFramework.SDKPublicStyle.Label
+  public var textField: SDKFramework.SDKPublicStyle.TextField
+  public var pinPad: SDKFramework.SDKPublicStyle.PinPad
+  public var `switch`: SDKFramework.SDKPublicStyle.Switch
+  public var numPad: SDKFramework.SDKPublicStyle.NumPad
+  public var modalWaitTintColor: UIKit.UIColor
+  public init()
+  public static func toLight()
+  public static func toDark()
+  public static func to(custom: SDKFramework.SDKPublicStyle)
+  @objc deinit
+}
+extension SDKFramework.SDKPublicStyle {
+  @_hasMissingDesignatedInitializers public class Button {
+    @objc deinit
+  }
+}
+extension SDKFramework.SDKPublicStyle {
+  @_hasMissingDesignatedInitializers public class TextField {
+    @objc deinit
+  }
+}
+extension SDKFramework.SDKPublicStyle {
+  @_hasMissingDesignatedInitializers public class Label {
+    @objc deinit
+  }
+}
+extension SDKFramework.SDKPublicStyle {
+  @_hasMissingDesignatedInitializers public class PinPad {
+    @objc deinit
+  }
+}
+extension SDKFramework.SDKPublicStyle {
+  @_hasMissingDesignatedInitializers public class Switch {
+    @objc deinit
+  }
+}
+extension SDKFramework.SDKPublicStyle {
+  @_hasMissingDesignatedInitializers public class NumPad {
+    @objc deinit
+  }
+}
 public struct ApprovedOperation : Swift.Codable {
   public var id: Swift.String?
   public var type: Swift.String
@@ -479,6 +1251,44 @@ extension Swift.String : Foundation.LocalizedError {
 }
 extension Swift.String {
   public func pad(with padding: Swift.Character, toLength length: Swift.Int) -> Swift.String
+}
+public struct HTMLColors {
+  public static let hexColors: [Swift.String : Swift.String]
+}
+@_hasMissingDesignatedInitializers public class SDKNavigation {
+  public static let shared: SDKFramework.SDKNavigation
+  weak public var delegate: SDKFramework.SDKNavigationDelegate?
+  public var modalLoadingForSilentRequestType: SDKFramework.SDKNavigation.ModalLoadingForSilentRequestType {
+    get
+    set
+  }
+  @objc deinit
+}
+extension SDKFramework.SDKNavigation {
+  public func push(vc: UIKit.UIViewController, animated: Swift.Bool = true)
+  public func pop(animated: Swift.Bool = true, completion: (() -> Swift.Void)? = nil)
+  public func present(vc: UIKit.UIViewController, animated: Swift.Bool = true, modalPresentationStyle: UIKit.UIModalPresentationStyle = .fullScreen, completion: (() -> Swift.Void)? = nil)
+  public func dismissPresented(animated: Swift.Bool, completion: (() -> Swift.Void)? = nil)
+}
+public protocol SDKNavigationDelegate : AnyObject {
+  func needShow(navigationController: SDKFramework.SDKNavigationController, animated: Swift.Bool, completion: @escaping (() -> Swift.Void))
+  func needHide(navigationController: SDKFramework.SDKNavigationController, animated: Swift.Bool, completion: @escaping (() -> Swift.Void))
+  func needShowLoading()
+  func needHideLoading()
+}
+extension SDKFramework.SDKNavigation {
+  public func open(pdf url: Foundation.URL)
+}
+extension SDKFramework.SDKNavigation {
+  public enum ModalLoadingForSilentRequestType {
+    case inner
+    case outer
+    public static func == (a: SDKFramework.SDKNavigation.ModalLoadingForSilentRequestType, b: SDKFramework.SDKNavigation.ModalLoadingForSilentRequestType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
 }
 public enum SDKMessagesLocale : Swift.String {
   case undefinedError
@@ -533,11 +1343,22 @@ public enum SDKMessagesLocale : Swift.String {
   case cidOrRidFillingError
   case sessionFailed
   case deniedOfUseSDKMethod
+  case cantShowUI
   public init?(rawValue: Swift.String)
   public typealias RawValue = Swift.String
   public var rawValue: Swift.String {
     get
   }
+}
+public struct SDKCheckBoxStateValue<T> {
+  public var checked: T
+  public var unchecked: T
+  public init(checked: T, unchecked: T)
+  public init(all: T)
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class SDKButtonStyle : SDKFramework.SDKControlStyle {
+  public var title: SDKFramework.SDKLabelStyle
+  @objc deinit
 }
 public struct SignServerPolicy : Swift.Codable {
   public var caPolicies: [SDKFramework.CAPolicy]
@@ -547,7 +1368,7 @@ public struct SignServerPolicy : Swift.Codable {
 }
 open class CryptoProDss {
   public init()
-  public func _init(view: UIKit.UIViewController, completion: @escaping (_ result: SDKFramework.CSPInitCode) -> Swift.Void)
+  public func _init(completion: @escaping (_ result: SDKFramework.CSPInitCode) -> Swift.Void)
   @objc deinit
 }
 public struct SigningKeyInfo : Swift.Codable {
@@ -583,6 +1404,9 @@ public struct ProcessingTemplateInfo : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+extension SDKFramework.ConstraintRelation : Swift.Equatable {}
+extension SDKFramework.ConstraintRelation : Swift.Hashable {}
+extension SDKFramework.ConstraintRelation : Swift.RawRepresentable {}
 extension SDKFramework.DSSUser : Swift.Encodable {}
 extension SDKFramework.DSSUser : Swift.Decodable {}
 extension SDKFramework.OperationStatus : Swift.Equatable {}
@@ -594,6 +1418,13 @@ extension SDKFramework.SDKServerMessagesLocale : Swift.RawRepresentable {}
 extension SDKFramework.ProtectionType : Swift.Equatable {}
 extension SDKFramework.ProtectionType : Swift.Hashable {}
 extension SDKFramework.ProtectionType : Swift.RawRepresentable {}
+extension SDKFramework.SDKControlStatus : Swift.Equatable {}
+extension SDKFramework.SDKControlStatus : Swift.Hashable {}
+extension SDKFramework.Logger.Level : Swift.Hashable {}
+extension SDKFramework.Logger.Level : Swift.RawRepresentable {}
+extension SDKFramework.SDKCancelType : Swift.Sendable {}
+extension SDKFramework.SDKNavigation.ModalLoadingForSilentRequestType : Swift.Equatable {}
+extension SDKFramework.SDKNavigation.ModalLoadingForSilentRequestType : Swift.Hashable {}
 extension SDKFramework.SDKMessagesLocale : Swift.Equatable {}
 extension SDKFramework.SDKMessagesLocale : Swift.Hashable {}
 extension SDKFramework.SDKMessagesLocale : Swift.RawRepresentable {}
