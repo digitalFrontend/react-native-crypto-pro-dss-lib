@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="qr_scanner_primary_button_text_index">0</integer>
+
+    <integer name="password_creation_primary_button_text_index">0</integer>
+    <integer name="password_creation_tertiary_button_text_index">0</integer>
+    <integer name="pin_creation_tertiary_button_text_index">0</integer>
+
+    <integer name="password_confirmation_primary_button_text_index">0</integer>
+    <integer name="password_confirmation_secondary_button_text_index">0</integer>
+    <integer name="password_confirmation_tertiary_button_text_index">0</integer>
+    <integer name="pin_confirmation_tertiary_button_text_index">0</integer>
+
+    <integer name="biometric_primary_button_text_index">0</integer>
+    <integer name="biometric_error_primary_button_text_index">0</integer>
+
+    <integer name="profile_info_primary_button_text_index">0</integer>
+    <integer name="profile_info_tertiary_button_text_index">0</integer>
+
+    <integer name="operation_content_mt_primary_button_text_index">0</integer>
+    <integer name="operation_content_mt_tertiary_button_text_index">0</integer>
+    <integer name="operation_content_mo_primary_button_text_index">0</integer>
+    <integer name="operation_content_mo_tertiary_button_text_index">0</integer>
+    <integer name="operation_confirmation_mt_denial_primary_button_text_index">0</integer>
+    <integer name="operation_confirmation_mt_denial_secondary_button_text_index">0</integer>
+    <integer name="operation_confirmation_mo_denial_primary_button_text_index">0</integer>
+    <integer name="operation_confirmation_mo_denial_secondary_button_text_index">0</integer>
+    <integer name="operation_content_webview_secondary_mt_button_text_index">0</integer>
+    <integer name="operation_content_webview_secondary_mo_button_text_index">0</integer>
+    <integer name="operation_content_webview_menu_primary_button_text_index">0</integer>
+    <integer name="operation_content_webview_menu_secondary_button_text_index">0</integer>
+
+    <integer name="qr_viewer_primary_button_text_index">0</integer>
+
+    <integer name="security_warning_primary_button_text_index">0</integer>
+    <integer name="security_warning_tertiary_button_text_index">0</integer>
+</resources>

@@ -36,6 +36,7 @@ import com.digt.sdk.policy.Policy;
 import com.digt.sdk.policy.models.CaParams;
 import com.digt.sdk.policy.models.DeviceInfo;
 import com.digt.sdk.policy.models.OperationHistory;
+import com.digt.sdk.sign.ConfirmStateEnum;
 import com.digt.sdk.sign.Sign;
 import com.digt.sdk.sign.models.ApproveRequestMT;
 import com.digt.sdk.sign.models.Operation;
@@ -181,7 +182,10 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
         URI url = null;
         try {
             url = getUriFromAssets("SDKStyles.json");
-            policy.setPersonalisation(url);
+            //policy.setPersonalisation(url);
+
+
+
            promise.resolve("updateStyles success");
         } catch (IOException e) {
             reject(promise, "cant load styles (updateStyles)");
@@ -242,9 +246,11 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
                 Operation final_operation = _operation;
                 sign.signMT(getReactApplicationContext().getCurrentActivity(),kid,_operation, false,false,false, new SdkMtOperationWithSuspendCallback() {
+
+
                     @Override
-                    public void onOperationSuccessful() {
-                        promise.resolve("success");
+                    public void onOperationSuccessful(ConfirmStateEnum confirmStateEnum) {
+                        promise.resolve(confirmStateEnum.toString());
                     }
 
                     @Override
@@ -427,7 +433,6 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onOperationCancelled() {
-
                 promise.resolve("cancel");
             }
         });

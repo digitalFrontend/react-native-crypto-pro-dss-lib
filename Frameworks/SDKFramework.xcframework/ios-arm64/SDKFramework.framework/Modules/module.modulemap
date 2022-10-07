@@ -6,6 +6,6 @@ framework module SDKFramework {
 }
 
 module SDKFramework.Swift {
-    header "SDKFramework-Swift.h"
-    requires objc
+  header "SDKFramework-Swift.h"
+  requires objc
 }

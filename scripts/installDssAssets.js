@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 
 let isRootProjectDir = !__dirname.includes("node_modules")
 if (process.argv.includes("-fromRootProject")) {
@@ -11,9 +12,27 @@ const FONTS_DIR = `${PROJECT_DIR}dss/fonts/`
 const IOS_CERTS_FILE = "CpMyDssRootCerts.json"
 const CERTS_FILE = "certs.json"
 const STYLES_FILE = "SDKStyles.json"
+const ANDROID_SDK_FOLDERS = ["dssclient", "jinitcsp", "sharedlibrary", "cspgui"]
 const PROJECT_FILES_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}android/app/src/main/assets/`
+const LIB_SDK_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/android/libs/`
+const ANDROID_SDK_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}android/`
 const LIB_FILES_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/android/src/main/assets/`
 const IOS_FRAMEWORK_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/Frameworks/`
+
+const copyRecursiveSync = (src, dest) => {
+    let exists = fs.existsSync(src);
+    let stats = exists && fs.statSync(src);
+    let isDirectory = exists && stats.isDirectory();
+    if (isDirectory) {
+      fs.mkdirSync(dest);
+      fs.readdirSync(src).forEach(function(childItemName) {
+        copyRecursiveSync(path.join(src, childItemName),
+                          path.join(dest, childItemName));
+      });
+    } else {
+      fs.copyFileSync(src, dest);
+    }
+  };
 
 const convertStylesToIOS = (_stylesText = "", fonts = []) => {
     let stylesText = `${_stylesText}`
@@ -49,6 +68,7 @@ if (!projectDir.includes("dss")) {
 }
 
 const dssDir = fs.readdirSync(DSS_DIR)
+const sdkLibDir = fs.readdirSync(LIB_SDK_PATH)
 
 let shouldCopyFonts = true;
 
@@ -95,7 +115,19 @@ if (!dssDir.includes(CERTS_FILE)) {
     } catch (err) {
         console.log(`Ошибка копирования файла с сертификатами для айос: ${err.message}`)
     }
+}
 
+try {
+    try{
+        ANDROID_SDK_FOLDERS.forEach(folder => {
+            fs.rmdirSync(`${ANDROID_SDK_PATH}${folder}`, {recursive: true})
+        })
+    }catch(err){console.log(err)}
+    ANDROID_SDK_FOLDERS.forEach(folder => {
+        copyRecursiveSync(`${LIB_SDK_PATH}${folder}/`, `${ANDROID_SDK_PATH}/${folder}/`)
+    })
+} catch (err) {
+    console.log(`Ошибка копирования файлов с СДК для андройд: ${err.message}`)
 }
 
 if (!dssDir.includes(STYLES_FILE)) {

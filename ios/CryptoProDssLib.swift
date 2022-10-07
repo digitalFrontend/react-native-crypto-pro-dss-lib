@@ -51,8 +51,10 @@ class CryptoProDssLib : UIViewController {
     private var lastAuth: Auth? = nil;
     private weak var showingNC: UINavigationController?;
     
+    private var styles: Styles = .init()
+    
     private func reject(rejectFunc: @escaping RCTPromiseRejectBlock, text: String) -> Void {
-        rejectFunc("CryptoProDssLib", text, text);
+        rejectFunc("CryptoProDssLib", text, text as? Error);
     }
     
     @objc
@@ -106,23 +108,23 @@ class CryptoProDssLib : UIViewController {
         jsPromiseRejecter = reject;
         
         DispatchQueue.main.async {
-           
-            let policy = Policy();
-
-            policy.getOperations(kid: kid, type: nil, opId: nil){ operationsInfo,error  in
-
-                if (error != nil){
-                    self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (getOperations)")
-                } else {
-                    var operations = [] as [Any];
-                    
-                    for _operation in operationsInfo?.operations ?? [] {
-                        operations.append(try! DictionaryEncoder.encode(_operation))
-                    }
-                    
-                   resolve(operations)
+            
+            
+            
+            Policy.shared.getOperations(kid: kid, type: nil, opId: nil, successCompletion: {
+                (operationsInfo) in
+                var operations = [] as [Any];
+                
+                for _operation in operationsInfo.operations ?? [] {
+                    operations.append(try! DictionaryEncoder.encode(_operation))
                 }
-            }
+                
+               resolve(operations)
+            }, errorCompletion: {
+                (error) in
+                self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (getOperations)")
+            })
+
        }
         
     }
@@ -138,57 +140,46 @@ class CryptoProDssLib : UIViewController {
         jsPromiseRejecter = reject;
         
         DispatchQueue.main.async {
+            self.styles.updateSignStyles()
             
-            let policy = Policy();
             let sign = Sign();
-            policy.getOperations(kid: kid, type: nil, opId: nil){ operationsInfo,error  in
-                
-                if (error != nil){
-                    self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (getOperations.signMT)")
-                    return;
-                }
-                
+            Policy.shared.getOperations(kid: kid, type: nil, opId: nil, successCompletion: {
+                (operationsInfo) in
                 var operation = nil as SDKFramework.Operation?;
 
-                for _operation in operationsInfo?.operations ?? [] {
+                for _operation in operationsInfo.operations ?? [] {
 
                     if (transactionId == _operation.transactionId) {
                         operation = _operation;
                     }
                 }
-                print("SDKTEST0")
            
-                sign.signMT(kid: kid, operation: operation, enableMultiSelection: false, inmediateSendConfirm: false, silent: false){ approveRequestMT,error  in
+                sign.signMT(kid: kid, operation: operation, enableMultiSelection: false, inmediateSendConfirm: false, silent: false, successCompletion: {
+                    (approveRequestMT, state) in
                     
-         
-                    print("SDKTEST1")
-                    if (error != nil){
-                        print("SDKTEST2")
-                        if (error!.localizedDescription != "User cancelled"){
-                            self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (signMT)")
-                        }
-                    } else {
-                        
-                                   print("SDKTEST3")
-                        sign.deferredRequest(kid: kid, approveRequest: approveRequestMT!){ error in
-                            
-                                       print("SDKTEST4")
-                            if (error != nil){
-                                print("SDKTEST5")
-                                self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (deferredRequest)")
-                                return;
-                            }
-                            print("SDKTEST6")
-                            
-                            
+                    sign.deferredRequest(kid: kid, approveRequest: approveRequestMT!, successCompletion: {
+                        () in
                             let forReturn = try! DictionaryEncoder.encode(approveRequestMT);
-                                                    
+                                                
                             resolve(forReturn);
-                        }
-                    }
-              
-                }
-            }
+                    }, errorCompletion: {
+                        (error) in
+                            self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (deferredRequest)")
+                    })
+                }, errorCompletion: {
+                    (error) in
+                        print(error)
+                        //if (error.localizedDescription != "User cancelled"){
+                        self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (signMT)")
+                        //}
+                })
+            }, errorCompletion: {
+                (error) in
+                self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (getOperations.signMT)")
+            })
+            
+            
+         
        }
         
     }
@@ -220,6 +211,7 @@ class CryptoProDssLib : UIViewController {
         print("initialization");
     }
     
+    
     @objc
     func updateStyles(
         _ resolve: @escaping RCTPromiseResolveBlock,
@@ -229,15 +221,9 @@ class CryptoProDssLib : UIViewController {
         jsPromiseRejecter = reject;
         
         DispatchQueue.main.async {
-            let policy = Policy();
-
-            do {
-                try policy.setPersonalisation(url: Bundle.main.url(forResource: "SDKStyles", withExtension:"json")!)
-
-                resolve("updateStyles success");
-            } catch {
-                self.reject(rejectFunc: reject, text: "cant load styles (updateStyles)")
-            }
+            
+            resolve("Now not required");
+           
        }
     }
     
@@ -282,26 +268,20 @@ class CryptoProDssLib : UIViewController {
             
         
         DispatchQueue.main.async {
-            
-            
-            let policy = Policy();
-            
-            policy.getUserDevices(kid: kid){
-                devices,error  in
-
-                if (error != nil){
-                    self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (getUserDevices)")
-                } else {
+            Policy.shared.getUserDevices(kid: kid, successCompletion: {
+                (devices) in
                     var list = [] as [Any]
 
                     
-                    for device in devices!.devices {
+                    for device in devices.devices {
                         list.append(DictionaryEncoder.convertUserDevices(device: device));
                     }
                     
                     resolve(list)
-                }
-            }
+            }, errorCompletion: {
+                (error) in
+                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (getUserDevices)")
+            })
        }
     }
     
@@ -324,10 +304,11 @@ class CryptoProDssLib : UIViewController {
                             self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (auth.confirm)")
 
                         } else {
+                            self.styles.updateProfileStyles()
                             self.lastAuth!.verify(kid: kid, silent: false, successCompletion: {
                                 () in
                                 resolve(String(format: "success"))
-                            }, cancelCompletion: {
+                            }, errorCompletion: {
                                 type in
                                 self.reject(rejectFunc: reject, text: "\(type) (auth.verify)")
                             })
@@ -358,38 +339,27 @@ class CryptoProDssLib : UIViewController {
        
         DispatchQueue.main.async {
                 
-            do {
-               self.lastAuth = try Auth()
+            self.lastAuth = Auth()
+            
+            self.styles.updatePinStyle()
                 
-                
-                let user = DSSUser();
-                let registerInfo = RegisterInfo();
-                
-                self.lastAuth!.scanQR() {
-                    type, url, error in
-                    if error != nil {
-                        self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (scanQR)")
-                    } else {
-                        
-                        self.lastAuth!.kinit(dssUser: user, registerInfo: registerInfo, keyProtectionType: useBiometric ? SDKFramework.ProtectionType.BIOMETRIC : SDKFramework.ProtectionType.PASSWORD, activationCode: nil, password: nil) { kid, error  in
-
-                            if error != nil {
-                               
-                                self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (kinit)")
-                            } else {
-                                resolve(String(format: "success"))
-                            }
-                        }
-                    }
-                }
-                
-            } catch {
-                print("scanQR error")
-                print(error)
-                self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (initViaQr)")
-                   
-            }
-                  
+            let user = DSSUser();
+            let registerInfo = RegisterInfo();
+            
+            self.lastAuth!.scanQR(successCompletion: {
+                (type, url) in
+                self.styles.updateProfileStyles()
+                self.lastAuth!.kinit(dssUser: user, registerInfo: registerInfo, keyProtectionType: useBiometric ? SDKFramework.ProtectionType.BIOMETRIC : SDKFramework.ProtectionType.PASSWORD, activationCode: nil, password: nil, successCompletion: {
+                (kid) in
+                    resolve(String(format: "success"))
+                }, errorCompletion: {
+                (error) in
+                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (kinit)")
+                })
+            }, errorCompletion: {
+                (error) in
+                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (scanQR)")
+            })
         }
     }
 }
