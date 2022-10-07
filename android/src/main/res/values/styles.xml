@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Родитель для всех стилей и тем-->
+    <style name="DssSdk" />
+
+    <!--region Тулбар-->
+    <!--Родитель для всех стилей тулбаров-->
+    <style name="DssSdk.Toolbar" parent="Widget.Material3.Toolbar" />
+
+    <style name="DssSdk.Toolbar.Default">
+        <item name="navigationIcon">?attr/dssSdkDefaultToolbarNavigationIcon</item>
+        <item name="android:background">?attr/dssSdkDefaultToolbarBackgroundColor</item>
+        <item name="android:height">?attr/actionBarSize</item>
+        <item name="titleCentered">true</item>
+        <item name="titleTextAppearance">@style/DssSdk.TextAppearance.Header_3</item>
+    </style>
+
+    <style name="DssSdk.DefaultToolbarTheme" />
+
+    <style name="DssSdk.Toolbar.QrScanner">
+        <item name="navigationIcon">@drawable/back_icon</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:height">?attr/actionBarSize</item>
+    </style>
+
+    <style name="DssSdk.QrScannerToolbarTheme" />
+    <!--endregion-->
+
+    <!--region Поля ввода-->
+    <!--Родитель для всех стилей контейнеров полей ввода-->
+    <style name="DssSdk.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+
+    <style name="DssSdk.TextInputLayout.Default">
+        <item name="boxStrokeColor">@color/blue</item>
+        <item name="boxBackgroundColor">@color/white_color</item>
+        <item name="boxStrokeErrorColor">@color/redError</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="shapeAppearanceOverlay">@style/DssSdk.TextInputLayout.Default.ShapeAppearanceOverlay</item>
+        <item name="errorTextAppearance">@style/DssSdk.TextAppearance.Description</item>
+        <item name="errorTextColor">@color/redError</item>
+        <item name="helperTextTextAppearance">@style/DssSdk.TextAppearance.Description</item>
+        <item name="helperTextTextColor">?dssSdkTextInputLayoutHelpTextColor</item>
+        <item name="hintEnabled">false</item>
+        <item name="endIconDrawable">?dssSdkTextInputLayoutEndIcon</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="errorIconDrawable">@null</item>
+    </style>
+
+    <style name="DssSdk.TextInputLayout.Default.ShapeAppearanceOverlay">
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="DssSdk.DefaultTextInputLayoutTheme" />
+
+    <!--Родитель для всех стилей полей ввода-->
+    <style name="DssSdk.InputEditText" parent="Widget.Material3.TextInputEditText.FilledBox" />
+
+    <style name="DssSdk.InputEditText.Default">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:textColorHint">?dssSdkInputEditTextHintColor</item>
+        <item name="hintTextAppearance">@style/DssSdk.TextAppearance.InputText</item>
+        <item name="android:textColor">?dssSdkInputEditTextColor</item>
+        <item name="android:textAppearance">@style/DssSdk.TextAppearance.InputText</item>
+    </style>
+
+    <style name="DssSdk.DefaultInputEditTextTheme">
+        <item name="colorControlActivated">@color/dss_sdk_blue</item>
+    </style>
+    <!--endregion-->
+
+    <!--region Кнопки-->
+    <!--Родитель для всех стилей и тем кнопок-->
+    <style name="DssSdk.Button" parent="Widget.AppCompat.Button">
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="DssSdk.Button.Primary">
+        <item name="android:background">@drawable/bg_button_primary_selector</item>
+        <item name="android:textAppearance">@style/DssSdk.TextAppearance.BoldAction</item>
+        <item name="android:textColor">@color/dss_sdk_white</item>
+    </style>
+
+    <style name="DssSdk.Button.Secondary">
+        <item name="android:background">@drawable/bg_button_secondary_selector</item>
+        <item name="android:textAppearance">@style/DssSdk.TextAppearance.BoldAction</item>
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
+    <style name="DssSdk.Button.Tertiary">
+        <item name="android:background">@drawable/bg_button_tertiary_default</item>
+        <item name="android:textAppearance">@style/DssSdk.TextAppearance.Action</item>
+        <item name="android:textColor">@color/blue</item>
+    </style>
+    <!--endregion-->
+
+    <!--region Свитчи-->
+    <!--Родитель для всех стилей и тем свитчей-->
+    <style name="DssSdk.Switch" parent="Widget.Material3.CompoundButton.Switch" />
+
+    <style name="DssSdk.Switch.Default">
+        <item name="android:textAppearance">@style/DssSdk.TextAppearance.Body</item>
+        <item name="trackTint">@color/dss_sdk_blue_midnight_63</item>
+        <item name="thumbTint">@color/bg_switch_thumb_default</item>
+    </style>
+
+    <style name="DssSdk.DefaultSwitchTheme">
+        <item name="colorPrimary">@color/dss_sdk_blue</item>
+        <item name="colorOnSurface">@color/dss_sdk_gray_ghost</item>
+    </style>
+    <!--endregion-->
+
+    <!--region Description-->
+    <!--Родитель для всех стилей и тем чекбоксов-->
+    <style name="DssSdk.Checkbox" parent="Widget.Material3.CompoundButton.CheckBox"/>
+
+    <style name="DssSdk.Checkbox.Default">
+        <item name="buttonTint">@color/dss_sdk_blue</item>
+    </style>
+
+    <style name="DssSdk.DefaultCheckboxTheme"/>
+    <!--endregion-->
+
+    <!--region Диалоговые окна-->
+    <!--Родитель для всех стилей и тем BottomSheetDialog-->
+    <style name="DssSdk.BottomSheetDialog" parent="Widget.Material3.BottomSheet.Modal"/>
+
+    <style name="DssSdk.BottomSheetDialog.Rounded">
+        <item name="backgroundTint">?dssSdkBackgroundColor</item>
+        <item name="shapeAppearance">@style/DssSdk.BottomSheetDialogShapeAppearance</item>
+    </style>
+    
+    <style name="DssSdk.RoundedBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/DssSdk.BottomSheetDialog.Rounded</item>
+    </style>
+
+    <style name="DssSdk.BottomSheetDialogShapeAppearance" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+    <!--endregion-->
+
+    <!--region Кастомные компоненты-->
+    <style name="DssSdk.VendorLogoView">
+        <item name="dss_sdk_vendor_logo_icon">@drawable/ic_dss_sdk_vendor_logo</item>
+        <item name="dss_sdk_vendor_logo_icon_bottom_margin">0dp</item>
+        <item name="dss_sdk_vendor_logo_icon_title_color">?attr/dssSdkVendorLogoViewTitleColor
+        </item>
+        <item name="dss_sdk_vendor_logo_title_text_appearance">
+            @style/DssSdk.TextAppearance.Header_1
+        </item>
+    </style>
+
+    <style name="DssSdk.ProfileVendorLogoView">
+        <item name="dss_sdk_vendor_logo_icon">@drawable/ic_dss_sdk_profile_info</item>
+        <item name="dss_sdk_vendor_logo_icon_bottom_margin">0dp</item>
+        <item name="dss_sdk_vendor_logo_icon_title_color">?attr/dssSdkProfileVendorLogoViewTitleColor
+        </item>
+        <item name="dss_sdk_vendor_logo_title_text_appearance">
+            @style/DssSdk.TextAppearance.Header_1
+        </item>
+    </style>
+
+    <style name="DssSdk.PinTextView">
+        <item name="dss_sdk_pin_text_background">@drawable/bg_pin_text_selector</item>
+        <item name="dss_sdk_pin_text_success_background">@drawable/bg_pin_text_success</item>
+        <item name="dss_sdk_pin_text_error_background">@drawable/bg_pin_text_error</item>
+        <item name="dss_sdk_pin_text_masked_char_drawable">
+            ?dssSdkDigitPinTextViewMaskedCharDrawable
+        </item>
+        <item name="dss_sdk_pin_text_help_text_appearance">
+            @style/DssSdk.TextAppearance.Description
+        </item>x
+        <item name="dss_sdk_pin_text_help_text_default_color">
+            ?dssSdkDigitPinTextViewHelpTextDefaultColor
+        </item>
+        <item name="dss_sdk_pin_text_help_text_error_color">@color/redError</item>
+        <item name="dss_sdk_pin_text_help_text_success_color">@color/greenSuccess</item>
+    </style>
+
+    <style name="DssSdk.DigitPinButton">
+        <item name="dss_sdk_digit_pin_background">?dssSdkDigitPinButtonBackgroundDrawable</item>
+        <item name="dss_sdk_digit_pin_text_appearance">@style/DssSdk.TextAppearance.DigitPinButton
+        </item>
+        <item name="dss_sdk_digit_pin_text_color">?dssSdkDigitPinButtonTextColor</item>
+    </style>
+
+    <style name="DssSdk.BiometricsIconPinButton">
+        <item name="dss_sdk_icon_pin_background">?dssSdkBiometricsIconPinButtonBackgroundDrawable
+        </item>
+        <item name="dss_sdk_icon_pin_icon">?dssSdkBiometricsIconPinButtonIcon</item>
+    </style>
+
+    <style name="DssSdk.ClearIconPinButton">
+        <item name="dss_sdk_icon_pin_background">?dssSdkClearIconPinButtonBackgroundDrawable</item>
+        <item name="dss_sdk_icon_pin_icon">?dssSdkClearIconPinButtonIcon</item>
+    </style>
+
+    <style name="DssSdk.QrScannerHeaderView">
+        <item name="dss_sdk_qr_scanner_header_title_textAppearance">@style/DssSdk.TextAppearance.Header_3</item>
+        <item name="dss_sdk_qr_scanner_header_title_text_color">@color/dss_sdk_white</item>
+        <item name="dss_sdk_qr_scanner_header_description_textAppearance">@style/DssSdk.TextAppearance.Body</item>
+        <item name="dss_sdk_qr_scanner_header_description_text_color">@color/redError</item>
+    </style>
+
+    <style name="DssSdk.KeyValueView">
+        <item name="dss_sdk_key_value_title_textAppearance">@style/DssSdk.TextAppearance.Title</item>
+        <item name="dss_sdk_key_value_title_text_color">?dssSdkKeyValueTitleTextColor</item>
+        <item name="dss_sdk_key_value_subtitle_textAppearance">@style/DssSdk.TextAppearance.Body</item>
+        <item name="dss_sdk_key_value_subtitle_text_color">?dssSdkKeyValueSubtitleTextColor</item>
+    </style>
+
+    <style name="DssSdk.OperationContentWebViewStyle">
+        <item name="dss_sdk_operation_content_webview_menu_icon">?attr/dssSdkOperationContentWebViewMenuIcon</item>
+    </style>
+
+    <style name="DssSdk.PdfViewerSliderStyle" parent="Widget.AppCompat.SeekBar">
+        <item name="android:thumb">@drawable/bg_slider_pdf_viewer_thumb</item>
+        <item name="android:paddingLeft">24dp</item>
+        <item name="android:paddingRight">24dp</item>
+        <item name="android:progressTint">@color/dss_sdk_blue_light_10</item>
+    </style>
+
+    <style name="DssSdk.BiometricsV28Style">
+        <item name="dss_sdk_biometrics_v28_background">@drawable/bg_dialog_default</item>
+
+        <item name="dss_sdk_biometrics_v28_default_state_title_text_appearance">@style/DssSdk.TextAppearance.Title</item>
+        <item name="dss_sdk_biometrics_v28_default_state_title_text_color">?attr/dssSdkPrimaryTextColor</item>
+        <item name="dss_sdk_biometrics_v28_default_state_description_text_appearance">@style/DssSdk.TextAppearance.Body</item>
+        <item name="dss_sdk_biometrics_v28_default_state_description_text_color">?attr/dssSdkPrimaryTextColor</item>
+        <item name="dss_sdk_biometrics_v28_default_state_cancel_button_text_appearance">@style/DssSdk.TextAppearance.Body</item>
+        <item name="dss_sdk_biometrics_v28_default_state_cancel_button_text_color">?attr/dssSdkPrimaryTextColor</item>
+        <item name="dss_sdk_biometrics_v28_default_state_icon">@drawable/ic_sdk_fingerprint_24px</item>
+
+        <item name="dss_sdk_biometrics_v28_error_state_title_text_appearance">@style/DssSdk.TextAppearance.Title</item>
+        <item name="dss_sdk_biometrics_v28_error_state_title_text_color">?attr/dssSdkPrimaryTextColor</item>>
+        <item name="dss_sdk_biometrics_v28_error_state_description_text_appearance">@style/DssSdk.TextAppearance.Body</item>
+        <item name="dss_sdk_biometrics_v28_error_state_description_text_color">?attr/dssSdkPrimaryTextColor</item>
+        <item name="dss_sdk_biometrics_v28_error_state_cancel_button_text_appearance">@style/DssSdk.TextAppearance.Body</item>
+        <item name="dss_sdk_biometrics_v28_error_state_cancel_button_text_color">?attr/dssSdkPrimaryTextColor</item>
+        <item name="dss_sdk_biometrics_v28_error_state_icon">@drawable/ic_sdk_error_outline_24px</item>
+    </style>
+    <!--endregion-->
+
+</resources>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Родитель для всех стилей TextAppearance-->
+    <style name="DssSdk.TextAppearance" parent="TextAppearance.AppCompat" />
+
+    <!--region Базовые стили текстов-->
+    <style name="DssSdk.TextAppearance.Header_1">
+        <item name="android:textColor">@color/dark</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/header_bold_font</item>
+    </style>
+
+    <style name="DssSdk.TextAppearance.Header_3">
+        <item name="android:textColor">?attr/dssSdkPrimaryTextColor</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:fontFamily">@font/header_bold_font</item>
+    </style>
+
+    <style name="DssSdk.TextAppearance.Title">
+        <item name="android:textColor">?attr/grayTextColor</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:fontFamily">@font/sans_reg</item>
+    </style>
+
+    <style name="DssSdk.TextAppearance.Body">
+        <item name="android:textColor">?attr/darkTextColor</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:fontFamily">@font/sans_reg</item>
+    </style>
+
+    <style name="DssSdk.TextAppearance.Body.Secondary">
+        <item name="android:textColor">?attr/dssSdkSecondaryTextColor</item>
+    </style>
+
+    <style name="DssSdk.TextAppearance.Description">
+        <item name="android:textColor">@color/grayDescription</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/sans_reg</item>
+    </style>
+
+    <style name="DssSdk.TextAppearance.InputText">
+        <item name="android:textColor">@color/dss_sdk_blue_bay_of_many_50</item>
+        <item name="android:textSize">15dp</item>
+    </style>
+
+    <style name="DssSdk.TextAppearance.Action">
+        <item name="android:textColor">@color/dss_sdk_blue</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:fontFamily">@font/sans_reg</item>
+    </style>
+
+    <style name="DssSdk.TextAppearance.BoldAction">
+        <item name="android:textColor">@color/white_color</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:fontFamily">@font/sans_bold</item>
+    </style>
+    <!--endregion-->
+
+    <!--region Поля ввода-->
+    <style name="DssSdk.TextAppearance.InputField" />
+
+    <style name="DssSdk.TextAppearance.InputField.Default">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+    <style name="DssSdk.TextAppearance.InputField.Default.Title">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/dark</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <!--endregion-->
+
+    <!--region Кастомные компоненты-->
+    <style name="DssSdk.TextAppearance.DigitPinButton">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:fontFamily">@font/header_bold_font</item>
+    </style>
+    <!--endregion-->
+
+</resources>

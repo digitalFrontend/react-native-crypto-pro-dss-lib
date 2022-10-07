@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--region Основной фон для экранов-->
+    <attr name="dssSdkBackgroundColor" format="reference"/>
+    <!--endregion-->
+
+    <!--region Основнвые цвета для текста-->
+    <attr name="dssSdkPrimaryTextColor" format="reference"/>
+    <attr name="dssSdkSecondaryTextColor" format="reference"/>
+    <attr name="darkTextColor" format="reference"/>
+    <attr name="grayTextColor" format="reference"/>
+    <!--endregion-->
+
+    <!--region Тулбар-->
+    <attr name="dssSdkDefaultToolbarBackgroundColor" format="reference"/>
+    <attr name="dssSdkDefaultToolbarNavigationIcon" format="reference"/>
+    <attr name="dssSdkDefaultToolbarTitleColor" format="reference"/>
+    <attr name="dssSdkDefaultToolbarStyle" format="reference"/>
+
+    <attr name="dssSdkQrScannerToolbarStyle" format="reference"/>
+
+    <attr name="dssSdkOperationContentToolbarMenuIcon" format="reference"/>
+    <!--endregion-->
+
+    <!--region Поля ввода-->
+    <attr name="dssSdkDefaultInputFieldTitleStyle" format="reference"/>
+    <attr name="dssSdkTextInputLayoutStyle" format="reference"/>
+    <attr name="dssSdkTextInputLayoutEndIcon" format="reference"/>
+    <attr name="dssSdkTextInputLayoutHelpTextColor" format="reference"/>
+    <attr name="dssSdkInputEditTextStyle" format="reference"/>
+    <attr name="dssSdkInputEditTextColor" format="reference"/>
+    <attr name="dssSdkInputEditTextHintColor" format="reference"/>
+    <!--endregion-->
+
+    <!--region Кнопки-->
+    <attr name="dssSdkPrimaryButtonStyle" format="reference"/>
+    <attr name="dssSdkSecondaryButtonStyle" format="reference"/>
+    <attr name="dssSdkTertiaryButtonStyle" format="reference"/>
+    <!--endregion-->
+
+    <!--region Свитчи-->
+    <attr name="dssSdkDefaultSwitchStyle" format="reference"/>
+    <!--endregion-->
+
+    <!--region Чекбоксы-->
+    <attr name="dssSdkDefaultCheckboxStyle" format="reference"/>
+    <!--endregion-->
+
+    <!--region AuthLogoView-->
+    <attr name="dssSdkVendorLogoViewStyle" format="reference"/>
+    <attr name="dssSdkVendorLogoViewTitleColor" format="reference"/>
+    <attr name="dssSdkProfileVendorLogoViewStyle" format="reference"/>
+    <attr name="dssSdkProfileVendorLogoViewTitleColor" format="reference"/>
+    <declare-styleable name="VendorLogoView">
+        <attr name="dss_sdk_vendor_logo_icon" format="reference"/>
+        <attr name="dss_sdk_vendor_logo_icon_bottom_margin" format="dimension"/>
+        <attr name="dss_sdk_vendor_logo_icon_title_color" format="reference"/>
+        <attr name="dss_sdk_vendor_logo_title_text_appearance" format="reference"/>
+    </declare-styleable>
+    <!--endregion-->
+
+    <!--region PinTextView-->
+    <attr name="dssSdkDigitPinTextViewStyle" format="reference"/>
+    <attr name="dssSdkDigitPinTextViewMaskedCharDrawable" format="reference"/>
+    <attr name="dssSdkDigitPinTextViewHelpTextDefaultColor" format="reference"/>
+    <declare-styleable name="PinTextView">
+        <attr name="dss_sdk_pin_text_background" format="reference"/>
+        <attr name="dss_sdk_pin_text_success_background" format="reference"/>
+        <attr name="dss_sdk_pin_text_error_background" format="reference"/>
+        <attr name="dss_sdk_pin_text_masked_char_drawable" format="reference"/>
+        <attr name="dss_sdk_pin_text_help_text_appearance" format="reference"/>
+        <attr name="dss_sdk_pin_text_help_text_default_color" format="reference"/>
+        <attr name="dss_sdk_pin_text_help_text_success_color" format="reference"/>
+        <attr name="dss_sdk_pin_text_help_text_error_color" format="reference"/>
+    </declare-styleable>
+    <!--endregion-->
+
+    <!--region Кнопки для пина-->
+    <attr name="dssSdkDigitPinButtonStyle" format="reference"/>
+    <attr name="dssSdkDigitPinButtonBackgroundDrawable" format="reference"/>
+    <attr name="dssSdkDigitPinButtonTextColor" format="reference"/>
+    <declare-styleable name="DigitPinButton">
+        <attr name="dss_sdk_digit_pin_background" format="reference"/>
+        <attr name="dss_sdk_digit_pin_text_appearance" format="reference"/>
+        <attr name="dss_sdk_digit_pin_text_color" format="reference"/>
+    </declare-styleable>
+
+    <attr name="dssSdkBiometricsIconPinButtonStyle" format="reference"/>
+    <attr name="dssSdkBiometricsIconPinButtonBackgroundDrawable" format="reference"/>
+    <attr name="dssSdkBiometricsIconPinButtonIcon" format="reference"/>
+    <attr name="dssSdkClearIconPinButtonStyle" format="reference"/>
+    <attr name="dssSdkClearIconPinButtonBackgroundDrawable" format="reference"/>
+    <attr name="dssSdkClearIconPinButtonIcon" format="reference"/>
+    <declare-styleable name="IconPinButton">
+        <attr name="dss_sdk_icon_pin_background" format="reference"/>
+        <attr name="dss_sdk_icon_pin_icon" format="reference"/>
+    </declare-styleable>
+    <!--endregion-->
+
+    <!--region BiometricV28View-->
+    <attr name="dssSdkBiometicsV28Style" format="reference"/>
+    <declare-styleable name="BiometricsV28View">
+        <attr name="dss_sdk_biometrics_v28_background" format="reference"/>
+
+        <attr name="dss_sdk_biometrics_v28_default_state_title_text_appearance" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_default_state_title_text_color" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_default_state_description_text_appearance" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_default_state_description_text_color" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_default_state_cancel_button_text_appearance" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_default_state_cancel_button_text_color" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_default_state_icon" format="reference"/>
+
+        <attr name="dss_sdk_biometrics_v28_error_state_title_text_appearance" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_error_state_title_text_color" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_error_state_description_text_appearance" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_error_state_description_text_color" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_error_state_cancel_button_text_appearance" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_error_state_cancel_button_text_color" format="reference"/>
+        <attr name="dss_sdk_biometrics_v28_error_state_icon" format="reference"/>
+    </declare-styleable>
+    <!--endregion-->
+
+    <!--region QrScannerHeaderView-->
+    <attr name="dssSdkQrScannerHeaderStyle" format="reference"/>
+    <declare-styleable name="QrScannerHeaderView">
+        <attr name="dss_sdk_qr_scanner_header_title_textAppearance" format="reference"/>
+        <attr name="dss_sdk_qr_scanner_header_title_text_color" format="reference"/>
+        <attr name="dss_sdk_qr_scanner_header_description_textAppearance" format="reference"/>
+        <attr name="dss_sdk_qr_scanner_header_description_text_color" format="reference"/>
+    </declare-styleable>
+    <!--endregion-->
+
+    <!--region KeyValueView-->
+    <attr name="dssSdkKeyValueStyle" format="reference"/>
+    <attr name="dssSdkKeyValueTitleTextColor" format="reference"/>
+    <attr name="dssSdkKeyValueSubtitleTextColor" format="reference"/>
+    <declare-styleable name="KeyValueView">
+        <attr name="dss_sdk_key_value_title_textAppearance" format="reference"/>
+        <attr name="dss_sdk_key_value_title_text_color" format="reference"/>
+        <attr name="dss_sdk_key_value_subtitle_textAppearance" format="reference"/>
+        <attr name="dss_sdk_key_value_subtitle_text_color" format="reference"/>
+    </declare-styleable>
+    <!--endregion-->
+
+    <!--region OperationContentWebView-->
+    <attr name="dssSdkOperationContentWebViewStyle" format="reference"/>
+    <attr name="dssSdkOperationContentWebViewMenuIcon" format="reference"/>
+    <declare-styleable name="OperationContentWebView">
+        <attr name="dss_sdk_operation_content_webview_menu_icon" format="reference"/>
+    </declare-styleable>
+    <!--endregion-->
+
+    <!--region PdfViewerSliderView-->
+    <attr name="dssSdkPdfViewerSliderStyle" format="reference"/>
+    <!--endregion-->
+</resources>

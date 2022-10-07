@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="DssSdk.Theme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <item name="dssSdkBackgroundColor">@color/dss_sdk_white</item>
+        <item name="dssSdkPrimaryTextColor">@color/dss_sdk_blue_magenta_dark</item>
+        <item name="dssSdkSecondaryTextColor">@color/dss_sdk_blue_bay_of_many_50</item>
+        <item name="darkTextColor">@color/dark</item>
+        <item name="grayTextColor">@color/grayDescription</item>
+
+        <item name="dssSdkDefaultInputFieldTitleStyle">@style/DssSdk.TextAppearance.InputField.Default.Title</item>
+        <item name="dssSdkTextInputLayoutHelpTextColor">@color/dss_sdk_blue_bay_of_many_50</item>
+<!--        <item name="dssSdkTextInputLayoutEndIcon">@drawable/ic_dss_sdk_input_clear</item>-->
+        <item name="dssSdkTextInputLayoutStyle">@style/DssSdk.TextInputLayout.Default</item>
+        <item name="dssSdkInputEditTextColor">@color/dss_sdk_blue_magenta_dark</item>
+        <item name="dssSdkInputEditTextHintColor">@color/dss_sdk_blue_bay_of_many_50</item>
+        <item name="dssSdkInputEditTextStyle">@style/DssSdk.InputEditText.Default</item>
+
+        <item name="dssSdkPrimaryButtonStyle">@style/DssSdk.Button.Primary</item>
+        <item name="dssSdkSecondaryButtonStyle">@style/DssSdk.Button.Secondary</item>
+        <item name="dssSdkTertiaryButtonStyle">@style/DssSdk.Button.Tertiary</item>
+
+        <item name="dssSdkDefaultToolbarBackgroundColor">@color/dss_sdk_white</item>
+        <item name="dssSdkDefaultToolbarNavigationIcon">@drawable/back_icon</item>
+        <item name="dssSdkDefaultToolbarTitleColor">@color/dss_sdk_blue_magenta_dark</item>
+        <item name="dssSdkDefaultToolbarStyle">@style/DssSdk.Toolbar.Default</item>
+        <item name="dssSdkQrScannerToolbarStyle">@style/DssSdk.Toolbar.QrScanner</item>
+        <item name="dssSdkOperationContentToolbarMenuIcon">@drawable/iconicinfoblue</item>
+
+        <item name="dssSdkDefaultSwitchStyle">@style/DssSdk.Switch.Default</item>
+        <item name="dssSdkDefaultCheckboxStyle">@style/DssSdk.Checkbox.Default</item>
+
+        <item name="dssSdkVendorLogoViewTitleColor">@color/dss_sdk_blue_magenta_dark</item>
+        <item name="dssSdkVendorLogoViewStyle">@style/DssSdk.VendorLogoView</item>
+        <item name="dssSdkProfileVendorLogoViewTitleColor">@color/dss_sdk_blue_magenta_dark</item>
+        <item name="dssSdkProfileVendorLogoViewStyle">@style/DssSdk.ProfileVendorLogoView</item>
+
+        <item name="dssSdkDigitPinTextViewMaskedCharDrawable">@drawable/bg_pin_masked_char_selector_light</item>
+        <item name="dssSdkDigitPinTextViewHelpTextDefaultColor">@color/dss_sdk_blue_bay_of_many_50</item>
+        <item name="dssSdkDigitPinTextViewStyle">@style/DssSdk.PinTextView</item>
+        <item name="dssSdkDigitPinButtonBackgroundDrawable">@drawable/bg_button_pin_dark</item>
+        <item name="dssSdkDigitPinButtonTextColor">@color/blue</item>
+        <item name="dssSdkDigitPinButtonStyle">@style/DssSdk.DigitPinButton</item>
+        <item name="dssSdkBiometricsIconPinButtonBackgroundDrawable">@drawable/bg_button_pin_dark</item>
+<!--        <item name="dssSdkBiometricsIconPinButtonIcon">@drawable/ic_dss_sdk_pin_biometrics</item>-->
+        <item name="dssSdkBiometricsIconPinButtonStyle">@style/DssSdk.BiometricsIconPinButton</item>
+        <item name="dssSdkClearIconPinButtonBackgroundDrawable">@drawable/bg_button_pin_clear_dark</item>
+        <item name="dssSdkClearIconPinButtonIcon">@drawable/icbackblue</item>
+        <item name="dssSdkClearIconPinButtonStyle">@style/DssSdk.ClearIconPinButton</item>
+        <item name="dssSdkQrScannerHeaderStyle">@style/DssSdk.QrScannerHeaderView</item>
+
+        <item name="dssSdkKeyValueStyle">@style/DssSdk.KeyValueView</item>
+        <item name="dssSdkKeyValueTitleTextColor">@color/grayDescription</item>
+        <item name="dssSdkKeyValueSubtitleTextColor">@color/dark</item>
+
+        <item name="dssSdkOperationContentWebViewStyle">@style/DssSdk.OperationContentWebViewStyle</item>
+        <item name="dssSdkOperationContentWebViewMenuIcon">@drawable/ic_dss_sdk_menu_light</item>
+        <item name="dssSdkPdfViewerSliderStyle">@style/DssSdk.PdfViewerSliderStyle</item>
+
+        <item name="dssSdkBiometicsV28Style">@style/DssSdk.BiometricsV28Style</item>
+    </style>
+
+    <style name="DssSdk.DialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="dssSdkBackgroundColor">@color/dss_sdk_white</item>
+        <item name="dssSdkPrimaryTextColor">@color/dss_sdk_blue_magenta_dark</item>
+        <item name="dssSdkSecondaryTextColor">@color/dss_sdk_blue_bay_of_many_50</item>
+
+        <item name="dssSdkPrimaryButtonStyle">@style/DssSdk.Button.Primary</item>
+        <item name="dssSdkSecondaryButtonStyle">@style/DssSdk.Button.Secondary</item>
+        <item name="dssSdkTertiaryButtonStyle">@style/DssSdk.Button.Tertiary</item>
+
+        <item name="dssSdkDefaultSwitchStyle">@style/DssSdk.Switch.Default</item>
+
+        <item name="dssSdkBiometicsV28Style">@style/DssSdk.BiometricsV28Style</item>
+    </style>
+
+</resources>
