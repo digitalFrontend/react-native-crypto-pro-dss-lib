@@ -252,6 +252,38 @@ using UInt = size_t;
 #endif
 
 #if defined(__OBJC__)
+@class NSString;
+@class NSBundle;
+@class NSCoder;
+
+SWIFT_CLASS("_TtC12SDKFramework9SDKBaseVC")
+@interface SDKBaseVC : UIViewController
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
+- (void)viewDidLoad;
+- (void)viewWillAppear:(BOOL)animated;
+- (void)viewDidAppear:(BOOL)animated;
+- (void)viewWillDisappear:(BOOL)animated;
+- (void)viewDidDisappear:(BOOL)animated;
+- (void)willMoveToParentViewController:(UIViewController * _Nullable)parent;
+- (void)didMoveToParentViewController:(UIViewController * _Nullable)parent;
+@end
+
+
+SWIFT_CLASS("_TtC12SDKFramework10SDKFixedVC")
+@interface SDKFixedVC : SDKBaseVC
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC12SDKFramework21AutoSignConfirmaionVC")
+@interface AutoSignConfirmaionVC : SDKFixedVC
+- (void)viewDidLoad;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
 
 
 @class MTSlideToOpenView;
@@ -264,9 +296,7 @@ SWIFT_PROTOCOL("_TtP12SDKFramework21MTSlideToOpenDelegate_")
 @class UILabel;
 @class UIImageView;
 @class UIColor;
-@class NSString;
 @class UIFont;
-@class NSCoder;
 
 SWIFT_CLASS("_TtC12SDKFramework17MTSlideToOpenView")
 @interface MTSlideToOpenView : UIView
@@ -298,32 +328,6 @@ SWIFT_CLASS("_TtC12SDKFramework17MTSlideToOpenView")
 @end
 
 
-@interface NSLayoutConstraint (SWIFT_EXTENSION(SDKFramework))
-- (nonnull instancetype)with:(UILayoutPriority)p SWIFT_WARN_UNUSED_RESULT;
-@end
-
-
-@class NSBundle;
-
-SWIFT_CLASS("_TtC12SDKFramework9SDKBaseVC")
-@interface SDKBaseVC : UIViewController
-- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder SWIFT_UNAVAILABLE;
-- (void)viewDidLoad;
-- (void)viewWillAppear:(BOOL)animated;
-- (void)viewDidAppear:(BOOL)animated;
-- (void)viewWillDisappear:(BOOL)animated;
-- (void)viewDidDisappear:(BOOL)animated;
-- (void)willMoveToParentViewController:(UIViewController * _Nullable)parent;
-- (void)didMoveToParentViewController:(UIViewController * _Nullable)parent;
-@end
-
-
-SWIFT_CLASS("_TtC12SDKFramework10SDKFixedVC")
-@interface SDKFixedVC : SDKBaseVC
-- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
-@end
 
 
 SWIFT_CLASS("_TtC12SDKFramework18SDKAnimationTextVC")
