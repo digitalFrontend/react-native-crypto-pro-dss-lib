@@ -809,6 +809,21 @@ public struct DeclinedDocument : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
+@frozen public struct QrData : Swift.Codable {
+  public var kid: Swift.String?
+  public var uid: Swift.String?
+  public var service_url: Swift.String?
+  public var key_content: Swift.String?
+  public var activation_required: Swift.Bool?
+  public var weakness: Swift.Bool?
+  internal var nonce: Swift.String?
+  internal var seed: Swift.String?
+  public var operation: SDKFramework.Operation?
+  internal var keys: [Swift.String : Swift.String]?
+  internal var values: [Swift.String : Swift.String?]?
+  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: Swift.Decoder) throws
+}
 extension SDKFramework.Auth {
   public typealias QRHandler = ((_ type: Swift.String?, _ url: Swift.String?, _ error: Swift.Error?) -> Swift.Void)
 }
@@ -893,7 +908,7 @@ open class Auth {
   public init()
   open func add(qrCode: Swift.String, successCompletion: @escaping ((_ type: Swift.String, _ url: Swift.String?) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   open func add(base64QR: Swift.String, successCompletion: @escaping ((_ type: Swift.String, _ url: Swift.String?) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
-  open func scanQR(successCompletion: @escaping ((_ type: Swift.String, _ url: Swift.String?) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
+  open func scanQR(successCompletion: @escaping ((_ type: Swift.String, _ url: Swift.String?, _ qrData: SDKFramework.QrData?) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   open func _init(dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, password: Swift.String? = nil, successCompletion: @escaping ((_ kid: Swift.String) -> Swift.Void), errorCompletion: @escaping ((_ type: Swift.Error) -> Swift.Void))
   public func kinit(dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, activationCode: Swift.String? = nil, password: Swift.String? = nil, successCompletion: @escaping ((_ kid: Swift.String) -> Swift.Void), errorCompletion: @escaping ((_ type: Swift.Error) -> Swift.Void))
   open func addNewDevice(dssUser: SDKFramework.DSSUser, registerInfo: SDKFramework.RegisterInfo, keyProtectionType: SDKFramework.ProtectionType, uid: Swift.String, password: Swift.String? = nil, successCompletion: @escaping ((_ kid: Swift.String) -> Swift.Void), errorCompletion: @escaping ((_ type: Swift.Error) -> Swift.Void))
@@ -1361,7 +1376,7 @@ extension SDKFramework.Auth_V2 {
   public func add(base64QR: Swift.String) async throws -> (type: Swift.String, url: Swift.String?)
   #endif
   #if compiler(>=5.3) && $AsyncAwait
-  public func scanAndAddQR() async throws -> (type: Swift.String, url: Swift.String?)
+  public func scanAndAddQR() async throws -> (type: Swift.String, url: Swift.String?, qrData: SDKFramework.QrData?)
   #endif
 }
 extension SDKFramework.Auth_V2 {
@@ -1545,6 +1560,7 @@ extension SDKFramework.SDKPublicStyle {
     public var header: SDKFramework.SDKLabelStyle
     public var header3: SDKFramework.SDKLabelStyle
     public var main: SDKFramework.SDKLabelStyle
+    public var main2: SDKFramework.SDKLabelStyle
     public var title: SDKFramework.SDKLabelStyle
     public var body: SDKFramework.SDKLabelStyle
     public var second: SDKFramework.SDKLabelStyle
