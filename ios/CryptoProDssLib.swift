@@ -347,7 +347,7 @@ class CryptoProDssLib : UIViewController {
             let registerInfo = RegisterInfo();
             
             self.lastAuth!.scanQR(successCompletion: {
-                (type, url) in
+                (type, url,data) in
                 self.styles.updateProfileStyles()
                 self.lastAuth!.kinit(dssUser: user, registerInfo: registerInfo, keyProtectionType: useBiometric ? SDKFramework.ProtectionType.BIOMETRIC : SDKFramework.ProtectionType.PASSWORD, activationCode: nil, password: nil, successCompletion: {
                 (kid) in
