@@ -108,13 +108,13 @@ extension SDKFramework.Cert_V2 {
   public func sendClientSignedCertificate(kid: Swift.String, caId: Swift.Int, rid: Swift.String, content: Foundation.Data) async throws -> SDKFramework.Certificate
   #endif
   #if compiler(>=5.3) && $AsyncAwait
-  public func installCertificate(kid: Swift.String, cert: SDKFramework.Certificate, providerInfo: SDKFramework.CryptoProviderInfo, cred: SDKFramework.CryptoProviderInfoCreds) async throws
+  public func installCertificate(kid: Swift.String, cert: SDKFramework.Certificate, rid: Swift.String, cred: SDKFramework.CryptoProviderInfoCreds) async throws
   #endif
   #if compiler(>=5.3) && $AsyncAwait
   public func installCertificateExternal(kid: Swift.String, crt: SDKFramework.Certificate, keyInfo: SDKFramework.SigningKeyInfo) async throws
   #endif
   #if compiler(>=5.3) && $AsyncAwait
-  public func changeRutokenPin(kid: Swift.String, cid: Swift.String, rid: Swift.String) async throws
+  public func changeRutokenPin(kid: Swift.String, cid: Swift.String?, rid: Swift.String?) async throws
   #endif
   public func removeRutokenPin(kid: Swift.String, cid: Swift.String?, rid: Swift.String?) throws
 }
@@ -486,7 +486,7 @@ open class Sign {
   public init()
   public func signAuto(kid: Swift.String, operation: SDKFramework.Operation?, successCompletion: @escaping ((_ approveRequest: SDKFramework.ApproveRequestMT?, _ state: SDKFramework.MTSignConfirmStateEnum) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   public func signMT(kid: Swift.String, operation: SDKFramework.Operation?, enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, silent: Swift.Bool = false, successCompletion: @escaping ((_ approveRequest: SDKFramework.ApproveRequestMT?, _ state: SDKFramework.MTSignConfirmStateEnum) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
-  public func signMO(kid: Swift.String, parameters: [Swift.String : Swift.String], enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, uploadDocInfos: [SDKFramework.UploadDocInfo], silent: Swift.Bool = false, isClientSide: Swift.Bool, successCompletion: @escaping ((_ signatureResult: SDKFramework.SignatureResult?, _ approveRequestMOSign: SDKFramework.ApproveRequestMO?) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
+  public func signMO(kid: Swift.String, cid: Swift.String, parameters: [Swift.String : Swift.String], enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, uploadDocInfos: [SDKFramework.UploadDocInfo], silent: Swift.Bool = false, successCompletion: @escaping ((_ signatureResult: SDKFramework.SignatureResult?, _ approveRequestMOSign: SDKFramework.ApproveRequestMO?) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   public func deferredRequest(kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMT, successCompletion: @escaping (() -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   public func deferredRequest(kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMO, successCompletion: @escaping ((_ signatureResult: SDKFramework.SignatureResult) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   @objc deinit
@@ -527,6 +527,8 @@ public enum CryptoLibError : Swift.Error, Swift.Equatable {
   case removedCard
   case certificateNotFound
   case keysetAsRegisteredIsInvalid
+  case exportNotSupported
+  case operationNotSupported
   case unknown(hex: Swift.String)
   public static func error(byHexFrom code: Swift.Int) -> SDKFramework.CryptoLibError
   public static func error(by hexCode: Swift.String) -> SDKFramework.CryptoLibError
@@ -561,7 +563,7 @@ public struct Operation : Swift.Codable {
   public var documentCount: Swift.Int
   public var transactionId: Swift.String
   public var parameters: [Swift.String : Swift.String]?
-  public var documents: [SDKFramework.Document]?
+  public var documents: [SDKFramework.Document]
   public var kid: Swift.String?
   public var isClientSide: Swift.Bool?
   public var isFullDocRequired: Swift.Bool?
@@ -763,6 +765,7 @@ public struct Certificate : Swift.Codable {
   public var friendlyName: Swift.String?
   public var isDefault: Swift.Bool
   public var isClient: Swift.Bool
+  public var isArchived: Swift.Bool?
   public init()
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
@@ -887,6 +890,9 @@ public struct UploadDocInfo : Swift.Codable {
   public init(from decoder: Swift.Decoder) throws
 }
 @frozen public enum SDKCertError : Swift.String, Swift.Error {
+  case keyAlreadyInstalled
+  case keyNotFound
+  case certNotFound
   case notFoundSigningKeyInfo
   public init?(rawValue: Swift.String)
   public typealias RawValue = Swift.String
@@ -1321,7 +1327,7 @@ public struct SDKExternalKeyCertificateModel {
   open func getClientCert(kid: Swift.String, caId: Swift.Int, tId: Swift.String, dn: [Swift.String : Swift.String], successCompletion: @escaping ((_ cert: SDKFramework.Certificate) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   open func signRequest(kid: Swift.String, cert: SDKFramework.Certificate, providerInfo: SDKFramework.CryptoProviderInfo?, pin: Swift.String, successCompletion: @escaping ((_ signedCertificate: Foundation.Data) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   open func sendClientSignedCertificate(kid: Swift.String, caId: Swift.Int, rid: Swift.String, content: Foundation.Data, successCompletion: @escaping ((_ cert: SDKFramework.Certificate) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
-  open func installCertificate(kid: Swift.String, cert: SDKFramework.Certificate, providerInfo: SDKFramework.CryptoProviderInfo?, pin: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
+  open func installCertificate(kid: Swift.String, cert: SDKFramework.Certificate, rid: Swift.String, pin: Swift.String, completion: @escaping (_ error: Swift.Error?) -> Swift.Void)
   public func checkIfInstalled(kid: Swift.String, certificate: SDKFramework.Certificate) -> Swift.Bool
   public func checkIfAccessibleOnThisDevice(kid: Swift.String, cid: Swift.String?, rid: Swift.String?) -> Swift.Bool
   @objc deinit
@@ -1589,6 +1595,17 @@ extension SDKFramework.SDKPublicStyle {
     @objc deinit
   }
 }
+extension SDKFramework.Cert_V2 {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func importPFX(kid: Swift.String, cid: Swift.String, pin: Swift.String, keyContainerType: SDKFramework.CryptoKeyContainerType) async throws
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait
+  public func isExportable(kid: Swift.String, cid: Swift.String) async throws -> Swift.Bool
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait
+  public func exportPFX(kid: Swift.String, cid: Swift.String, pin: Swift.String) async throws
+  #endif
+}
 public struct ApprovedOperation : Swift.Codable {
   public var id: Swift.String?
   public var type: Swift.String
@@ -1706,6 +1723,9 @@ public struct SDKCheckBoxStateValue<T> {
 public struct SignServerPolicy : Swift.Codable {
   public var caPolicies: [SDKFramework.CAPolicy]
   public var processingTemplates: [SDKFramework.ProcessingTemplateInfo]?
+  public var isMobileKeysSupported: Swift.Bool?
+  public var isMobileKeyArchiveSupported: Swift.Bool?
+  public var isMobileKeyArchivePermanent: Swift.Bool?
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
@@ -1741,7 +1761,7 @@ public struct SigningKeyInfo : Swift.Codable {
   public var isExportable: Swift.Bool?
   public var containerFullName: Swift.String
   public init(from decoder: Swift.Decoder) throws
-  public init(kid: Swift.String, uid: Swift.String = "", containerName: Swift.String, containerFullName: Swift.String, providerName: Swift.String?, providerType: Swift.Int, providerKeyType: SDKFramework.CryptoKeyContainerType, cid: Swift.String?, rid: Swift.String?, isInstalled: Swift.Bool)
+  public init(kid: Swift.String, uid: Swift.String = "", containerName: Swift.String, containerFullName: Swift.String, providerName: Swift.String?, providerType: Swift.Int, providerKeyType: SDKFramework.CryptoKeyContainerType, cid: Swift.String?, rid: Swift.String?, isInstalled: Swift.Bool, isExportable: Swift.Bool? = nil)
   public func encode(to encoder: Swift.Encoder) throws
 }
 @frozen public enum CSPInitCode : Swift.String {
@@ -1768,7 +1788,7 @@ extension SDKFramework.Sign_V2 {
   public func signMT(kid: Swift.String, operation: SDKFramework.Operation?, enableMultiSelection: Swift.Bool, confirmationSendingMode: SDKFramework.ConfirmationSendingMode, silent: Swift.Bool = false) async throws -> (approveRequest: SDKFramework.ApproveRequestMT?, state: SDKFramework.MTSignConfirmStateEnum)
   #endif
   #if compiler(>=5.3) && $AsyncAwait
-  public func signMO(kid: Swift.String, parameters: [Swift.String : Swift.String], enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, uploadDocInfos: [SDKFramework.UploadDocInfo], silent: Swift.Bool = false, isClientSide: Swift.Bool) async throws -> (signatureResult: SDKFramework.SignatureResult?, approveRequestMOSign: SDKFramework.ApproveRequestMO?)
+  public func signMO(kid: Swift.String, cid: Swift.String, parameters: [Swift.String : Swift.String], enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, uploadDocInfos: [SDKFramework.UploadDocInfo], silent: Swift.Bool = false) async throws -> (signatureResult: SDKFramework.SignatureResult?, approveRequestMOSign: SDKFramework.ApproveRequestMO?)
   #endif
   #if compiler(>=5.3) && $AsyncAwait
   public func deferredRequest(kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMT) async throws
