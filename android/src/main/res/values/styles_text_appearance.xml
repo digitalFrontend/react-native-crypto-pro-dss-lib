@@ -24,7 +24,7 @@
     </style>
 
     <style name="DssSdk.TextAppearance.Body">
-        <item name="android:textColor">?attr/darkTextColor</item>
+        <item name="android:textColor">@color/dark</item>
         <item name="android:textSize">17dp</item>
         <item name="android:fontFamily">@font/sans_reg</item>
     </style>
