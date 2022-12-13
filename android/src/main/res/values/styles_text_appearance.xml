@@ -12,13 +12,13 @@
     </style>
 
     <style name="DssSdk.TextAppearance.Header_3">
-        <item name="android:textColor">?attr/dssSdkPrimaryTextColor</item>
+        <item name="android:textColor">@color/dark</item>
         <item name="android:textSize">17dp</item>
         <item name="android:fontFamily">@font/header_bold_font</item>
     </style>
 
     <style name="DssSdk.TextAppearance.Title">
-        <item name="android:textColor">?attr/grayTextColor</item>
+        <item name="android:textColor">@color/grayDescription</item>
         <item name="android:textSize">15dp</item>
         <item name="android:fontFamily">@font/sans_reg</item>
     </style>
@@ -30,7 +30,7 @@
     </style>
 
     <style name="DssSdk.TextAppearance.Body.Secondary">
-        <item name="android:textColor">?attr/dssSdkSecondaryTextColor</item>
+        <item name="android:textColor">@color/dark</item>
     </style>
 
     <style name="DssSdk.TextAppearance.Description">
@@ -40,12 +40,12 @@
     </style>
 
     <style name="DssSdk.TextAppearance.InputText">
-        <item name="android:textColor">@color/dss_sdk_blue_bay_of_many_50</item>
+        <item name="android:textColor">@color/dark</item>
         <item name="android:textSize">15dp</item>
     </style>
 
     <style name="DssSdk.TextAppearance.Action">
-        <item name="android:textColor">@color/dss_sdk_blue</item>
+        <item name="android:textColor">@color/blue</item>
         <item name="android:textSize">15dp</item>
         <item name="android:fontFamily">@font/sans_reg</item>
     </style>
