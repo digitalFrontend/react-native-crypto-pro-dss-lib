@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   # optional - use expanded license entry instead:
   # s.license    = { :type => "MIT", :file => "LICENSE" }
   s.authors      = { "digitalFrontend" => "digitalFrontend@tele2.ru" }
-  s.platforms    = { :ios => "12.0" }
+  s.platforms    = { :ios => "13.0" }
   s.source       = { :git => "https://github.com/digitalFrontend/react-native-crypto-pro-dss-lib.git", :tag => "#{s.version}" }
 
    s.pod_target_xcconfig = {

@@ -297,15 +297,14 @@ class CryptoProDssLib : UIViewController {
             DispatchQueue.main.async {
                     
                 do {
-                   
-                    self.lastAuth!.confirm(kid: kid) { error in
+                    Auth().confirm(kid: kid) { error in
                         if error != nil {
-                        
+                            
                             self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (auth.confirm)")
 
                         } else {
                             self.styles.updateProfileStyles()
-                            self.lastAuth!.verify(kid: kid, silent: false, successCompletion: {
+                            Auth().verify(kid: kid, silent: false, successCompletion: {
                                 () in
                                 resolve(String(format: "success"))
                             }, errorCompletion: {
@@ -333,33 +332,27 @@ class CryptoProDssLib : UIViewController {
         withUseBiometric useBiometric: Bool,
         withResolver resolve: @escaping RCTPromiseResolveBlock,
         withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
-        
-        jsPromiseResolver = resolve;
-        jsPromiseRejecter = reject;
-       
-        DispatchQueue.main.async {
-                
-            self.lastAuth = Auth()
             
-            self.styles.updatePinStyle()
-                
-            let user = DSSUser();
-            let registerInfo = RegisterInfo();
             
-            self.lastAuth!.scanQR(successCompletion: {
-                (type, url,data) in
-                self.styles.updateProfileStyles()
-                self.lastAuth!.kinit(dssUser: user, registerInfo: registerInfo, keyProtectionType: useBiometric ? SDKFramework.ProtectionType.BIOMETRIC : SDKFramework.ProtectionType.PASSWORD, activationCode: nil, password: nil, successCompletion: {
-                (kid) in
-                    resolve(String(format: "success"))
-                }, errorCompletion: {
-                (error) in
-                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (kinit)")
-                })
-            }, errorCompletion: {
-                (error) in
-                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (scanQR)")
-            })
+            DispatchQueue.main.async {
+                
+                self.styles.updatePinStyle()
+                
+                let user = DSSUser();
+                let registerInfo = RegisterInfo();
+                
+                Task {
+                    do {
+                        try await Auth_V2.shared.scanAndAddQR()
+                        self.styles.updateProfileStyles()
+                        try await Auth_V2.shared.kInit(dssUser: user,
+                                                       registerInfo: registerInfo,
+                                                       keyProtectionType:  SDKFramework.ProtectionType.PASSWORD)
+                        resolve(String(format: "success"))
+                    } catch {
+                        reject("CryptoProDssLib", "\(error.localizedDescription)", "\(error.localizedDescription)" as? Error);
+                    }
+                }
+            }
         }
-    }
 }
