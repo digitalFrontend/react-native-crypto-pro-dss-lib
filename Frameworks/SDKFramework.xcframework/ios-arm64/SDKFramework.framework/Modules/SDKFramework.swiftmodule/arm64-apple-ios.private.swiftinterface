@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.7 (swiftlang-5.7.0.127.4 clang-1400.0.29.50)
+// swift-compiler-version: Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)
 // swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name SDKFramework
 // swift-module-flags-ignorable: -enable-bare-slash-regex
 import AVFoundation
@@ -60,6 +60,7 @@ public struct DSSUser {
   public var keyType: Swift.Bool
   public init()
   public init(kid: Swift.String, uid: Swift.String, alias: Swift.String?, state: Swift.String, profile: Swift.String, notBefore: Swift.Int64, notAfter: Swift.Int64, serviceUrl: Swift.String, name: Swift.String, keyType: Swift.Bool)
+  public init(serviceUrl: Swift.String, name: Swift.String, keyType: Swift.Bool)
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
@@ -310,20 +311,6 @@ extension SDKFramework.Docs_V2 {
   open func cleanUpDocument(kid: Swift.String, id: Swift.String) async throws
   #endif
 }
-public protocol LogHandler {
-  func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, source: Swift.String, file: Swift.String, function: Swift.String, line: Swift.UInt)
-  @available(*, deprecated, renamed: "log(level:message:metadata:source:file:function:line:)")
-  func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, file: Swift.String, function: Swift.String, line: Swift.UInt)
-  subscript(metadataKey _: Swift.String) -> SDKFramework.Logger.Metadata.Value? { get set }
-  var metadata: SDKFramework.Logger.Metadata { get set }
-  var logLevel: SDKFramework.Logger.Level { get set }
-}
-extension SDKFramework.LogHandler {
-  @available(*, deprecated, message: "You should implement this method instead of using the default implementation")
-  public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, source: Swift.String, file: Swift.String, function: Swift.String, line: Swift.UInt)
-  @available(*, deprecated, renamed: "log(level:message:metadata:source:file:function:line:)")
-  public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, file: Swift.String, function: Swift.String, line: Swift.UInt)
-}
 public typealias CLNumPadDotStyle = SDKFramework.SDKViewStyle
 public enum OperationStatus : Swift.String {
   case Completed
@@ -427,7 +414,7 @@ public struct CAPolicy : Swift.Codable {
   case mapping(text: Swift.String)
   case responseBodyIsNil
   case parsing
-  case server
+  case server(message: SDKFramework.SDKServerMessagesLocale)
   case customServer(text: Swift.String)
   case customText(text: Swift.String)
   case customCode(code: Swift.Int)
@@ -484,7 +471,6 @@ public enum SDKCornerRadius {
 }
 open class Sign {
   public init()
-  public func signAuto(kid: Swift.String, operation: SDKFramework.Operation?, successCompletion: @escaping ((_ approveRequest: SDKFramework.ApproveRequestMT?, _ state: SDKFramework.MTSignConfirmStateEnum) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   public func signMT(kid: Swift.String, operation: SDKFramework.Operation?, enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, silent: Swift.Bool = false, successCompletion: @escaping ((_ approveRequest: SDKFramework.ApproveRequestMT?, _ state: SDKFramework.MTSignConfirmStateEnum) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   public func signMO(kid: Swift.String, cid: Swift.String, parameters: [Swift.String : Swift.String], enableMultiSelection: Swift.Bool, inmediateSendConfirm: Swift.Bool, uploadDocInfos: [SDKFramework.UploadDocInfo], silent: Swift.Bool = false, successCompletion: @escaping ((_ signatureResult: SDKFramework.SignatureResult?, _ approveRequestMOSign: SDKFramework.ApproveRequestMO?) -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
   public func deferredRequest(kid: Swift.String, approveRequest: SDKFramework.ApproveRequestMT, successCompletion: @escaping (() -> Swift.Void), errorCompletion: @escaping ((_ error: Swift.Error) -> Swift.Void))
@@ -759,6 +745,7 @@ public struct Certificate : Swift.Codable {
   public var caId: Swift.Int
   public var dn: [Swift.String : Swift.String]
   public var issuer: [Swift.String : Swift.String]?
+  public var serialNumber: Swift.String?
   public var notBefore: Swift.Int32
   public var notAfter: Swift.Int32
   public var state: Swift.String
@@ -1034,232 +1021,6 @@ public enum SDKControlStatus {
   }
   @objc deinit
 }
-public struct Logger {
-  @usableFromInline
-  internal var handler: SDKFramework.LogHandler
-  public let label: Swift.String
-}
-extension SDKFramework.Logger {
-  @inlinable public func log(level: SDKFramework.Logger.Level, _ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        if self.logLevel <= level {
-            self.handler.log(level: level,
-                             message: message(),
-                             metadata: metadata(),
-                             source: source() ?? Logger.currentModule(fileID: (file)),
-                             file: file, function: function, line: line)
-        }
-    }
-  @inlinable public func log(level: SDKFramework.Logger.Level, _ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.log(level: level, message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
-    }
-  @inlinable public subscript(metadataKey metadataKey: Swift.String) -> SDKFramework.Logger.Metadata.Value? {
-    get {
-            return self.handler[metadataKey: metadataKey]
-        }
-    set {
-            self.handler[metadataKey: metadataKey] = newValue
-        }
-  }
-  @inlinable public var logLevel: SDKFramework.Logger.Level {
-    get {
-            return self.handler.logLevel
-        }
-    set {
-            self.handler.logLevel = newValue
-        }
-  }
-}
-extension SDKFramework.Logger {
-  @inlinable public func trace(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.log(level: .trace, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
-    }
-  @inlinable public func trace(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.trace(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
-    }
-  @inlinable public func debug(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.log(level: .debug, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
-    }
-  @inlinable public func debug(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.debug(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
-    }
-  @inlinable public func info(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.log(level: .info, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
-    }
-  @inlinable public func info(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.info(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
-    }
-  @inlinable public func notice(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.log(level: .notice, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
-    }
-  @inlinable public func notice(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.notice(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
-    }
-  @inlinable public func warning(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.log(level: .warning, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
-    }
-  @inlinable public func warning(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.warning(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
-    }
-  @inlinable public func error(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.log(level: .error, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
-    }
-  @inlinable public func error(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.error(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
-    }
-  @inlinable public func critical(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, source: @autoclosure () -> Swift.String? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.log(level: .critical, message(), metadata: metadata(), source: source(), file: file, function: function, line: line)
-    }
-  @inlinable public func critical(_ message: @autoclosure () -> SDKFramework.Logger.Message, metadata: @autoclosure () -> SDKFramework.Logger.Metadata? = nil, file: Swift.String = #fileID, function: Swift.String = #function, line: Swift.UInt = #line) {
-        self.critical(message(), metadata: metadata(), source: nil, file: file, function: function, line: line)
-    }
-}
-public enum LoggingSystem {
-  public static func bootstrap(_ factory: @escaping (Swift.String) -> SDKFramework.LogHandler)
-}
-extension SDKFramework.Logger {
-  public typealias Metadata = [Swift.String : SDKFramework.Logger.MetadataValue]
-  public enum MetadataValue {
-    case string(Swift.String)
-    case stringConvertible(Swift.CustomStringConvertible)
-    case dictionary(SDKFramework.Logger.Metadata)
-    case array([SDKFramework.Logger.Metadata.Value])
-  }
-  public enum Level : Swift.String, Swift.Codable, Swift.CaseIterable {
-    case trace
-    case debug
-    case info
-    case notice
-    case warning
-    case error
-    case critical
-    public init?(rawValue: Swift.String)
-    public typealias AllCases = [SDKFramework.Logger.Level]
-    public typealias RawValue = Swift.String
-    public static var allCases: [SDKFramework.Logger.Level] {
-      get
-    }
-    public var rawValue: Swift.String {
-      get
-    }
-  }
-  public init(label: Swift.String)
-  public init(label: Swift.String, factory: (Swift.String) -> SDKFramework.LogHandler)
-}
-extension SDKFramework.Logger.Level : Swift.Comparable {
-  public static func < (lhs: SDKFramework.Logger.Level, rhs: SDKFramework.Logger.Level) -> Swift.Bool
-}
-extension SDKFramework.Logger.MetadataValue : Swift.Equatable {
-  public static func == (lhs: SDKFramework.Logger.Metadata.Value, rhs: SDKFramework.Logger.Metadata.Value) -> Swift.Bool
-}
-extension SDKFramework.Logger {
-  public struct Message : Swift.ExpressibleByStringLiteral, Swift.Equatable, Swift.CustomStringConvertible, Swift.ExpressibleByStringInterpolation {
-    public typealias StringLiteralType = Swift.String
-    public init(stringLiteral value: Swift.String)
-    public var description: Swift.String {
-      get
-    }
-    public static func == (a: SDKFramework.Logger.Message, b: SDKFramework.Logger.Message) -> Swift.Bool
-    public typealias ExtendedGraphemeClusterLiteralType = SDKFramework.Logger.Message.StringLiteralType
-    public typealias StringInterpolation = Swift.DefaultStringInterpolation
-    public typealias UnicodeScalarLiteralType = SDKFramework.Logger.Message.StringLiteralType
-  }
-}
-public struct MultiplexLogHandler : SDKFramework.LogHandler {
-  public init(_ handlers: [SDKFramework.LogHandler])
-  public var logLevel: SDKFramework.Logger.Level {
-    get
-    set
-  }
-  public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, source: Swift.String, file: Swift.String, function: Swift.String, line: Swift.UInt)
-  public var metadata: SDKFramework.Logger.Metadata {
-    get
-    set
-  }
-  public subscript(metadataKey metadataKey: SDKFramework.Logger.Metadata.Key) -> SDKFramework.Logger.Metadata.Value? {
-    get
-    set
-  }
-}
-public struct StreamLogHandler : SDKFramework.LogHandler {
-  public static func standardOutput(label: Swift.String) -> SDKFramework.StreamLogHandler
-  public static func standardError(label: Swift.String) -> SDKFramework.StreamLogHandler
-  public var logLevel: SDKFramework.Logger.Level
-  public var metadata: SDKFramework.Logger.Metadata {
-    get
-    set
-  }
-  public subscript(metadataKey metadataKey: Swift.String) -> SDKFramework.Logger.Metadata.Value? {
-    get
-    set
-  }
-  public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, source: Swift.String, file: Swift.String, function: Swift.String, line: Swift.UInt)
-}
-public struct SwiftLogNoOpLogHandler : SDKFramework.LogHandler {
-  public init()
-  public init(_: Swift.String)
-  @inlinable public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, file: Swift.String, function: Swift.String, line: Swift.UInt) {}
-  @inlinable public subscript(metadataKey _: Swift.String) -> SDKFramework.Logger.Metadata.Value? {
-    get {
-            return nil
-        }
-    set {}
-  }
-  @inlinable public var metadata: SDKFramework.Logger.Metadata {
-    get {
-            return [:]
-        }
-    set {}
-  }
-  @inlinable public var logLevel: SDKFramework.Logger.Level {
-    get {
-            return .critical
-        }
-    set {}
-  }
-}
-extension SDKFramework.Logger {
-  @inlinable internal static func currentModule(filePath: Swift.String = #file) -> Swift.String {
-        let utf8All = filePath.utf8
-        return filePath.utf8.lastIndex(of: UInt8(ascii: "/")).flatMap { lastSlash -> Substring? in
-            utf8All[..<lastSlash].lastIndex(of: UInt8(ascii: "/")).map { secondLastSlash -> Substring in
-                filePath[utf8All.index(after: secondLastSlash) ..< lastSlash]
-            }
-        }.map {
-            String($0)
-        } ?? "n/a"
-    }
-  @inlinable internal static func currentModule(fileID: Swift.String = #fileID) -> Swift.String {
-        let utf8All = fileID.utf8
-        if let slashIndex = utf8All.firstIndex(of: UInt8(ascii: "/")) {
-            return String(fileID[..<slashIndex])
-        } else {
-            return "n/a"
-        }
-    }
-}
-extension SDKFramework.Logger.MetadataValue : Swift.ExpressibleByStringLiteral {
-  public typealias StringLiteralType = Swift.String
-  public init(stringLiteral value: Swift.String)
-  public typealias ExtendedGraphemeClusterLiteralType = SDKFramework.Logger.MetadataValue.StringLiteralType
-  public typealias UnicodeScalarLiteralType = SDKFramework.Logger.MetadataValue.StringLiteralType
-}
-extension SDKFramework.Logger.MetadataValue : Swift.CustomStringConvertible {
-  public var description: Swift.String {
-    get
-  }
-}
-extension SDKFramework.Logger.MetadataValue : Swift.ExpressibleByStringInterpolation {
-  public typealias StringInterpolation = Swift.DefaultStringInterpolation
-}
-extension SDKFramework.Logger.MetadataValue : Swift.ExpressibleByDictionaryLiteral {
-  public typealias Key = Swift.String
-  public typealias Value = SDKFramework.Logger.Metadata.Value
-  public init(dictionaryLiteral elements: (Swift.String, SDKFramework.Logger.Metadata.Value)...)
-}
-extension SDKFramework.Logger.MetadataValue : Swift.ExpressibleByArrayLiteral {
-  public typealias ArrayLiteralElement = SDKFramework.Logger.Metadata.Value
-  public init(arrayLiteral elements: SDKFramework.Logger.Metadata.Value...)
-}
 public typealias SDKControlColor = SDKFramework.SDKControlValue<SDKFramework.SDKControlStateValue<UIKit.UIColor>>
 public typealias SDKControlFloatValue = SDKFramework.SDKControlValue<SDKFramework.SDKControlStateValue<CoreFoundation.CGFloat>>
 public struct SDKControlValue<T> {
@@ -1435,7 +1196,7 @@ public struct AuditRecord : Swift.Codable {
   @objc deinit
 }
 public struct RegisterInfo {
-  public var pushAddress: Swift.String
+  public var pushAddress: Swift.String?
   public var appVersion: Swift.String?
   public var userName: Swift.String?
   public var phone: Swift.String?
@@ -1443,7 +1204,7 @@ public struct RegisterInfo {
   public var token: Swift.String?
   public var deviceName: Swift.String?
   public init()
-  public init(pushAddress: Swift.String, appVersion: Swift.String?, userName: Swift.String?, phone: Swift.String?, email: Swift.String?, token: Swift.String?)
+  public init(pushAddress: Swift.String? = nil, appVersion: Swift.String? = nil, userName: Swift.String? = nil, phone: Swift.String? = nil, email: Swift.String? = nil, token: Swift.String? = nil, deviceName: Swift.String? = nil)
 }
 @frozen public enum SDKQRCodeError : Swift.Error {
   case wrongQrString
@@ -1782,9 +1543,6 @@ public struct SigningKeyInfo : Swift.Codable {
 }
 extension SDKFramework.Sign_V2 {
   #if compiler(>=5.3) && $AsyncAwait
-  public func signAuto(kid: Swift.String, operation: SDKFramework.Operation?) async throws -> (approveRequest: SDKFramework.ApproveRequestMT?, state: SDKFramework.MTSignConfirmStateEnum)
-  #endif
-  #if compiler(>=5.3) && $AsyncAwait
   public func signMT(kid: Swift.String, operation: SDKFramework.Operation?, enableMultiSelection: Swift.Bool, confirmationSendingMode: SDKFramework.ConfirmationSendingMode, silent: Swift.Bool = false) async throws -> (approveRequest: SDKFramework.ApproveRequestMT?, state: SDKFramework.MTSignConfirmStateEnum)
   #endif
   #if compiler(>=5.3) && $AsyncAwait
@@ -1826,19 +1584,9 @@ public struct ProcessingTemplateInfo : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
 }
-public struct SDKStreamLogHandler : SDKFramework.LogHandler {
+public struct SDKStreamLogHandler {
   public static func standardOutput(label: Swift.String) -> SDKFramework.SDKStreamLogHandler
   public static func standardError(label: Swift.String) -> SDKFramework.SDKStreamLogHandler
-  public var logLevel: SDKFramework.Logger.Level
-  public var metadata: SDKFramework.Logger.Metadata {
-    get
-    set
-  }
-  public subscript(metadataKey metadataKey: Swift.String) -> SDKFramework.Logger.Metadata.Value? {
-    get
-    set
-  }
-  public func log(level: SDKFramework.Logger.Level, message: SDKFramework.Logger.Message, metadata: SDKFramework.Logger.Metadata?, source: Swift.String, file: Swift.String, function: Swift.String, line: Swift.UInt)
 }
 extension SDKFramework.DSSUser : Swift.Encodable {}
 extension SDKFramework.DSSUser : Swift.Decodable {}
@@ -1879,8 +1627,6 @@ extension SDKFramework.SDKBiometricAuthError : Swift.Equatable {}
 extension SDKFramework.SDKBiometricAuthError : Swift.Hashable {}
 extension SDKFramework.SDKControlStatus : Swift.Equatable {}
 extension SDKFramework.SDKControlStatus : Swift.Hashable {}
-extension SDKFramework.Logger.Level : Swift.Hashable {}
-extension SDKFramework.Logger.Level : Swift.RawRepresentable {}
 extension SDKFramework.SDKQRCodeError : Swift.Equatable {}
 extension SDKFramework.SDKQRCodeError : Swift.Hashable {}
 extension SDKFramework.SDKNetReqResDownloadType : Swift.Sendable {}
