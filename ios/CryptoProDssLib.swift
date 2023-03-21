@@ -333,9 +333,6 @@ class CryptoProDssLib : UIViewController {
         withResolver resolve: @escaping RCTPromiseResolveBlock,
         withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
             
-            
-            DispatchQueue.main.async {
-                
                 self.styles.updatePinStyle()
                 
                 let user = DSSUser();
@@ -353,6 +350,6 @@ class CryptoProDssLib : UIViewController {
                         reject("CryptoProDssLib", "\(error.localizedDescription)", "\(error.localizedDescription)" as? Error);
                     }
                 }
-            }
+         
         }
 }
