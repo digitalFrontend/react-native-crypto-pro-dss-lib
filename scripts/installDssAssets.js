@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { exec } = require('child_process')
 
 let isRootProjectDir = !__dirname.includes('node_modules')
 if (process.argv.includes('-fromRootProject')) {
@@ -83,8 +84,8 @@ if (!projectDir.includes('dss')) {
 const dssDir = fs.readdirSync(DSS_DIR)
 const sdkLibDir = fs.readdirSync(LIB_SDK_PATH)
 
-shell.exec(`cp -r ${IOS_SDK_FOLDER}${IOS_SDK_1} ${IOS_LIB_SDK_PATH}${IOS_SDK_1}`)
-shell.exec(`cp -r ${IOS_SDK_FOLDER}${IOS_SDK_2} ${IOS_LIB_SDK_PATH}${IOS_SDK_2}`)
+exec(`cp -r ${IOS_SDK_FOLDER}${IOS_SDK_1} ${IOS_LIB_SDK_PATH}${IOS_SDK_1}`)
+exec(`cp -r ${IOS_SDK_FOLDER}${IOS_SDK_2} ${IOS_LIB_SDK_PATH}${IOS_SDK_2}`)
 
 let shouldCopyFonts = true
 
