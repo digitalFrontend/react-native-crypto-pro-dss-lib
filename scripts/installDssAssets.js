@@ -1,44 +1,53 @@
 const fs = require('fs')
 const path = require('path')
 
-let isRootProjectDir = !__dirname.includes("node_modules")
-if (process.argv.includes("-fromRootProject")) {
+let isRootProjectDir = !__dirname.includes('node_modules')
+if (process.argv.includes('-fromRootProject')) {
     isRootProjectDir = true
 }
 
 const PROJECT_DIR = isRootProjectDir ? `./` : `../../`
 const DSS_DIR = `${PROJECT_DIR}dss/`
 const FONTS_DIR = `${PROJECT_DIR}dss/fonts/`
-const IOS_CERTS_FILE = "CpMyDssRootCerts.json"
-const CERTS_FILE = "certs.json"
-const STYLES_FILE = "SDKStyles.json"
-const ANDROID_SDK_FOLDERS = ["dssclient", "jinitcsp", "sharedlibrary", "cspgui"]
-const PROJECT_FILES_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}android/app/src/main/assets/`
-const LIB_SDK_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/android/libs/`
-const ANDROID_SDK_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}android/`
-const LIB_FILES_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/android/src/main/assets/`
-const IOS_FRAMEWORK_PATH = `${isRootProjectDir ? "" : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/Frameworks/`
+const IOS_CERTS_FILE = 'CpMyDssRootCerts.json'
+const CERTS_FILE = 'certs.json'
+const STYLES_FILE = 'SDKStyles.json'
+const ANDROID_SDK_FOLDERS = ['dssclient', 'jinitcsp', 'sharedlibrary', 'cspgui']
+const PROJECT_FILES_PATH = `${isRootProjectDir ? '' : PROJECT_DIR}android/app/src/main/assets/`
+const LIB_SDK_PATH = `${isRootProjectDir ? '' : PROJECT_DIR}node_modules/react-native-crypto-pro-dss-lib/android/libs/`
+const ANDROID_SDK_PATH = `${isRootProjectDir ? '' : PROJECT_DIR}android/`
+const LIB_FILES_PATH = `${
+    isRootProjectDir ? '' : PROJECT_DIR
+}node_modules/react-native-crypto-pro-dss-lib/android/src/main/assets/`
+const IOS_FRAMEWORK_PATH = `${
+    isRootProjectDir ? '' : PROJECT_DIR
+}node_modules/react-native-crypto-pro-dss-lib/Frameworks/`
+const IOS_LIB_SDK_PATH = `${
+    isRootProjectDir ? '' : PROJECT_DIR
+}node_modules/react-native-crypto-pro-dss-lib/Frameworks/`
+const IOS_SDK_FOLDER = `${isRootProjectDir ? '' : PROJECT_DIR}ecpSDKs/`
+const IOS_SDK_1 = 'CPROCSP.framework/'
+const IOS_SDK_2 = 'SDKFramework.xcframework/'
 
 const copyRecursiveSync = (src, dest) => {
-    let exists = fs.existsSync(src);
-    let stats = exists && fs.statSync(src);
-    let isDirectory = exists && stats.isDirectory();
+    let exists = fs.existsSync(src)
+    let stats = exists && fs.statSync(src)
+    let isDirectory = exists && stats.isDirectory()
     if (isDirectory) {
-      fs.mkdirSync(dest);
-      fs.readdirSync(src).forEach(function(childItemName) {
-        copyRecursiveSync(path.join(src, childItemName),
-                          path.join(dest, childItemName));
-      });
+        fs.mkdirSync(dest)
+        fs.readdirSync(src).forEach(function (childItemName) {
+            copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName))
+        })
     } else {
-      fs.copyFileSync(src, dest);
+        fs.copyFileSync(src, dest)
     }
-  };
+}
 
-const convertStylesToIOS = (_stylesText = "", fonts = []) => {
+const convertStylesToIOS = (_stylesText = '', fonts = []) => {
     let stylesText = `${_stylesText}`
-    fonts.forEach(font => {
+    fonts.forEach((font) => {
         try {
-            const newFont = font.slice(0, font.lastIndexOf("."))
+            const newFont = font.slice(0, font.lastIndexOf('.'))
 
             stylesText = stylesText.split(`"font": "${font}"`).join(`"font": "${newFont}"`)
         } catch (err) {
@@ -47,7 +56,9 @@ const convertStylesToIOS = (_stylesText = "", fonts = []) => {
     })
 
     try {
-        stylesText = stylesText.split(`"numberOfAttempts": "Количество попыток",`).join(`"numberOfAttempts": "Количество попыток: ",`)
+        stylesText = stylesText
+            .split(`"numberOfAttempts": "Количество попыток",`)
+            .join(`"numberOfAttempts": "Количество попыток: ",`)
     } catch (err) {
         console.log(`Произошла ошибка при конвертации надписи отличающейся на разных ОС: ${err.message}`)
     }
@@ -55,7 +66,9 @@ const convertStylesToIOS = (_stylesText = "", fonts = []) => {
     try {
         stylesText = stylesText.split(`"signMTconfirmation": 3,`).join(`"signMTconfirmation": 0,`)
     } catch (err) {
-        console.log(`Произошла ошибка при конвертации типа окошка подтверждения, отличающегося на разных ОС: ${err.message}`)
+        console.log(
+            `Произошла ошибка при конвертации типа окошка подтверждения, отличающегося на разных ОС: ${err.message}`
+        )
     }
     return stylesText
 }
@@ -63,22 +76,25 @@ const convertStylesToIOS = (_stylesText = "", fonts = []) => {
 let fonts = []
 
 const projectDir = fs.readdirSync(PROJECT_DIR)
-if (!projectDir.includes("dss")) {
+if (!projectDir.includes('dss')) {
     console.log(`Папка ${DSS_DIR} не найдена`)
 }
 
 const dssDir = fs.readdirSync(DSS_DIR)
 const sdkLibDir = fs.readdirSync(LIB_SDK_PATH)
 
-let shouldCopyFonts = true;
+shell.exec(`cp -r ${IOS_SDK_FOLDER}${IOS_SDK_1} ${IOS_LIB_SDK_PATH}${IOS_SDK_1}`)
+shell.exec(`cp -r ${IOS_SDK_FOLDER}${IOS_SDK_2} ${IOS_LIB_SDK_PATH}${IOS_SDK_2}`)
 
-if (!dssDir.includes("fonts")) {
-    shouldCopyFonts = false;
+let shouldCopyFonts = true
+
+if (!dssDir.includes('fonts')) {
+    shouldCopyFonts = false
     console.log(`Папка ${FONTS_DIR} не найдена. Копирование шрифтов проигнорировано.`)
 } else {
     const fontsDir = fs.readdirSync(FONTS_DIR)
     if (fontsDir.length == 0) {
-        shouldCopyFonts = false;
+        shouldCopyFonts = false
         console.log(`Папка ${FONTS_DIR} пуста. Копирование шрифтов проигнорировано.`)
     } else {
         fonts = fontsDir
@@ -91,10 +107,10 @@ if (shouldCopyFonts) {
     if (!fs.existsSync(LIB_FILES_PATH)) {
         fs.mkdirSync(LIB_FILES_PATH)
     }
-    fontsDir.forEach(font => {
+    fontsDir.forEach((font) => {
         try {
             fs.copyFileSync(`${FONTS_DIR}${font}`, `${LIB_FILES_PATH}/${font}`)
-            copiedCount++;
+            copiedCount++
         } catch (err) {
             console.log(`Ошибка копирования шрифта ${font}: ${err.message}`)
         }
@@ -118,12 +134,14 @@ if (!dssDir.includes(CERTS_FILE)) {
 }
 
 try {
-    try{
-        ANDROID_SDK_FOLDERS.forEach(folder => {
-            fs.rmdirSync(`${ANDROID_SDK_PATH}${folder}`, {recursive: true})
+    try {
+        ANDROID_SDK_FOLDERS.forEach((folder) => {
+            fs.rmdirSync(`${ANDROID_SDK_PATH}${folder}`, { recursive: true })
         })
-    }catch(err){console.log(err)}
-    ANDROID_SDK_FOLDERS.forEach(folder => {
+    } catch (err) {
+        console.log(err)
+    }
+    ANDROID_SDK_FOLDERS.forEach((folder) => {
         copyRecursiveSync(`${LIB_SDK_PATH}${folder}/`, `${ANDROID_SDK_PATH}/${folder}/`)
     })
 } catch (err) {
@@ -139,12 +157,12 @@ if (!dssDir.includes(STYLES_FILE)) {
         console.log(`Ошибка копирования файла со стилями для андройд: ${err.message}`)
     }
     try {
-        const stylesContent = fs.readFileSync(`${DSS_DIR}${STYLES_FILE}`, "utf-8")
+        const stylesContent = fs.readFileSync(`${DSS_DIR}${STYLES_FILE}`, 'utf-8')
         const iosStylesContent = convertStylesToIOS(stylesContent, fonts)
-        fs.writeFileSync(`${IOS_FRAMEWORK_PATH}${STYLES_FILE}`, iosStylesContent, "utf-8")
+        fs.writeFileSync(`${IOS_FRAMEWORK_PATH}${STYLES_FILE}`, iosStylesContent, 'utf-8')
     } catch (err) {
         console.log(`Ошибка копирования файла со стилями для айос: ${err.message}`)
     }
 }
 
-console.log("Установка ассетов завершена")
+console.log('Установка ассетов завершена')
