@@ -297,6 +297,7 @@ class CryptoProDssLib : UIViewController {
             DispatchQueue.main.async {
                     
                 do {
+                    
                     Auth().confirm(kid: kid) { error in
                         if error != nil {
                             
@@ -333,7 +334,7 @@ class CryptoProDssLib : UIViewController {
         withResolver resolve: @escaping RCTPromiseResolveBlock,
         withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
             
-                self.styles.updatePinStyle()
+                self.styles.updateQRStyle()
                 
                 let user = DSSUser();
                 let registerInfo = RegisterInfo();
@@ -341,6 +342,7 @@ class CryptoProDssLib : UIViewController {
                 Task {
                     do {
                         try await Auth_V2.shared.scanAndAddQR()
+                        self.styles.updatePinStyle()
                         self.styles.updateProfileStyles()
                         try await Auth_V2.shared.kInit(dssUser: user,
                                                        registerInfo: registerInfo,
