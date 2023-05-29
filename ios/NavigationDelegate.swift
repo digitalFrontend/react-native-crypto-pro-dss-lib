@@ -1,11 +1,11 @@
 // CryptoProDssLib.swift
 
 import Foundation
-import SDKFramework
+import DSSFramework
 import UIKit
 
 
-class NavigationDelegate : SDKNavigationDelegate {
+class NavigationDelegate : DSSNavigationDelegate {
     
     private var window: UIWindow? = nil;
     private var mainVC: UIViewController? = nil;
@@ -17,7 +17,7 @@ class NavigationDelegate : SDKNavigationDelegate {
         self.window = appDelegate?.window
     }
     
-    func needShow(navigationController: SDKNavigationController, animated: Bool, completion: @escaping (() -> Void)) {
+    func needShow(navigationController: DSSNavigationController, animated: Bool, completion: @escaping (() -> Void)) {
         guard let window = self.window else { return }
         self.mainVC = window.rootViewController
 
@@ -31,7 +31,7 @@ class NavigationDelegate : SDKNavigationDelegate {
         })
     }
     
-    func needHide(navigationController: SDKNavigationController, animated: Bool, completion: @escaping (() -> Void)) {
+    func needHide(navigationController: DSSNavigationController, animated: Bool, completion: @escaping (() -> Void)) {
         print("needHide")
         guard let window = self.window else { return }
         guard let mainVC = self.mainVC else { return }

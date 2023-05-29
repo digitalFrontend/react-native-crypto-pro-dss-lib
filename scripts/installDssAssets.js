@@ -27,8 +27,8 @@ const IOS_LIB_SDK_PATH = `${
     isRootProjectDir ? '' : PROJECT_DIR
 }node_modules/react-native-crypto-pro-dss-lib/Frameworks/`
 const IOS_SDK_FOLDER = `${isRootProjectDir ? '' : PROJECT_DIR}ecpSDKs/`
-const IOS_SDK_1 = 'CPROCSP.framework/'
-const IOS_SDK_2 = 'SDKFramework.xcframework/'
+const IOS_SDK_1 = 'DSSFramework.xcframework/'
+const IOS_SDK_2 = 'DSSFrameworkSupport.xcframework/'
 
 const copyRecursiveSync = (src, dest) => {
     let exists = fs.existsSync(src)

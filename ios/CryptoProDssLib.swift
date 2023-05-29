@@ -1,7 +1,7 @@
 // CryptoProDssLib.swift
 
 import Foundation
-import SDKFramework
+import DSSFramework
 import UIKit
 
 
@@ -71,8 +71,8 @@ class CryptoProDssLib : UIViewController {
                 
                 self.navigationDelegate = NavigationDelegate()
                 
-                SDKNavigation.shared.delegate = self.navigationDelegate
-                SDKNavigation.shared.modalLoadingForSilentRequestType = .outer
+                DSSNavigation.shared.delegate = self.navigationDelegate
+                DSSNavigation.shared.modalLoadingForSilentRequestType = .outer
                 
                 
                 
@@ -145,7 +145,7 @@ class CryptoProDssLib : UIViewController {
             let sign = Sign();
             Policy.shared.getOperations(kid: kid, type: nil, opId: nil, successCompletion: {
                 (operationsInfo) in
-                var operation = nil as SDKFramework.Operation?;
+                var operation = nil as DSSFramework.Operation?;
 
                 for _operation in operationsInfo.operations ?? [] {
 
@@ -344,7 +344,7 @@ class CryptoProDssLib : UIViewController {
                         self.styles.updateProfileStyles()
                         try await Auth_V2.shared.kInit(dssUser: user,
                                                        registerInfo: registerInfo,
-                                                       keyProtectionType:  SDKFramework.ProtectionType.PASSWORD)
+                                                       keyProtectionType:  DSSFramework.ProtectionType.PASSWORD)
                         resolve(String(format: "success"))
                     } catch {
                         reject("CryptoProDssLib", "\(error.localizedDescription)", "\(error.localizedDescription)" as? Error);
