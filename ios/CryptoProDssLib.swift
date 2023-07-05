@@ -240,7 +240,6 @@ class CryptoProDssLib : UIViewController {
                 var devices:DSSDevices = try await DSSPolicy_V2.shared.getUserDevices(kid: kid);
             
                 for device in devices.devices {
-                    print("33 \(DictionaryEncoder.convertUserDevices(device: device))")
                     list.append(DictionaryEncoder.convertUserDevices(device: device));
                 }
                 resolve(list);
@@ -302,7 +301,7 @@ class CryptoProDssLib : UIViewController {
                     try await DSSAuth_V2.shared.kInit(dssUser: user, registerInfo: registerInfo, keyProtectionType: DSSFramework.DSSProtectionType.PASSWORD);
                     resolve(String(format: "success"));
                 } catch {
-                    reject("CryptoProDssLib", "\(error.localizedDescription)", "\(error.localizedDescription)" as? Error);
+                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (initViaQr)");
                 }
             }
          
