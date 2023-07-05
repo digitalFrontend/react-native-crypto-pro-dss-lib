@@ -1,7 +1,7 @@
 // CryptoProDssLib.swift
 
 import Foundation
-import SDKFramework
+import DSSFramework
 import UIKit
 
 
@@ -24,8 +24,8 @@ struct DictionaryEncoder {
         return map;
     }
     
-    static func convertUserDevices(device: DeviceInfo) -> [String:Any] {
-        
+    static func convertUserDevices(device: DSSDeviceInfo) -> [String:Any] {
+    
         var map = [String:Any]()
         
         let kid : String = device.kid;
@@ -48,7 +48,7 @@ class CryptoProDssLib : UIViewController {
     private var jsPromiseResolver: RCTPromiseResolveBlock? = nil;
     private var jsPromiseRejecter: RCTPromiseRejectBlock? = nil;
     private var navigationDelegate: NavigationDelegate? = nil;
-    private var lastAuth: Auth? = nil;
+    private var lastAuth: DSSAuth_V2? = nil;
     private weak var showingNC: UINavigationController?;
     
     private var styles: Styles = .init()
@@ -65,18 +65,15 @@ class CryptoProDssLib : UIViewController {
             jsPromiseResolver = resolve;
             jsPromiseRejecter = reject;
             
-           
-      
+    
             DispatchQueue.main.async {
                 
                 self.navigationDelegate = NavigationDelegate()
                 
-                SDKNavigation.shared.delegate = self.navigationDelegate
-                SDKNavigation.shared.modalLoadingForSilentRequestType = .outer
+                DSSNavigation.shared.delegate = self.navigationDelegate
+                DSSNavigation.shared.modalLoadingForSilentRequestType = .outer
                 
-                
-                
-                let cpd = CryptoProDss();
+                let cpd = DSSCryptoProDss();
                 cpd._init() { code in
                     resolve(CSPInitCode.init_ok.rawValue)
                 }
@@ -106,27 +103,22 @@ class CryptoProDssLib : UIViewController {
         
         jsPromiseResolver = resolve;
         jsPromiseRejecter = reject;
-        
-        DispatchQueue.main.async {
             
+        var operations = [] as [Any];
             
-            
-            Policy.shared.getOperations(kid: kid, type: nil, opId: nil, successCompletion: {
-                (operationsInfo) in
-                var operations = [] as [Any];
+        Task {
+            do {
+                let operationsInfo:DSSFramework.DSSOperationsInfo = try await DSSPolicy_V2.shared.getOperations(kid: kid, type: nil, opId: nil)
                 
                 for _operation in operationsInfo.operations ?? [] {
                     operations.append(try! DictionaryEncoder.encode(_operation))
                 }
+                resolve(operations)
                 
-               resolve(operations)
-            }, errorCompletion: {
-                (error) in
+            } catch {
                 self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (getOperations)")
-            })
-
-       }
-        
+            }
+        }
     }
     
     @objc
@@ -138,71 +130,46 @@ class CryptoProDssLib : UIViewController {
         
         jsPromiseResolver = resolve;
         jsPromiseRejecter = reject;
-        
-        DispatchQueue.main.async {
-            self.styles.updateSignStyles()
             
-            let sign = Sign();
-            Policy.shared.getOperations(kid: kid, type: nil, opId: nil, successCompletion: {
-                (operationsInfo) in
-                var operation = nil as SDKFramework.Operation?;
-
+            
+        self.styles.updateSignStyles()
+        
+        Task {
+            do {
+                let operationsInfo:DSSFramework.DSSOperationsInfo = try await DSSPolicy_V2.shared.getOperations(kid: kid, type: nil, opId: nil);
+                var operation = nil as DSSFramework.DSSOperation?;
+                
                 for _operation in operationsInfo.operations ?? [] {
-
                     if (transactionId == _operation.transactionId) {
                         operation = _operation;
                     }
                 }
-           
-                sign.signMT(kid: kid, operation: operation, enableMultiSelection: false, inmediateSendConfirm: false, silent: false, successCompletion: {
-                    (approveRequestMT, state) in
+                
+                do {
+                    let (approveRequestMT, _) = try await DSSSign_V2.shared.signMT(kid: kid, operation: operation, enableMultiSelection: false, confirmationSendingMode: DSSFramework.DSSConfirmationSendingMode.offline)
                     
-                    sign.deferredRequest(kid: kid, approveRequest: approveRequestMT!, successCompletion: {
-                        () in
-                            let forReturn = try! DictionaryEncoder.encode(approveRequestMT);
-                                                
-                            resolve(forReturn);
-                    }, errorCompletion: {
-                        (error) in
-                            self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (deferredRequest)")
-                    })
-                }, errorCompletion: {
-                    (error) in
-                        print(error)
-                        //if (error.localizedDescription != "User cancelled"){
-                        self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (signMT)")
-                        //}
-                })
-            }, errorCompletion: {
-                (error) in
+                    do {
+                        try await DSSSign_V2.shared.deferredRequest(kid: kid, approveRequest: approveRequestMT!);
+                        
+                        let forReturn = try! DictionaryEncoder.encode(approveRequestMT);
+                        
+                        resolve(forReturn);
+                    } catch {
+                        self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (deferredRequest)")
+                    }
+                } catch {
+                    print(error)
+                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (signMT)")
+                }
+                
+            } catch {
                 self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (getOperations.signMT)")
-            })
-            
-            
-         
-       }
-        
+            }
+        }
     }
-    
-    
-   
     
     override func viewDidLoad() {
             super.viewDidLoad()
-    }
-    
-    func getLastUserKid() -> String? {
-            
-        var authList = [] as [DSSUser];
-            do {
-                authList = try Auth.getAuthList();
-                
-                let lastUser = authList[authList.count-1];
-                return lastUser.kid;
-            } catch {
-
-            }
-        return nil;
     }
     
     @objc
@@ -242,7 +209,7 @@ class CryptoProDssLib : UIViewController {
             
             var authList = [] as [DSSUser];
             do {
-                authList = try Auth.getAuthList();
+                authList = try DSSAuth_V2.shared.getAuthList()
             } catch {
                 
             }
@@ -266,23 +233,20 @@ class CryptoProDssLib : UIViewController {
         jsPromiseResolver = resolve;
         jsPromiseRejecter = reject;
             
-        
-        DispatchQueue.main.async {
-            Policy.shared.getUserDevices(kid: kid, successCompletion: {
-                (devices) in
-                    var list = [] as [Any]
-
-                    
-                    for device in devices.devices {
-                        list.append(DictionaryEncoder.convertUserDevices(device: device));
-                    }
-                    
-                    resolve(list)
-            }, errorCompletion: {
-                (error) in
-                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (getUserDevices)")
-            })
-       }
+        var list = [] as [Any];
+            
+        Task {
+            do {
+                var devices:DSSDevices = try await DSSPolicy_V2.shared.getUserDevices(kid: kid);
+            
+                for device in devices.devices {
+                    list.append(DictionaryEncoder.convertUserDevices(device: device));
+                }
+                resolve(list);
+            } catch {
+                self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (getUserDevices)");
+            }
+        }
     }
     
     @objc
@@ -293,33 +257,21 @@ class CryptoProDssLib : UIViewController {
             
             jsPromiseResolver = resolve;
             jsPromiseRejecter = reject;
-           
-            DispatchQueue.main.async {
-                    
+                
+                
+            Task {
                 do {
-                    Auth().confirm(kid: kid) { error in
-                        if error != nil {
-                            
-                            self.reject(rejectFunc: reject, text: "\(error!.localizedDescription) (auth.confirm)")
-
-                        } else {
-                            self.styles.updateProfileStyles()
-                            Auth().verify(kid: kid, silent: false, successCompletion: {
-                                () in
-                                resolve(String(format: "success"))
-                            }, errorCompletion: {
-                                type in
-                                self.reject(rejectFunc: reject, text: "\(type) (auth.verify)")
-                            })
-                        }
+                    try await DSSAuth_V2.shared.confirm(kid: kid);
+                    
+                    self.styles.updateProfileStyles();
+                    do {
+                        try await DSSAuth_V2.shared.verifyDevice(kid: kid,silent: false);
+                        resolve(String(format: "success"));
+                    } catch {
+                        self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (auth.verify)");
                     }
-                    
-                    
                 } catch {
-                    print("continueInitViaQr error")
-                    print(error)
-                    
-                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (continueInitViaQr)")
+                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (auth.confirm)");
                 }
             }
     }
@@ -333,23 +285,25 @@ class CryptoProDssLib : UIViewController {
         withResolver resolve: @escaping RCTPromiseResolveBlock,
         withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
             
-                self.styles.updatePinStyle()
+            self.styles.updateQRStyle();
                 
-                let user = DSSUser();
-                let registerInfo = RegisterInfo();
-                
-                Task {
-                    do {
-                        try await Auth_V2.shared.scanAndAddQR()
-                        self.styles.updateProfileStyles()
-                        try await Auth_V2.shared.kInit(dssUser: user,
-                                                       registerInfo: registerInfo,
-                                                       keyProtectionType:  SDKFramework.ProtectionType.PASSWORD)
-                        resolve(String(format: "success"))
-                    } catch {
-                        reject("CryptoProDssLib", "\(error.localizedDescription)", "\(error.localizedDescription)" as? Error);
-                    }
+            let user = DSSUser();
+            let registerInfo = DSSRegisterInfo();
+            
+            
+            Task {
+                do {
+                    try await DSSAuth_V2.shared.scanAndAddQR();
+                    
+                    self.styles.updatePinStyle();
+                    self.styles.updateProfileStyles();
+                    
+                    try await DSSAuth_V2.shared.kInit(dssUser: user, registerInfo: registerInfo, keyProtectionType: DSSFramework.DSSProtectionType.PASSWORD);
+                    resolve(String(format: "success"));
+                } catch {
+                    self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (initViaQr)");
                 }
+            }
          
         }
 }

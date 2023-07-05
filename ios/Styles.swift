@@ -1,7 +1,8 @@
 // CryptoProDssLib.swift
 
 import Foundation
-import SDKFramework
+import DSSFramework
+import DSSFrameworkSupport
 import UIKit
 
 class Fonts {
@@ -22,265 +23,219 @@ class Colors {
     let white_50_opacity = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0.5)
 }
 
+public class DSSCustomFonts : DSSFramework.DSSPublicFontProtocol {
+
+    let fonts: Fonts = .init()
+    
+  
+    
+    public func bold(size: CGFloat) -> UIFont {
+            return UIFont.init(name: self.fonts.headerBold, size: size)!
+    }
+
+    public func semiBold(size: CGFloat) -> UIFont {
+        return UIFont.init(name: self.fonts.bold, size: size)!
+    }
+    
+    public func medium(size: CGFloat) -> UIFont {
+        return UIFont.init(name: self.fonts.regular, size: size)!
+    }
+    
+    public func regular(size: CGFloat) -> UIFont {
+        return UIFont.init(name: self.fonts.regular, size: size)!
+    }
+  
+}
+
 class Styles {
     
     let fonts: Fonts = .init()
     let colors: Colors = .init()
-    var style: SDKPublicStyle = .init()
+    var style: DSSPublicStyle = .init()
+    var map: [String: Any] = [String:Any]()
     
     init(){
         
     }
     
-    func updatePinStyle() -> Void {
+    func updateQRStyle() -> Void {
+        
+        
+        var lightTheme = DSSPublicColorStyle.getLight()
+        
+        
+        lightTheme.bg.header = .init(hex: "3fcbffff")
+        lightTheme.bg.modal = .init(hex: "ffffffff")
+        lightTheme.bg.tabBarLine = .init(hex: "3fcbffff")
+        lightTheme.button.primary = .init(hex: "3fcbffff")
+        lightTheme.button.primaryPressed = .init(hex: "a1e6ffff")
+        lightTheme.button.secondary = .init(hex: "ff0000ff")
+        lightTheme.button.secondaryPressed = .init(hex: "ff0000ff")
+        lightTheme.status.blue = .init(hex: "3fcbffff")
+        lightTheme.text.links = .init(hex: "3fcbffff")
+        lightTheme.text.tabBar = .init(hex: "3fcbffff")
+        lightTheme.text.primary = .init(hex: "ffffffff")
+        lightTheme.text.description = .init(hex: "ffffffff")
+        
+        
+        //Применяем цвет
+        let appearance1 = DSSPublicAppearance.init(color: lightTheme, font: DSSCustomFonts.init())
+        DSSPublicAppearance.to(appearance: appearance1)
+        
+        //
+        
         let button = self.style.button
         
-        // Цвет шапки
-        UINavigationBar.appearance().tintColor = .init(red: 0.247, green: 0.796, blue: 1, alpha: 1)
+    }
+    
+    
+    func updatePinStyle() -> Void {
+        
+        self.updateQRStyle()
+    
+        
+        var lightTheme = DSSPublicColorStyle.getLight()
         
         
-        // Цвет заголовка на скане куара сверху
-        self.style.label.qrHeader3.textColor = .init(normal: .init(normal: .white))
-        self.style.label.qrHeader3.fontSize = .init(normal: .init(normal: 17))
-        self.style.label.qrHeader3.font = .init(name: self.fonts.headerBold, size: 17)
-        
-        // Кнопка на скане куара внизу
-        button.secondary.borderColor = .init(normal: .init(normal: self.colors.transparent))
-        button.secondary.title.textColor = .init(normal: .init(normal: .white, highlighted: self.colors.white_50_opacity))
-        button.secondary.title.fontSize = .init(normal: .init(normal: 15))
-        button.secondary.title.font = .init(name: self.fonts.regular, size: 15)
-        button.secondary.backgroundColor = .init(normal: .init(normal: self.colors.transparent, highlighted: self.colors.transparent))
-        
-        
-        
-        // Заголовок на вводе пина
-        self.style.label.header.textColor = .init(normal: .init(normal: self.colors.dark))
-        self.style.label.header.fontSize = .init(normal: .init(normal: 20))
-        self.style.label.header.font = .init(name: self.fonts.headerBold, size: 20)
-        
-        // Поле для ввода пина
-        let borderColor = UIColor.init(red: 0.768, green: 0.764, blue: 0.784, alpha: 1)
-        // Пустое и не активное
-        self.style.textField.textInput.textFieldStyle.empty.cornerRadius = .value(8)
-        self.style.textField.textInput.textFieldStyle.empty.backgroundColor = .init(normal: .init(normal: .white))
-        self.style.textField.textInput.textFieldStyle.empty.borderColor = .init(normal: .init(normal: borderColor))
-        // Пустое и активное
-        self.style.textField.textInput.textFieldStyle.emptyActive.cornerRadius = .value(8)
-        self.style.textField.textInput.textFieldStyle.emptyActive.backgroundColor = .init(normal: .init(normal: .white))
-        self.style.textField.textInput.textFieldStyle.emptyActive.borderColor = .init(normal: .init(normal: self.colors.blue))
-        // Заполненное и не активное
-        self.style.textField.textInput.textFieldStyle.filled.cornerRadius = .value(8)
-        self.style.textField.textInput.textFieldStyle.filled.backgroundColor = .init(normal: .init(normal: .white))
-        self.style.textField.textInput.textFieldStyle.filled.borderColor = .init(normal: .init(normal: borderColor))
-        // Заполненное и активное
-        self.style.textField.textInput.textFieldStyle.filledActive.cornerRadius = .value(8)
-        self.style.textField.textInput.textFieldStyle.filledActive.backgroundColor = .init(normal: .init(normal: .white))
-        self.style.textField.textInput.textFieldStyle.filledActive.borderColor = .init(normal: .init(normal: self.colors.blue))
-        
-        // Точки в поле для ввода пина
-        self.style.numPad.dot.borderWidth = 1
-        self.style.numPad.dot.borderColor = .init(normal: .init(normal: borderColor, selected: self.colors.blue), error: .init(normal: .red, selected: .red))
-        self.style.numPad.dot.backgroundColor = .init(normal: .init(normal: .white, selected: self.colors.blue), error: .init(normal: .red, selected: .red))
-        
-        self.style.textField.textInput.textColor = .init(all: .init(normal: .init(normal: self.colors.dark)))
-        self.style.textField.textInput.descriptionColor = .init(all: .init(normal: .init(normal: self.colors.grayDescription), success:.init(normal: self.colors.greenSuccess), error: .init(normal: self.colors.redError)))
-        
-        // Нумпад на вводе пина
-        self.style.pinPad.number.cornerRadius = .value(5)
-        self.style.pinPad.number.borderWidth = .init(1)
-        self.style.pinPad.number.backgroundColor = .init(normal: .init(normal: .white, highlighted: self.colors.blue))
-        self.style.pinPad.number.borderColor = .init(normal: .init(normal: self.colors.blue, highlighted: .white))
-        self.style.pinPad.number.title.textColor = .init(normal: .init(normal: self.colors.blue,selected: .white, highlighted: .white))
-        self.style.pinPad.number.title.fontSize = .init(normal: .init(normal: 20))
-        self.style.pinPad.number.title.font = .init(name: self.fonts.headerBold, size: 20)
-        self.style.pinPad.delete.cornerRadius = .value(5)
-//        self.style.pinPad.delete.borderWidth = .init(1)
-        self.style.pinPad.delete.backgroundColor = .init(normal: .init(normal: .white))
-//        self.style.pinPad.delete.borderColor = .init(normal: .init(normal: self.colors.blue, highlighted: .white))
-        self.style.pinPad.delete.tintColor = .init(normal: .init(normal: self.colors.blue, highlighted: self.colors.disabledBlue))
-        
-        // Кнопка ввести сложный пароль
-        button.triety.title.textColor = .init(normal: .init(normal: self.colors.blue))
-        button.triety.title.fontSize = .init(normal: .init(normal: 17))
-        button.triety.title.font = .init(name: self.fonts.regular, size: 17)
-        button.triety.backgroundColor = .init(normal: .init(normal: self.colors.transparent, highlighted: self.colors.transparent))
-        
-        // Кнопка Продолжить
-        button.primary.backgroundColor = .init(normal: .init(normal: self.colors.blue,  highlighted: self.colors.disabledBlue, disabled: self.colors.disabledBlue))
-        button.primary.cornerRadius = .value(27)
-        button.primary.title.textColor = .init(normal: .init(normal: .white))
-        button.primary.title.fontSize = .init(normal: .init(normal: 15))
-        button.primary.title.font = .init(name: self.fonts.bold, size: 15)
-        
-        // Описание профиля
-        self.style.label.title.textColor = .init(normal: .init(normal: self.colors.grayDescription))
-        self.style.label.title.fontSize = .init(normal: .init(normal: 15))
-        self.style.label.title.font = .init(name: self.fonts.regular, size: 15)
-        self.style.label.body.textColor = .init(normal: .init(normal: self.colors.dark))
-        self.style.label.body.fontSize = .init(normal: .init(normal: 17))
-        self.style.label.body.font = .init(name: self.fonts.regular, size: 17)
+        lightTheme.bg.header = .init(hex: "3fcbffff")
+        lightTheme.bg.modal = .init(hex: "ff0000ff")
+        lightTheme.bg.tabBarLine = .init(hex: "3fcbffff")
+        lightTheme.button.primary = .init(hex: "3fcbffff")
+        lightTheme.button.primaryPressed = .init(hex: "a1e6ffff")
+        lightTheme.button.secondary = .init(hex: "E5EFF9FF")
+        lightTheme.button.secondaryPressed = .init(hex: "CEE0F2FF")
+        lightTheme.status.blue = .init(hex: "3fcbffff")
+        lightTheme.text.links = .init(hex: "3fcbffff")
+        lightTheme.text.tabBar = .init(hex: "3fcbffff")
+        lightTheme.text.primary = .init(hex: "1f2229ff")
+        lightTheme.text.description = .init(hex: "1f2229ff")
         
      
         
         
-//            style.label.def.textColor = .init(normal: .init(normal: .green))
-//            style.label.header3.textColor = .init(normal: .init(normal: .blue))
-//            style.label.main.textColor = .init(normal: .init(normal: .yellow))
-//            style.label.second.textColor = .init(normal: .init(normal: .lightGray))
-//            style.label.qrBody.textColor = .init(normal: .init(normal: .purple))
+        //Применяем цвет
+        let appearance1 = DSSPublicAppearance.init(color: lightTheme, font: DSSCustomFonts.init())
+        DSSPublicAppearance.to(appearance: appearance1)
         
+        //
         
-//            style.textField.textInput.controlStyle.empty.backgroundColor = .init(normal: .init(normal: .red))
-//            style.textField.textInput.controlStyle.emptyActive.backgroundColor = .init(normal: .init(normal: .yellow))
-//            style.textField.textInput.controlStyle.filled.backgroundColor = .init(normal: .init(normal: .green))
-//            style.textField.textInput.controlStyle.filledActive.backgroundColor = .init(normal: .init(normal: .blue))
-//
+        let button = self.style.button
         
-//            style.label.def.textColor = .init(normal: .init(normal: .green))
-//            style.label.header3.textColor = .init(normal: .init(normal: .blue))
-//            style.label.main.textColor = .init(normal: .init(normal: .yellow))
-//            style.label.title.textColor = .init(normal: .init(normal: .white))
-//            style.label.body.textColor = .init(normal: .init(normal: .brown))
-//            style.label.second.textColor = .init(normal: .init(normal: .lightGray))
-//            style.label.qrBody.textColor = .init(normal: .init(normal: .purple))
-            
-        
-        //style.label.qrBody.textColor = .init(normal: .init(normal: .red))
-//            button.primary.tintColor = .init(normal: .init(normal: .red))
-//            button.secondary.tintColor = .init(normal: .init(normal: .red))
-//            button.triety.tintColor = .init(normal: .init(normal: .red))
-//
-//            button.primary.borderColor = .init(normal: .init(normal: .red))
-//            button.secondary.borderColor = .init(normal: .init(normal: .red))
-//            button.triety.borderColor = .init(normal: .init(normal: .red))
-//
-//            button.primary.backgroundColor = .init(normal: .init(normal: .red))
-//            button.secondary.backgroundColor = .init(normal: .init(normal: .red))
-//            button.triety.backgroundColor = .init(normal: .init(normal: .yellow))
-//
-//            style.label.def.textColor = .init(normal: .init(normal: .green))
-//            style.label.header.textColor = .init(normal: .init(normal: .green))
-//            style.label.header3.textColor = .init(normal: .init(normal: .green))
-//            style.label.main.textColor = .init(normal: .init(normal: .green))
-//            style.label.title.textColor = .init(normal: .init(normal: .green))
-//            style.label.body.textColor = .init(normal: .init(normal: .green))
-//            style.label.second.textColor = .init(normal: .init(normal: .green))
-//            style.label.qrHeader3.textColor = .init(normal: .init(normal: .green))
-//            style.label.qrBody.textColor = .init(normal: .init(normal: .green))
-//
-//
+    }
+    
+    func logColor(color: UIColor, name: String) -> Void{
+        self.map.updateValue(color.hexString, forKey: name)
+    }
+    
 
-//            style.textField.textInput.textColor = .init(all: .init(normal: .init(normal: .green)))
-//            style.textField.textInput.descriptionColor = .init(all: .init(normal: .init(normal: .green)))
-//            style.textField.textInput.placeholderColor = .init(all: .init(normal: .init(normal: .green)))
-//
-//            style.modalWaitTintColor = .brown
-//
-//            style.pinPad.number.backgroundColor = .init(normal: .init(normal: .yellow))
-//            style.pinPad.delete.backgroundColor = .init(normal: .init(normal: .yellow))
-//
-//            var switchStyle = style.switch
-//            switchStyle.primary.tintColor = .init(normal: .init(normal: .brown))
-//            switchStyle.primary.onTintColor = .init(normal: .init(normal: .darkGray))
-//            switchStyle.checkBox.backgroundColor = .init(all: .init(normal: .init(normal: .brown)))
-//
-//            style.numPad.dot.backgroundColor = .init(normal: .init(normal: .yellow))
-//
-
-     
-       
-        SDKPublicStyle.to(custom: self.style)
+    func test() -> [String: Any] {
+        
+    
+        
+        return self.map
     }
     
     func updateProfileStyles() -> Void {
-        let button = self.style.button
         
         self.updatePinStyle()
+    
         
-        // Описание профиля кнопка справа
-        button.secondary.borderColor = .init(normal: .init(normal: self.colors.blue, highlighted: self.colors.disabledBlue))
-        button.secondary.cornerRadius = .value(27)
-        button.secondary.title.textColor = .init(normal: .init(normal: self.colors.blue, highlighted: self.colors.disabledBlue))
-        button.secondary.title.fontSize = .init(normal: .init(normal: 15))
-        button.secondary.title.font = .init(name: self.fonts.bold, size: 15)
-        button.secondary.backgroundColor = .init(normal: .init(normal: .white, highlighted: .init(red: 1, green: 1, blue: 1, alpha: 0.5)))
-        
-        
-//            style.label.def.textColor = .init(normal: .init(normal: .green))
-//            style.label.header3.textColor = .init(normal: .init(normal: .blue))
-//            style.label.main.textColor = .init(normal: .init(normal: .yellow))
-//            style.label.second.textColor = .init(normal: .init(normal: .lightGray))
-//            style.label.qrBody.textColor = .init(normal: .init(normal: .purple))
-        
-        
-//            style.textField.textInput.controlStyle.empty.backgroundColor = .init(normal: .init(normal: .red))
-//            style.textField.textInput.controlStyle.emptyActive.backgroundColor = .init(normal: .init(normal: .yellow))
-//            style.textField.textInput.controlStyle.filled.backgroundColor = .init(normal: .init(normal: .green))
-//            style.textField.textInput.controlStyle.filledActive.backgroundColor = .init(normal: .init(normal: .blue))
-//
-        
-//            style.label.def.textColor = .init(normal: .init(normal: .green))
-//            style.label.header3.textColor = .init(normal: .init(normal: .blue))
-//            style.label.main.textColor = .init(normal: .init(normal: .yellow))
-//            style.label.title.textColor = .init(normal: .init(normal: .white))
-//            style.label.body.textColor = .init(normal: .init(normal: .brown))
-//            style.label.second.textColor = .init(normal: .init(normal: .lightGray))
-//            style.label.qrBody.textColor = .init(normal: .init(normal: .purple))
-            
-        
-        //style.label.qrBody.textColor = .init(normal: .init(normal: .red))
-
-
-//
-
-//            style.textField.textInput.textColor = .init(all: .init(normal: .init(normal: .green)))
-//            style.textField.textInput.descriptionColor = .init(all: .init(normal: .init(normal: .green)))
-//            style.textField.textInput.placeholderColor = .init(all: .init(normal: .init(normal: .green)))
-//
-//            style.modalWaitTintColor = .brown
-//
-
-//            var switchStyle = style.switch
-//            switchStyle.primary.tintColor = .init(normal: .init(normal: .brown))
-//            switchStyle.primary.onTintColor = .init(normal: .init(normal: .darkGray))
-//            switchStyle.checkBox.backgroundColor = .init(all: .init(normal: .init(normal: .brown)))
-//
-//            style.numPad.dot.backgroundColor = .init(normal: .init(normal: .yellow))
-//
-
-//        style.label.def.textColor = .init(normal: .init(normal: .green))
-//        style.label.header3.textColor = .init(normal: .init(normal: .red))
-//        style.label.main.textColor = .init(normal: .init(normal: .yellow))
-//        style.label.second.textColor = .init(normal: .init(normal: .brown))
-//        style.label.qrBody.textColor = .init(normal: .init(normal: .purple))
-       
-        SDKPublicStyle.to(custom: self.style)
+        let button = self.style.button
+        var lightTheme = DSSPublicColorStyle.getLight()
+        lightTheme.bg.header = .init(hex: "3fcbffff")
+        lightTheme.bg.modal = .init(hex: "ffffffff")
+        lightTheme.bg.tabBarLine = .init(hex: "3fcbffff")
+        lightTheme.button.primary = .init(hex: "3fcbffff")
+        lightTheme.button.primaryPressed = .init(hex: "a1e6ffff")
+        lightTheme.button.secondary = .init(hex: "E5EFF9FF")
+        lightTheme.button.secondaryPressed = .init(hex: "CEE0F2FF")
+        lightTheme.status.blue = .init(hex: "3fcbffff")
+        lightTheme.text.links = .init(hex: "3fcbffff")
+        lightTheme.text.tabBar = .init(hex: "3fcbffff")
+        lightTheme.text.primary = .init(hex: "1f2229ff")
+        lightTheme.text.description = .init(hex: "1f2229ff")
+        //Применяем цвет
+        let appearance1 = DSSPublicAppearance.init(color: lightTheme, font: DSSCustomFonts.init())
+        DSSPublicAppearance.to(appearance: appearance1)
+   
     }
     
     func updateSignStyles () -> Void {
         let button = self.style.button
         
         self.updateProfileStyles()
+        var lightTheme = DSSPublicColorStyle.getLight()
         
-        // Подписание документа
-        button.secondary.borderColor = .init(normal: .init(normal: self.colors.transparent))
-        button.secondary.cornerRadius = .value(27)
-        button.secondary.title.textColor.normal.normal = self.colors.blue
-        button.secondary.title.fontSize = .init(normal: .init(normal: 15))
-        button.secondary.title.font = .init(name: self.fonts.bold, size: 15)
-        button.secondary.backgroundColor = .init(normal: .init(normal: self.colors.transparent))
+   
         
-        // Попап заголовок
-        style.label.header3.textColor = .init(normal: .init(normal: self.colors.dark))
-        style.label.header3.fontSize = .init(normal: .init(normal: 17))
-        style.label.header3.font = .init(name: self.fonts.headerBold, size: 17)
+        lightTheme.bg.header = .init(hex: "3fcbffff")
+        lightTheme.bg.modal = .init(hex: "ffffffff")
+        lightTheme.bg.tabBarLine = .init(hex: "3fcbffff")
+        lightTheme.button.primary = .init(hex: "3fcbffff")
+        lightTheme.button.primaryPressed = .init(hex: "a1e6ffff")
+        lightTheme.button.secondary = .init(hex: "E5EFF9FF")
+        lightTheme.button.secondaryPressed = .init(hex: "CEE0F2FF")
+        lightTheme.status.blue = .init(hex: "3fcbffff")
+        lightTheme.text.links = .init(hex: "3fcbffff")
+        lightTheme.text.tabBar = .init(hex: "3fcbffff")
+        lightTheme.text.primary = .init(hex: "1f2229ff")
+        lightTheme.text.description = .init(hex: "1f2229ff")
+     
+       
         
-        style.modalWaitTintColor = self.colors.blue
+        //Применяем цвет
+        let appearance1 = DSSPublicAppearance.init(color: lightTheme, font: DSSCustomFonts.init())
+        DSSPublicAppearance.to(appearance: appearance1)
         
-        style.QRCamera.body.borderWidth = 0
-        
-        SDKPublicStyle.to(custom: self.style)
+      
     }
     
     
+}
+
+extension UIColor {
+    var hexString: String {
+        let components = self.cgColor.components!
+        let r = Float(components[0])
+        let g = Float(components[1])
+        let b = Float(components[2])
+        let a = Float(components[3])
+
+        let hex = String(
+            format: "%02X%02X%02X%02X",
+            Int(r * 255),
+            Int(g * 255),
+            Int(b * 255),
+            Int(a * 255)
+        )
+
+        return hex
+    }
+}
+
+
+extension UIColor {
+    convenience init(hex: String) {
+        var hexWithoutPrefix = hex
+            
+            // Remove any "#" character from the beginning of the string
+            if hex.hasPrefix("#") {
+                hexWithoutPrefix = String(hex.dropFirst())
+            }
+            
+            // Convert the hex string to a UInt32 value
+            guard let hexValue = UInt32(hexWithoutPrefix, radix: 16) else {
+                self.init(red: 0, green: 0, blue: 0, alpha: 1)
+                return
+            }
+            
+            // Separate the components of the value
+            let red = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
+            let green = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
+            let blue = CGFloat((hexValue & 0x0000FF00) >> 8) / 255.0
+            let alpha = CGFloat(hexValue & 0x000000FF) / 255.0
+            
+            // Create and return the UIColor object
+            self.init(red: red, green: green, blue: blue, alpha: alpha)
+    }
 }
