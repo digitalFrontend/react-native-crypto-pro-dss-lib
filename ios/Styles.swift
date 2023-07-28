@@ -169,7 +169,7 @@ class Styles {
    
         
         lightTheme.bg.header = .init(hex: "3fcbffff")
-        lightTheme.bg.modal = .init(hex: "ffffffff")
+        lightTheme.bg.modal = .init(hex: "00000080")
         lightTheme.bg.tabBarLine = .init(hex: "3fcbffff")
         lightTheme.button.primary = .init(hex: "3fcbffff")
         lightTheme.button.primaryPressed = .init(hex: "a1e6ffff")
