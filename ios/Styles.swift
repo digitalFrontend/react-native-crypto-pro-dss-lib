@@ -65,7 +65,7 @@ class Styles {
         
         
         lightTheme.bg.header = .init(hex: "3fcbffff")
-        lightTheme.bg.modal = .init(hex: "ffffffff")
+        lightTheme.bg.modal = .init(hex: "00000080")
         lightTheme.bg.tabBarLine = .init(hex: "3fcbffff")
         lightTheme.button.primary = .init(hex: "3fcbffff")
         lightTheme.button.primaryPressed = .init(hex: "a1e6ffff")
@@ -74,7 +74,7 @@ class Styles {
         lightTheme.status.blue = .init(hex: "3fcbffff")
         lightTheme.text.links = .init(hex: "3fcbffff")
         lightTheme.text.tabBar = .init(hex: "3fcbffff")
-        lightTheme.text.primary = .init(hex: "ffffffff")
+        lightTheme.text.primary = .init(hex: "1f2229ff")
         lightTheme.text.description = .init(hex: "ffffffff")
         
         
@@ -98,7 +98,7 @@ class Styles {
         
         
         lightTheme.bg.header = .init(hex: "3fcbffff")
-        lightTheme.bg.modal = .init(hex: "ff0000ff")
+        lightTheme.bg.modal = .init(hex: "00000080")
         lightTheme.bg.tabBarLine = .init(hex: "3fcbffff")
         lightTheme.button.primary = .init(hex: "3fcbffff")
         lightTheme.button.primaryPressed = .init(hex: "a1e6ffff")
