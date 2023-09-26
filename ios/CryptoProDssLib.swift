@@ -178,21 +178,7 @@ class CryptoProDssLib : UIViewController {
         print("initialization");
     }
     
-    
-    @objc
-    func updateStyles(
-        _ resolve: @escaping RCTPromiseResolveBlock,
-        withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
-        
-        jsPromiseResolver = resolve;
-        jsPromiseRejecter = reject;
-        
-        DispatchQueue.main.async {
-            
-            resolve("Now not required");
-           
-       }
-    }
+
     
     
     @objc

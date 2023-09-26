@@ -25,7 +25,6 @@ let CryptoProDss = {
             })
         })
     }),
-    updateStyles: () => CryptoProDssLib.updateStyles(),
     getUsers: () => CryptoProDssLib.getUsers(),
     getUserDevices: (kid) => CryptoProDssLib.getUserDevices(kid),
     continueInitViaQr: (kid) => CryptoProDssLib.continueInitViaQr(kid),
