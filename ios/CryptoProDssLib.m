@@ -43,11 +43,6 @@ RCT_EXTERN_METHOD(signMT:
 )
 
 
-RCT_EXTERN_METHOD(updateStyles:
-                  (RCTPromiseResolveBlock)resolve
-                  withRejecter: (RCTPromiseRejectBlock)reject
-)
-
 RCT_EXTERN_METHOD(getUsers:
                   (RCTPromiseResolveBlock)resolve
                   withRejecter: (RCTPromiseRejectBlock)reject
