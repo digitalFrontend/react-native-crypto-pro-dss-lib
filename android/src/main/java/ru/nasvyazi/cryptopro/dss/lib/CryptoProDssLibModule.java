@@ -174,26 +174,6 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
         return tempFile.toURI();
     }
 
-    @SuppressLint("RestrictedApi")
-    @ReactMethod
-    public void updateStyles(Promise promise) throws URISyntaxException {
-        Policy policy = new Policy();
-
-        URI url = null;
-        try {
-            url = getUriFromAssets("SDKStyles.json");
-            //policy.setPersonalisation(url);
-
-
-
-           promise.resolve("updateStyles success");
-        } catch (IOException e) {
-            reject(promise, "cant load styles (updateStyles)");
-        }
-    }
-
-
-
 
 
     @SuppressLint("RestrictedApi")
