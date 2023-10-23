@@ -73,8 +73,12 @@ class CryptoProDssLib : UIViewController {
                 DSSNavigation.shared.delegate = self.navigationDelegate
                 DSSNavigation.shared.modalLoadingForSilentRequestType = .outer
                 
-                let cpd = DSSCryptoProDss();
+                let cpd = DSSCryptoProDss.shared;
                 cpd._init() { code in
+                    cpd.setRequestTimeouts(timeout: 10, connectionTimeout: 15)
+                    let consoleLogger = DSSStreamLogHandler.standardOutput(label: "DSSLog")
+                                        
+                    DSSCryptoProDss.shared.setLogger(with: consoleLogger)
                     resolve(CSPInitCode.init_ok.rawValue)
                 }
            }
