@@ -127,7 +127,7 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
             public void run() {
 
                 CryptoProDss.initDSS(((FragmentActivity)getReactApplicationContext().getCurrentActivity()));
-                CryptoProDss.getInstance().init(((FragmentActivity)getReactApplicationContext().getCurrentActivity()),new HashMap<String,String[]>(),new InitCallbackHandler(){
+                CryptoProDss.init(((FragmentActivity)getReactApplicationContext().getCurrentActivity()),new HashMap<String,String[]>(),new InitCallbackHandler(){
                     @Override
                     public void onInit(Constants.CSPInitCode var1) {
 
