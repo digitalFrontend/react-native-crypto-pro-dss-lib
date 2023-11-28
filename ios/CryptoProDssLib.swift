@@ -112,7 +112,34 @@ class CryptoProDssLib : UIViewController {
             
         Task {
             do {
-                let operationsInfo:DSSFramework.DSSOperationsInfo = try await DSSPolicy_V2.shared.getOperations(kid: kid, type: nil, opId: nil)
+                let operationsInfo:DSSFramework.DSSOperationsInfo = try await DSSPolicy_V2.shared.getOperations(kid: kid, type: nil, opId: "31fb8bfe-94c8-4299-b376-e1423d29d256")
+                
+                for _operation in operationsInfo.operations ?? [] {
+                    operations.append(try! DictionaryEncoder.encode(_operation))
+                }
+                resolve(operations)
+                
+            } catch {
+                self.reject(rejectFunc: reject, text: "\(error.localizedDescription) (getOperations)")
+            }
+        }
+    }
+    
+    @objc
+    func getOperationsByOpId(
+        _ kid: String,
+        withOpId opId: String,
+        withResolver resolve: @escaping RCTPromiseResolveBlock,
+        withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+        
+        jsPromiseResolver = resolve;
+        jsPromiseRejecter = reject;
+            
+        var operations = [] as [Any];
+            
+        Task {
+            do {
+                let operationsInfo:DSSFramework.DSSOperationsInfo = try await DSSPolicy_V2.shared.getOperations(kid: kid, type: nil, opId: opId)
                 
                 for _operation in operationsInfo.operations ?? [] {
                     operations.append(try! DictionaryEncoder.encode(_operation))
@@ -140,7 +167,7 @@ class CryptoProDssLib : UIViewController {
         
         Task {
             do {
-                let operationsInfo:DSSFramework.DSSOperationsInfo = try await DSSPolicy_V2.shared.getOperations(kid: kid, type: nil, opId: nil);
+                let operationsInfo:DSSFramework.DSSOperationsInfo = try await DSSPolicy_V2.shared.getOperations(kid: kid, type: nil, opId: transactionId);
                 var operation = nil as DSSFramework.DSSOperation?;
                 
                 for _operation in operationsInfo.operations ?? [] {

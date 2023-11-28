@@ -175,12 +175,39 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
     }
 
 
+    @SuppressLint("RestrictedApi")
+    @ReactMethod
+    public void getOperationsByOpId(String kid, String opId, Promise promise) {
+        Policy policy = new Policy();
+        policy.getOperations(getReactApplicationContext().getCurrentActivity(), kid, null, opId, new SdkPolicyOperationsInfoCallback() {
+            @Override
+            public void onOperationSuccessful(@NonNull OperationsInfo operationsInfo) {
+                List<WritableMap> listWithJson =  new ArrayList<>();
+                for (Operation operation : operationsInfo.getOperations())
+                {
+                    try {
+                        listWithJson.add(convertJsonToMap(new JSONObject(operation.toJsonString())));
+                    } catch (JSONException e) {
+                        reject(promise, String.format("json error (getOperations)"));
+                    }
+                }
+                WritableNativeArray array = Arguments.makeNativeArray((List)listWithJson);
+                promise.resolve(array);
+            }
+
+            @Override
+            public void onOperationFailed(int i, @Nullable String s, @Nullable Throwable throwable) {
+                reject(promise, String.format("%s (getOperations)", s));
+            }
+        });
+    }
+
 
     @SuppressLint("RestrictedApi")
     @ReactMethod
     public void getOperations(String kid,Promise promise) {
         Policy policy = new Policy();
-        policy.getOperations(getReactApplicationContext().getCurrentActivity(), kid, null, null, new SdkPolicyOperationsInfoCallback() {
+        policy.getOperations(getReactApplicationContext().getCurrentActivity(), kid, null, "31fb8bfe-94c8-4299-b376-e1423d29d256", new SdkPolicyOperationsInfoCallback() {
             @Override
             public void onOperationSuccessful(@NonNull OperationsInfo operationsInfo) {
                 List<WritableMap> listWithJson =  new ArrayList<>();
@@ -210,7 +237,7 @@ public class CryptoProDssLibModule extends ReactContextBaseJavaModule {
         Sign sign = new Sign();
 
         Policy policy = new Policy();
-        policy.getOperations(getReactApplicationContext().getCurrentActivity(), kid, null, null, new SdkPolicyOperationsInfoCallback() {
+        policy.getOperations(getReactApplicationContext().getCurrentActivity(), kid, null, transactionId, new SdkPolicyOperationsInfoCallback() {
             @Override
             public void onOperationSuccessful(@NonNull OperationsInfo operationsInfo) {
 
